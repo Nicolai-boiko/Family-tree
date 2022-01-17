@@ -1,0 +1,41 @@
+.wrapper {
+  margin-top: auto;
+}
+
+.container {
+  height: 50vh;
+  margin: auto;
+  margin-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.error {
+  font-size: 20rem;
+  width: 20rem;
+  height: 20rem;
+  margin-bottom: 1.5rem;
+}
+
+.head {
+  font-size: 7rem;
+  width: auto;
+  height: 100%;
+  margin-bottom: 3rem;
+}
+
+.text {
+  font-size: 3rem;
+  font-weight: 300;
+  width: auto;
+  height: 100%;
+  margin-bottom: 3rem;
+}
+
+.home_btn {
+  width: 6rem;
+  height: 6rem;
+  font-size: 4rem;
+}
