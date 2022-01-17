@@ -8,9 +8,14 @@
 }
 
 .wrapper-footer {
-  height: 2rem;
+  height: 3rem;
   background: $footerColor;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
+}
+
+img {
+  width: 2rem;
+  height: 2rem;
 }
