@@ -7,6 +7,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { AppRoutingModule } from '../../app-routing.module';
 
 @NgModule({
   declarations: [HeaderComponent],
@@ -18,6 +19,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatIconModule,
     MatButtonModule,
     FlexLayoutModule,
+    AppRoutingModule,
   ],
   exports: [HeaderComponent],
 })

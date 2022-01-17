@@ -1,4 +1,4 @@
-@import '../../constants/colors.scss';
+@import "../../constants/colors.scss";
 
 .menu-spacer {
   flex: 1 1 auto;
@@ -10,4 +10,13 @@
 }
 mat-sidenav-content {
   background-color: $bodyColor;
+}
+
+a {
+  text-decoration: none;
+  color: #fff;
+}
+
+header {
+  height: 93vh;
 }
