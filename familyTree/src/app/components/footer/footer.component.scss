@@ -1,3 +1,5 @@
+@import '../../constants/colors.scss';
+
 .footer {
   position: fixed;
   bottom: 0;
@@ -6,8 +8,8 @@
 }
 
 .wrapper-footer {
-  height: 30px;
-  background: #e5ebf0;
+  height: 2rem;
+  background: $footerColor;
   display: flex;
   justify-content: center;
   align-items: center;

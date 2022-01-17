@@ -1,3 +1,5 @@
+@import "./app/constants/colors.scss";
+
 * {
   box-sizing: border-box;
 }
@@ -6,9 +8,13 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 16px;
-  background-color: rgb(254, 255, 189);
+  background-color: $bodyColor;
 }
 
 html {
   height: 100%;
+}
+
+p, h1, h2, h3 {
+  margin: 0;
 }
