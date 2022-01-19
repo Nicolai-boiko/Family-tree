@@ -1,0 +1,30 @@
+.login-form {
+  background-color: white;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 15rem;
+  padding: 1rem;
+}
+
+.password_btn {
+  border: none;
+  background-color: transparent;
+}
+
+.login-form_btns {
+  display: flex;
+  justify-content: space-between;
+}
+
+a {
+  text-decoration: none;
+}
+
+.forg_password-link {
+  margin-top: 1rem;
+}
