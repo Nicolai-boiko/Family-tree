@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { RoutesEnum } from 'src/app/app-routing.module';
 
 @Component({
   selector: 'app-restore-password-page',
@@ -10,6 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 export class RestorePasswordPageComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute) {}
 
+  public routesEnum: typeof RoutesEnum = RoutesEnum;
   public resetForm!: FormGroup;
   public userEmail: string = this.activatedRoute.snapshot.queryParams['email'];
   ngOnInit(): void {
