@@ -1,13 +1,15 @@
 <form class="login-form" [formGroup]="loginForm" (ngSubmit)="submit()">
-  <h1>{{token === 'login' ? 'Login' : token === 'registration' ? 'Registration' : 'Restore password'}}</h1>
+  <h1>
+    {{ !flag ? "Login" : "Registration" }}
+  </h1>
   <ng-container *ngIf="flag">
     <mat-form-field appearance="outline">
       <mat-label>Name</mat-label>
       <input matInput formControlName="firstName" />
       <mat-error
         *ngIf="
-          loginForm.controls['name'].invalid &&
-          loginForm.controls['name'].touched
+          loginForm.controls['firstName'].invalid &&
+          loginForm.controls['firstName'].touched
         "
       >
         Please enter a valid name
@@ -80,7 +82,9 @@
 
   <div class="login-form_btns">
     <ng-container *ngIf="!flag">
-      <a routerLink="/registration" mat-flat-button color="accent">Registration</a>
+      <a routerLink="/registration" mat-flat-button color="accent"
+        >Registration</a
+      >
       <button type="submit" mat-flat-button color="primary">Login</button>
     </ng-container>
     <ng-container *ngIf="flag">
@@ -88,5 +92,11 @@
       <button type="submit" mat-flat-button color="primary">Confirm</button>
     </ng-container>
   </div>
-  <a class="forg_password-link" routerLink="/restore-password" [queryParams]="{'email': email.value}" *ngIf="!flag">Forgot <strong>password</strong>?</a>
+  <a
+    class="forg_password-link"
+    routerLink="/restore-password"
+    [queryParams]="{ email: email.value }"
+    *ngIf="!flag"
+    >Forgot <strong>password</strong>?</a
+  >
 </form>

@@ -10,6 +10,11 @@ import { FooterModule } from './components/footer/footer.module';
 import { ErrorPageModule } from './pages/error-page/error-page.module';
 import { LoginPageModule } from './pages/login-page/login-page.module';
 import { RestorePasswordPageModule } from './pages/restore-password-page/restore-password-page.module';
+import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+import { environment } from '../environments/environment';
+import { provideAuth,getAuth } from '@angular/fire/auth';
+import { provideDatabase,getDatabase } from '@angular/fire/database';
+import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,6 +28,10 @@ import { RestorePasswordPageModule } from './pages/restore-password-page/restore
     ErrorPageModule,
     LoginPageModule,
     RestorePasswordPageModule,
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideAuth(() => getAuth()),
+    provideDatabase(() => getDatabase()),
+    provideFirestore(() => getFirestore()),
   ],
   providers: [],
   bootstrap: [AppComponent],
