@@ -8,6 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AppRoutingModule } from '../../app-routing.module';
+import { MatDialogModule } from '@angular/material/dialog';
+import { PopupModule } from '../popup/popup.module';
 
 @NgModule({
   declarations: [HeaderComponent],
@@ -20,6 +22,8 @@ import { AppRoutingModule } from '../../app-routing.module';
     MatButtonModule,
     FlexLayoutModule,
     AppRoutingModule,
+    MatDialogModule,
+    PopupModule,
   ],
   exports: [HeaderComponent],
 })

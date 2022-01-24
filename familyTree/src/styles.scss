@@ -1,5 +1,5 @@
 @import "./app/constants/colors.scss";
-@import '~ngx-toastr/toastr';
+@import "~ngx-toastr/toastr";
 
 * {
   box-sizing: border-box;
@@ -9,19 +9,28 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 16px;
-  background-color: $bodyColor;
+  background: $bodyColor;
+  background: $bodyGradientColor;
 }
 
 html {
   height: 100%;
 }
 
-p, h1, h2, h3 {
+p,
+h1,
+h2,
+h3 {
   margin: 0;
 }
 
-html { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 a {
   text-decoration: none;

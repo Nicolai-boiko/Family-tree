@@ -3,7 +3,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RoutesEnum } from 'src/app/app-routing.module';
 import { AuthService } from 'src/app/services/auth.service';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login-page',
@@ -19,8 +18,7 @@ export class LoginPageComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private authenticationService: AuthService,
-    private toastr: ToastrService
+    public authenticationService: AuthService
   ) {}
 
   ngOnInit(): void {

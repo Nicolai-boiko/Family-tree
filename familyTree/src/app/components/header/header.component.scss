@@ -9,7 +9,8 @@
   text-align: end;
 }
 mat-sidenav-content {
-  background-color: $bodyColor;
+  background: $bodyColor;
+  background: $bodyGradientColor;
 }
 
 a {
@@ -22,7 +23,7 @@ header {
 }
 
 .mat-toolbar {
-  background: black;
+  background: $headerColor;
 }
 
 .login_btn {

@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { RoutesEnum } from 'src/app/app-routing.module';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { PopupComponent } from '../popup/popup.component';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -10,8 +13,12 @@ import { Router } from '@angular/router';
 export class HeaderComponent implements OnInit {
   public routesEnum: typeof RoutesEnum = RoutesEnum;
 
-  constructor(private authenticationService: AuthService, private router: Router) {}
-  
+  constructor(
+    private authenticationService: AuthService,
+    private router: Router,
+    public dialog: MatDialog
+  ) {}
+
   public userState = this.authenticationService.userData;
   public isLoggedIn: boolean = false;
 
@@ -24,9 +31,16 @@ export class HeaderComponent implements OnInit {
       }
     });
   }
+  openDialog() {
+    this.dialog.open(PopupComponent, {
+      data: {
+        title: 'Are you sure to Logout?',
+      },
+    });
+  }
 
   signOut() {
     this.authenticationService.SignOut();
-    this.router.navigate(['/', this.routesEnum.LOG_IN])
+    this.router.navigate(['/', this.routesEnum.LOG_IN]);
   }
 }

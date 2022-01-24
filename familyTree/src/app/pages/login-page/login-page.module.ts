@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { MatSelectModule } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [LoginPageComponent],
@@ -20,6 +21,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatButtonModule,
     AppRoutingModule,
     MatSelectModule,
+    MatProgressSpinnerModule,
   ],
   exports: [LoginPageComponent],
 })
