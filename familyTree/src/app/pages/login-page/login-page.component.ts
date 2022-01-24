@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RoutesEnum } from 'src/app/app-routing.module';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login-page',
@@ -9,16 +10,30 @@ import { RoutesEnum } from 'src/app/app-routing.module';
   styleUrls: ['./login-page.component.scss'],
 })
 export class LoginPageComponent implements OnInit {
-  constructor(private activatedRoute: ActivatedRoute) {}
-
   public routesEnum: typeof RoutesEnum = RoutesEnum;
   public currentUrl: string = this.activatedRoute.snapshot.url[0].path;
-  public currentUrlFlag: boolean =
-    this.currentUrl === this.routesEnum.REGISTRATION ? true : false;
   public loginForm!: FormGroup;
-  public hidePassword: boolean = true;
+  public registerForm!: FormGroup;
+  public hidePassword = true;
+
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private authenticationService: AuthService
+  ) {}
+
   ngOnInit(): void {
     this.loginForm = new FormGroup({
+      email: new FormControl('', [
+        Validators.required,
+        Validators.email,
+        Validators.maxLength(50),
+      ]),
+      password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(8),
+      ]),
+    });
+    this.registerForm = new FormGroup({
       firstName: new FormControl('', [
         Validators.required,
         Validators.pattern(/[a-zA-Z]/g),
@@ -41,10 +56,19 @@ export class LoginPageComponent implements OnInit {
       ]),
     });
   }
+  getControl(formName: FormGroup, control: string): FormControl {
+    return formName.get(control) as FormControl;
+  }
 
-  submit(): void {
+  signUp(): void {
+    if (this.registerForm.valid) {
+      this.authenticationService.SignUp(this.getControl(this.registerForm, 'email').value, this.getControl(this.registerForm, 'password').value);
+    }
+  }
+
+  signIn(): void {
     if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
+      this.authenticationService.SignIn(this.getControl(this.loginForm, 'email').value, this.getControl(this.loginForm, 'password').value);
     }
   }
 }

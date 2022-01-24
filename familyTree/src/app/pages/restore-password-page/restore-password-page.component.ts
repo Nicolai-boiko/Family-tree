@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RoutesEnum } from 'src/app/app-routing.module';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-restore-password-page',
@@ -9,11 +10,16 @@ import { RoutesEnum } from 'src/app/app-routing.module';
   styleUrls: ['./restore-password-page.component.scss'],
 })
 export class RestorePasswordPageComponent implements OnInit {
-  constructor(private activatedRoute: ActivatedRoute) {}
-
   public routesEnum: typeof RoutesEnum = RoutesEnum;
   public resetForm!: FormGroup;
   public userEmail: string = this.activatedRoute.snapshot.queryParams['email'];
+  public emailSendFlag: boolean = false;
+
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private authenticationService: AuthService
+  ) {}
+
   ngOnInit(): void {
     this.resetForm = new FormGroup({
       email: new FormControl(this.userEmail, [
@@ -23,9 +29,12 @@ export class RestorePasswordPageComponent implements OnInit {
       ]),
     });
   }
-  submit() {
+
+  ressetPassword(): void {
     if (this.resetForm.valid) {
-      console.log(this.resetForm.value);
+      this.authenticationService.ressetPassword(
+        this.resetForm.get('email')?.value
+      ).then(res => this.emailSendFlag = true);
     }
   }
 }
