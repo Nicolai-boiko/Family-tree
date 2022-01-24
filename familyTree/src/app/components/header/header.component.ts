@@ -11,7 +11,7 @@ export class HeaderComponent implements OnInit {
   public routesEnum: typeof RoutesEnum = RoutesEnum;
 
   constructor(private authenticationService: AuthService, private router: Router) {}
-
+  
   public userState = this.authenticationService.userData;
   public isLoggedIn: boolean = false;
 

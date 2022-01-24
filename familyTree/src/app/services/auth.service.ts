@@ -3,6 +3,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,8 @@ export class AuthService {
 
   constructor(
     private angularFireAuth: AngularFireAuth,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {
     this.userData = angularFireAuth.authState;
   }
@@ -24,6 +26,7 @@ export class AuthService {
         console.log('You are Successfully signed up!', res);
       })
       .catch((error) => {
+        this.toastr.error('Something is wrong', '')
         console.log('Something is wrong:', error.message);
       });
   }
@@ -35,8 +38,14 @@ export class AuthService {
       .then((res) => {
         this.router.navigate(['/tree']);
       })
-      .catch((err) => {
-        console.log('Something went wrong:', err.message);
+      .catch((error) => {
+        if (error.code === 'auth/wrong-password') {
+          this.toastr.error('Wrong password', '');
+        } else if (error.code === 'auth/user-not-found') {
+          this.toastr.error('Wrong email', '');
+        }
+        console.log('Something went wrong:', error.message);
+        console.log('Error code:', error.code);
       });
   }
 

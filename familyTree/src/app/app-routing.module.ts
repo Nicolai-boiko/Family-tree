@@ -5,6 +5,8 @@ import { ErrorPageComponent } from './pages/error-page/error-page.component';
 import { TreeComponent } from './pages/tree/tree.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { RestorePasswordPageComponent } from './pages/restore-password-page/restore-password-page.component';
+import { AuthGuard } from './guards/auth.guard';
+import { IsLoggedOutGuard } from './guards/is-logged-out.guard';
 
 export enum RoutesEnum {
   LOG_IN = 'log-in',
@@ -15,12 +17,21 @@ export enum RoutesEnum {
 
 const routes: Routes = [
   { path: '', component: HomePageComponent },
-  { path: RoutesEnum.TREE, component: TreeComponent },
-  { path: RoutesEnum.LOG_IN, component: LoginPageComponent },
-  { path: RoutesEnum.REGISTRATION, component: LoginPageComponent },
+  { path: RoutesEnum.TREE, component: TreeComponent, canActivate: [AuthGuard] },
+  {
+    path: RoutesEnum.LOG_IN,
+    component: LoginPageComponent,
+    canActivate: [IsLoggedOutGuard],
+  },
+  {
+    path: RoutesEnum.REGISTRATION,
+    component: LoginPageComponent,
+    canActivate: [IsLoggedOutGuard],
+  },
   {
     path: RoutesEnum.RESTORE_PASSWORD,
     component: RestorePasswordPageComponent,
+    canActivate: [IsLoggedOutGuard],
   },
   { path: '**', component: ErrorPageComponent },
 ];

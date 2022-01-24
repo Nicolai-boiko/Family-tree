@@ -9,12 +9,7 @@
       formControlName="email"
       placeholder="Ex. pat@example.com"
     />
-    <mat-error
-      *ngIf="
-        loginForm.controls['email'].invalid &&
-        loginForm.controls['email'].touched
-      "
-    >
+    <mat-error *ngIf="loginForm.controls['email'].invalid">
       Please enter a valid email address
     </mat-error>
   </mat-form-field>
@@ -27,7 +22,7 @@
       formControlName="password"
     />
     <mat-error *ngIf="loginForm.controls['password'].invalid">
-      Password min length is 8 symbols
+      Invalid password
     </mat-error>
     <button
       class="password_btn"
