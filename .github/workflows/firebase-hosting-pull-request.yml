@@ -15,3 +15,5 @@ jobs:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_FAMILY_TREE_4AAF6 }}"
           projectId: family-tree-4aaf6
+env:
+  FIREBASE_CLI_PREVIEWS: hostingchannels
