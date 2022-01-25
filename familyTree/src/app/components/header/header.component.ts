@@ -24,14 +24,10 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.authenticationService.userData.subscribe((res) => {
-      if (res && res.uid) {
-        this.isLoggedIn = true;
-      } else {
-        this.isLoggedIn = false;
-      }
+      res && res.uid ? (this.isLoggedIn = true) : (this.isLoggedIn = false);
     });
   }
-  openDialog() {
+  openDialog(): void {
     this.dialog.open(PopupComponent, {
       data: {
         title: 'Are you sure to Logout?',
@@ -39,8 +35,8 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  signOut() {
-    this.authenticationService.SignOut();
+  signOut(): void {
+    this.authenticationService.signOut();
     this.router.navigate(['/', this.routesEnum.LOG_IN]);
   }
 }

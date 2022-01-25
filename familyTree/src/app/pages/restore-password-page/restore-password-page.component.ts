@@ -13,7 +13,7 @@ export class RestorePasswordPageComponent implements OnInit {
   public routesEnum: typeof RoutesEnum = RoutesEnum;
   public resetForm!: FormGroup;
   public userEmail: string = this.activatedRoute.snapshot.queryParams['email'];
-  public emailSendFlag: boolean = false;
+  public emailSendFlag = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -34,7 +34,10 @@ export class RestorePasswordPageComponent implements OnInit {
     if (this.resetForm.valid) {
       this.authenticationService.ressetPassword(
         this.resetForm.get('email')?.value
-      ).then(res => this.emailSendFlag = true);
+      );
+      this.authenticationService.showSpinner.subscribe(
+        (res) => (this.emailSendFlag = !res)
+      );
     }
   }
 }

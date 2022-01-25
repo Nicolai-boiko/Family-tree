@@ -1,20 +1,9 @@
-<form
-  class="login-form"
-  [formGroup]="loginForm"
-  (ngSubmit)="signIn()"
-  *ngIf="currentUrl !== routesEnum.REGISTRATION"
->
+<form class="login-form" [formGroup]="loginForm" (ngSubmit)="signIn()" *ngIf="currentUrl !== routesEnum.REGISTRATION">
   <div class="form_container">
     <h1>Login</h1>
     <mat-form-field appearance="outline">
       <mat-label>Email</mat-label>
-      <input
-        #email
-        type="email"
-        matInput
-        formControlName="email"
-        placeholder="Ex. pat@example.com"
-      />
+      <input #email type="email" matInput formControlName="email" placeholder="Ex. pat@example.com" />
       <mat-error *ngIf="loginForm.controls['email'].invalid">
         Please enter a valid email address
       </mat-error>
@@ -22,65 +11,36 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Enter your password</mat-label>
-      <input
-        matInput
-        [type]="hidePassword ? 'password' : 'text'"
-        formControlName="password"
-      />
+      <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" />
       <mat-error *ngIf="loginForm.controls['password'].invalid">
         Invalid password
       </mat-error>
-      <button
-        class="password_btn"
-        type="button"
-        mat-icon-button
-        matSuffix
-        (click)="hidePassword = !hidePassword"
-        [attr.aria-label]="'Hide password'"
-        [attr.aria-pressed]="hidePassword"
-      >
+      <button class="password_btn" type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
         <mat-icon>{{
           hidePassword ? "visibility_off" : "visibility"
-        }}</mat-icon>
+          }}</mat-icon>
       </button>
     </mat-form-field>
 
     <div class="login-form_btns">
-      <a
-        [routerLink]="['/', routesEnum.REGISTRATION]"
-        mat-flat-button
-        color="accent"
-        >Registration</a
-      >
+      <a [routerLink]="['/', routesEnum.REGISTRATION]" mat-flat-button color="accent">Registration</a>
       <button mat-flat-button color="primary">Login</button>
     </div>
-    <a
-      class="forg_password-link"
-      [routerLink]="['/', routesEnum.RESTORE_PASSWORD]"
-      [queryParams]="{ email: email.value }"
-      *ngIf="currentUrl !== routesEnum.REGISTRATION"
-      >Forgot <strong>password</strong>?</a
-    >
+    <a class="forg_password-link" [routerLink]="['/', routesEnum.RESTORE_PASSWORD]"
+      [queryParams]="{ email: email.value }" *ngIf="currentUrl !== routesEnum.REGISTRATION">Forgot
+      <strong>password</strong>?</a>
   </div>
 </form>
 
-<form
-  class="login-form"
-  [formGroup]="registerForm"
-  (ngSubmit)="signUp()"
-  *ngIf="currentUrl === routesEnum.REGISTRATION"
->
+
+<form class="login-form" [formGroup]="registerForm" (ngSubmit)="signUp()"
+  *ngIf="currentUrl === routesEnum.REGISTRATION">
   <div class="form_container">
     <h1>Registration</h1>
     <mat-form-field appearance="outline">
       <mat-label>Name</mat-label>
       <input matInput formControlName="firstName" />
-      <mat-error
-        *ngIf="
-          registerForm.controls['firstName'].invalid &&
-          registerForm.controls['firstName'].touched
-        "
-      >
+      <mat-error *ngIf="registerForm.controls['firstName'].invalid && registerForm.controls['firstName'].touched">
         Please enter a valid name
       </mat-error>
     </mat-form-field>
@@ -88,12 +48,7 @@
     <mat-form-field appearance="outline">
       <mat-label>Second name</mat-label>
       <input matInput formControlName="secondName" />
-      <mat-error
-        *ngIf="
-          registerForm.controls['secondName'].invalid &&
-          registerForm.controls['secondName'].touched
-        "
-      >
+      <mat-error *ngIf="registerForm.controls['secondName'].invalid && registerForm.controls['secondName'].touched">
         Please enter a valid second name
       </mat-error>
     </mat-form-field>
@@ -107,56 +62,31 @@
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Email</mat-label>
-      <input
-        #email
-        type="email"
-        matInput
-        formControlName="email"
-        placeholder="Ex. pat@example.com"
-      />
-      <mat-error
-        *ngIf="
-          registerForm.controls['email'].invalid &&
-          registerForm.controls['email'].touched
-        "
-      >
+      <input #email type="email" matInput formControlName="email" placeholder="Ex. pat@example.com" />
+      <mat-error *ngIf="registerForm.controls['email'].invalid && registerForm.controls['email'].touched">
         Please enter a valid email address
       </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Enter your password</mat-label>
-      <input
-        matInput
-        [type]="hidePassword ? 'password' : 'text'"
-        formControlName="password"
-      />
+      <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" />
       <mat-error *ngIf="registerForm.controls['password'].invalid">
         Password min length is 8 symbols
       </mat-error>
-      <button
-        class="password_btn"
-        type="button"
-        mat-icon-button
-        matSuffix
-        (click)="hidePassword = !hidePassword"
-        [attr.aria-label]="'Hide password'"
-        [attr.aria-pressed]="hidePassword"
-      >
+      <button class="password_btn" type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
         <mat-icon>{{
           hidePassword ? "visibility_off" : "visibility"
-        }}</mat-icon>
+          }}</mat-icon>
       </button>
     </mat-form-field>
     <div class="login-form_btns">
-      <a [routerLink]="['/', routesEnum.LOG_IN]" mat-flat-button color="accent"
-        >Cancel</a
-      >
+      <a [routerLink]="['/', routesEnum.LOG_IN]" mat-flat-button color="accent">Cancel</a>
       <button mat-flat-button color="primary">Confirm</button>
     </div>
   </div>
 </form>
 
-<div class="spinner" *ngIf="(authenticationService.showSpinner | async)">
+<div class="spinner" *ngIf="authenticationService.showSpinner | async">
   <mat-spinner></mat-spinner>
 </div>

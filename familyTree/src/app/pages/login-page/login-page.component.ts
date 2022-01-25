@@ -56,19 +56,20 @@ export class LoginPageComponent implements OnInit {
       ]),
     });
   }
-  getControl(formName: FormGroup, control: string): FormControl {
-    return formName.get(control) as FormControl;
-  }
 
   signUp(): void {
     if (this.registerForm.valid) {
-      this.authenticationService.SignUp(this.getControl(this.registerForm, 'email').value, this.getControl(this.registerForm, 'password').value);
+      const signUpEmail = this.registerForm.get('email')?.value;
+      const signUpPassword = this.registerForm.get('password')?.value;
+      this.authenticationService.signUp(signUpEmail, signUpPassword);
     }
   }
 
   signIn(): void {
     if (this.loginForm.valid) {
-      this.authenticationService.SignIn(this.getControl(this.loginForm, 'email').value, this.getControl(this.loginForm, 'password').value);
+      const signInEmail = this.loginForm.get('email')?.value;
+      const signInPassword = this.loginForm.get('password')?.value;
+      this.authenticationService.signIn(signInEmail, signInPassword);
     }
   }
 }

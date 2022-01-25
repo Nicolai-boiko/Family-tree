@@ -20,7 +20,7 @@ export class PopupComponent {
 }
 
 signOut() {
-  this.authenticationService.SignOut();
+  this.authenticationService.signOut();
   this.router.navigate(['/', this.routesEnum.LOG_IN]);
 }
 }
