@@ -22,17 +22,18 @@ export class AuthService {
   /* Sign up */
   signUp(email: string, password: string): void {
     this.showSpinner.next(true);
-    this.angularFireAuth
-      .createUserWithEmailAndPassword(email, password)
-      .then((res) => {
+    const createUserWithEmailAndPassword = from(
+      this.angularFireAuth.createUserWithEmailAndPassword(email, password)
+    );
+    createUserWithEmailAndPassword.subscribe({
+      next: () => {
         this.showSpinner.next(false);
-        console.log('You are Successfully signed up!', res);
-      })
-      .catch((error) => {
+      },
+      error: (error) => {
         this.showSpinner.next(false);
-        this.toastr.error('Something is wrong', '');
-        console.log('Something is wrong:', error.message);
-      });
+        this.toastr.error('Something is wrong', `${error.message}`);
+      },
+    });
   }
 
   /* Sign in */
@@ -51,7 +52,7 @@ export class AuthService {
         if (error.code === 'auth/wrong-password') {
           this.toastr.error('Wrong password', '');
         } else if (error.code === 'auth/user-not-found') {
-          this.toastr.error('Wrong email', '');
+          this.toastr.error('Wrong email', `${error.message}`);
         }
       },
     });
@@ -62,7 +63,7 @@ export class AuthService {
     this.angularFireAuth.signOut();
   }
 
-  /* Sign out */
+  /* Resset password */
   ressetPassword(email: string): Observable<void> {
     this.showSpinner.next(true);
     const sendPasswordResetEmail = from(
