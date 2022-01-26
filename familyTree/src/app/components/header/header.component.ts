@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { RoutesEnum } from 'src/app/app-routing.module';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import firebase from 'firebase/compat/app';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -9,15 +12,17 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
   public routesEnum: typeof RoutesEnum = RoutesEnum;
+  public userState: Observable<firebase.User | null> = this.authenticationService.userData;
+  public isLoggedIn = false;
 
-  constructor(private authenticationService: AuthService, private router: Router) {}
+  constructor(
+    private authenticationService: AuthService,
+    private router: Router
+  ) {}
 
-  public userState = this.authenticationService.userData;
-  public isLoggedIn: boolean = false;
-
-  ngOnInit(): void {
-    this.authenticationService.userData.subscribe((res) => {
-      res && res.uid ? (this.isLoggedIn = true) : (this.isLoggedIn = false);
+  ngOnInit(): void {   
+    this.authenticationService.userData.subscribe((res: firebase.User | null) => {    
+      this.isLoggedIn = !!(res && res.uid)
     });
   }
 

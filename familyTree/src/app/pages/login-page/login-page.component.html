@@ -16,29 +16,34 @@
         Invalid password
       </mat-error>
       <button class="password_btn" type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
-        <mat-icon>{{
-          hidePassword ? "visibility_off" : "visibility"
-          }}</mat-icon>
+        <mat-icon>{{hidePassword ? "visibility_off" : "visibility"}}</mat-icon>
       </button>
     </mat-form-field>
 
     <div class="login-form_btns">
-      <a [routerLink]="['/', routesEnum.REGISTRATION]" mat-flat-button color="accent">Registration</a>
+      <a [routerLink]="['/', routesEnum.REGISTRATION]" mat-flat-button color="accent">
+        Registration
+      </a>
       <button mat-flat-button color="primary">Login</button>
     </div>
-    <a class="forg_password-link" [routerLink]="['/', routesEnum.RESTORE_PASSWORD]"
-      [queryParams]="{ email: email.value }" *ngIf="currentUrl !== routesEnum.REGISTRATION">Forgot
-      <strong>password</strong>?</a>
+    <a 
+      class="forg_password-link" 
+      [routerLink]="['/', routesEnum.RESTORE_PASSWORD]"
+      [queryParams]="{ email: email.value }" 
+      *ngIf="currentUrl !== routesEnum.REGISTRATION"
+    >
+      Forgot<strong>password</strong>?
+    </a>
   </div>
-  <a
-    class="forg_password-link"
-    [routerLink]="['/', routesEnum.RESTORE_PASSWORD]"
+  <a 
+    class="forg_password-link" 
+    [routerLink]="['/', routesEnum.RESTORE_PASSWORD]" 
     [queryParams]="{ email: email.value }"
     *ngIf="currentUrl !== routesEnum.REGISTRATION"
-    >Forgot <strong>password</strong>?</a
   >
+    Forgot <strong>password</strong>?
+  </a>
 </form>
-
 
 <form class="login-form" [formGroup]="registerForm" (ngSubmit)="signUp()"
   *ngIf="currentUrl === routesEnum.REGISTRATION">
@@ -47,7 +52,7 @@
     <mat-form-field appearance="outline">
       <mat-label>Name</mat-label>
       <input matInput formControlName="firstName" />
-      <mat-error *ngIf="registerForm.controls['firstName'].invalid && registerForm.controls['firstName'].touched">
+      <mat-error *ngIf="registerForm.controls['firstName'].invalid &&registerForm.controls['firstName'].touched">
         Please enter a valid name
       </mat-error>
     </mat-form-field>
@@ -82,9 +87,7 @@
         Password min length is 8 symbols
       </mat-error>
       <button class="password_btn" type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
-        <mat-icon>{{
-          hidePassword ? "visibility_off" : "visibility"
-          }}</mat-icon>
+        <mat-icon>{{hidePassword ? "visibility_off" : "visibility"}}</mat-icon>
       </button>
     </mat-form-field>
     <div class="login-form_btns">

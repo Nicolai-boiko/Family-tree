@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { finalize, take } from 'rxjs';
 import { RoutesEnum } from 'src/app/app-routing.module';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -18,7 +19,7 @@ export class LoginPageComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private authenticationService: AuthService
+    private authenticationService: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -61,7 +62,10 @@ export class LoginPageComponent implements OnInit {
     if (this.registerForm.valid) {
       const signUpEmail = this.registerForm.get('email')?.value;
       const signUpPassword = this.registerForm.get('password')?.value;
-      this.authenticationService.signUp(signUpEmail, signUpPassword);
+      this.authenticationService.signUp(signUpEmail, signUpPassword).pipe(
+        take(1),
+        finalize(()=>{})
+      ).subscribe();
     }
   }
 
@@ -69,7 +73,10 @@ export class LoginPageComponent implements OnInit {
     if (this.loginForm.valid) {
       const signInEmail = this.loginForm.get('email')?.value;
       const signInPassword = this.loginForm.get('password')?.value;
-      this.authenticationService.signIn(signInEmail, signInPassword);
+      this.authenticationService.signIn(signInEmail, signInPassword).pipe(
+        take(1),
+        finalize(()=>{})
+      ).subscribe();
     }
   }
 }
