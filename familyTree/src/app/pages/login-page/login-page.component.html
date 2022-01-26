@@ -32,17 +32,9 @@
       [queryParams]="{ email: email.value }" 
       *ngIf="currentUrl !== routesEnum.REGISTRATION"
     >
-      Forgot<strong>password</strong>?
+      Forgot <strong>password</strong>?
     </a>
   </div>
-  <a 
-    class="forg_password-link" 
-    [routerLink]="['/', routesEnum.RESTORE_PASSWORD]" 
-    [queryParams]="{ email: email.value }"
-    *ngIf="currentUrl !== routesEnum.REGISTRATION"
-  >
-    Forgot <strong>password</strong>?
-  </a>
 </form>
 
 <form class="login-form" [formGroup]="registerForm" (ngSubmit)="signUp()"

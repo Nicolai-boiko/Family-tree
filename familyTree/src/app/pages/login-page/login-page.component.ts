@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { finalize, take } from 'rxjs';
 import { RoutesEnum } from 'src/app/app-routing.module';
 import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-page',
@@ -20,9 +21,10 @@ export class LoginPageComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private authenticationService: AuthService,
+    private router: Router,
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {  
     this.loginForm = new FormGroup({
       email: new FormControl('', [
         Validators.required,
@@ -64,7 +66,7 @@ export class LoginPageComponent implements OnInit {
       const signUpPassword = this.registerForm.get('password')?.value;
       this.authenticationService.signUp(signUpEmail, signUpPassword).pipe(
         take(1),
-        finalize(()=>{})
+        finalize(() => this.router.navigate(['/', this.routesEnum.TREE]))
       ).subscribe();
     }
   }
@@ -75,7 +77,7 @@ export class LoginPageComponent implements OnInit {
       const signInPassword = this.loginForm.get('password')?.value;
       this.authenticationService.signIn(signInEmail, signInPassword).pipe(
         take(1),
-        finalize(()=>{})
+        finalize(() => this.router.navigate(['/', this.routesEnum.TREE]))
       ).subscribe();
     }
   }
