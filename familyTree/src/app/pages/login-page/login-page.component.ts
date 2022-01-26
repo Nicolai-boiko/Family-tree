@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { finalize, take } from 'rxjs';
 import { RoutesEnum } from 'src/app/app-routing.module';
 import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-page',
@@ -13,17 +14,18 @@ import { AuthService } from 'src/app/services/auth.service';
 export class LoginPageComponent implements OnInit {
   public routesEnum: typeof RoutesEnum = RoutesEnum;
   public currentUrl: string = this.activatedRoute.snapshot.url[0].path;
-  public loginForm!: FormGroup;
-  public registerForm!: FormGroup;
+  public authForm!: FormGroup;
   public hidePassword = true;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private authenticationService: AuthService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
-    this.loginForm = new FormGroup({
+    this.currentUrl !== this.routesEnum.REGISTRATION ?
+    this.authForm = new FormGroup({
       email: new FormControl('', [
         Validators.required,
         Validators.email,
@@ -33,8 +35,8 @@ export class LoginPageComponent implements OnInit {
         Validators.required,
         Validators.minLength(8),
       ]),
-    });
-    this.registerForm = new FormGroup({
+    }) : 
+    this.authForm = new FormGroup({
       firstName: new FormControl('', [
         Validators.required,
         Validators.pattern(/[a-zA-Z]/g),
@@ -55,27 +57,23 @@ export class LoginPageComponent implements OnInit {
         Validators.required,
         Validators.minLength(8),
       ]),
-    });
+    })
   }
 
   signUp(): void {
-    if (this.registerForm.valid) {
-      const signUpEmail = this.registerForm.get('email')?.value;
-      const signUpPassword = this.registerForm.get('password')?.value;
-      this.authenticationService.signUp(signUpEmail, signUpPassword).pipe(
+    if (this.authForm.valid) {
+      this.authenticationService.signUp(this.authForm.get('email')?.value, this.authForm.get('password')?.value).pipe(
         take(1),
-        finalize(()=>{})
+        finalize(() => this.router.navigate(['/', this.routesEnum.LOG_IN]))
       ).subscribe();
     }
   }
 
   signIn(): void {
-    if (this.loginForm.valid) {
-      const signInEmail = this.loginForm.get('email')?.value;
-      const signInPassword = this.loginForm.get('password')?.value;
-      this.authenticationService.signIn(signInEmail, signInPassword).pipe(
+    if (this.authForm.valid) {
+      this.authenticationService.signIn(this.authForm.get('email')?.value, this.authForm.get('password')?.value).pipe(
         take(1),
-        finalize(()=>{})
+        finalize(() => this.router.navigate(['/', this.routesEnum.TREE]))
       ).subscribe();
     }
   }
