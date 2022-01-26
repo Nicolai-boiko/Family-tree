@@ -15,6 +15,9 @@ export class RestorePasswordPageComponent implements OnInit {
   public resetForm!: FormGroup;
   public userEmail: string = this.activatedRoute.snapshot.queryParams['email'];
   public emailSendFlag = false;
+  get emailControl(): FormControl {
+    return this.resetForm.get('email') as FormControl;
+  }
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -33,7 +36,7 @@ export class RestorePasswordPageComponent implements OnInit {
 
   ressetPassword(): void {
     if (this.resetForm.valid) {
-      this.authenticationService.ressetPassword(this.resetForm.get('email')?.value)
+      this.authenticationService.ressetPassword(this.emailControl.value)
       .pipe(
         take(1),
         finalize(()=> this.emailSendFlag = true)
