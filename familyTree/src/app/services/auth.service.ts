@@ -13,27 +13,40 @@ export class AuthService {
   public userData: Observable<firebase.User | null> = this.angularFireAuth.authState;
   public isUserLogged: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public isUserLogged$: Observable<boolean> = this.isUserLogged.asObservable();
+  public isEmailSend = false;
   constructor(
     private angularFireAuth: AngularFireAuth,
     private router: Router,
   ) {}
 
   /* Sign up Observable<firebase.auth.UserCredential> */
-  signUp(email: string, password: string): void {
-    from(this.angularFireAuth.createUserWithEmailAndPassword(email, password)).pipe(
+  signUp(formValue: Record<string, string>): void {
+    from(this.angularFireAuth.createUserWithEmailAndPassword(formValue['email'], formValue['password'])).pipe(
         take(1),
-        tap(() => this.isUserLogged.next(true)),
+        tap(() => {
+          this.isUserLogged.next(true);
+          this.router.navigate(['/', RoutesEnum.LOG_IN]);
+      }),
         catchError((err) => {
           this.isUserLogged.next(false);
-          return throwError(err);
+          return throwError(() => err);
         }),
-        finalize(() => this.router.navigate(['/', RoutesEnum.LOG_IN])),
     ).subscribe();
   }
 
   /* Sign in */
-  signIn(email: string, password: string): Observable<firebase.auth.UserCredential> {
-    return from(this.angularFireAuth.signInWithEmailAndPassword(email, password));
+  signIn(formValue: Record<string, string>): void {
+    from(this.angularFireAuth.signInWithEmailAndPassword(formValue['email'], formValue['password'])).pipe(
+      take(1),
+      tap(() => {
+        this.isUserLogged.next(true);
+        this.router.navigate(['/', RoutesEnum.TREE]);
+      }),
+      catchError((err) => {
+        this.isUserLogged.next(false);
+        return throwError(() => err);
+      }),
+  ).subscribe();
   }
 
   /* Sign out */
@@ -42,7 +55,15 @@ export class AuthService {
   }
 
   /* Reset password */
-  ressetPassword(email: string): Observable<void> {
-    return from(this.angularFireAuth.sendPasswordResetEmail(email));
+  ressetPassword(email: string): void {
+    from(this.angularFireAuth.sendPasswordResetEmail(email))
+    .pipe(
+      take(1),
+      tap(() => this.isEmailSend = true),
+      catchError((err) => {
+        return throwError(() => err);
+      }),
+    )
+    .subscribe();
   }
 }
