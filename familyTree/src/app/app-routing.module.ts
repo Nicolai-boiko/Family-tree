@@ -7,6 +7,7 @@ import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { RestorePasswordPageComponent } from './pages/restore-password-page/restore-password-page.component';
 
 export enum RoutesEnum {
+  HOME = 'home',
   LOG_IN = 'log-in',
   REGISTRATION = 'registration',
   RESTORE_PASSWORD = 'restore-password',
@@ -14,7 +15,8 @@ export enum RoutesEnum {
 }
 
 const routes: Routes = [
-  { path: '', component: HomePageComponent },
+  { path: '', redirectTo: `/${RoutesEnum.HOME}`, pathMatch: 'full' },
+  { path: RoutesEnum.HOME, component: HomePageComponent },
   { path: RoutesEnum.TREE, component: TreeComponent },
   { path: RoutesEnum.LOG_IN, component: LoginPageComponent },
   { path: RoutesEnum.REGISTRATION, component: LoginPageComponent },

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { RoutesEnum } from 'src/app/app-routing.module';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
@@ -8,13 +8,15 @@ import firebase from 'firebase/compat/app';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
+  styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
   public routesEnum: typeof RoutesEnum = RoutesEnum;
   public userState: Observable<firebase.User | null> = this.authenticationService.userData;
   public isLoggedIn = false;
 
+  @Output() public sidenavToggle = new EventEmitter();
+  
   constructor(
     private authenticationService: AuthService,
     private router: Router
@@ -25,9 +27,13 @@ export class HeaderComponent implements OnInit {
       this.isLoggedIn = !!(res && res.uid)
     });
   }
-
+  
   signOut(): void {
     this.authenticationService.signOut();
     this.router.navigate(['/', this.routesEnum.LOG_IN]);
+  }
+  
+  onToggleSidenav() {
+    this.sidenavToggle.emit();
   }
 }
