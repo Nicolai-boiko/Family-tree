@@ -58,9 +58,9 @@
 
     <a 
       *ngIf="currentUrl !== routesEnum.REGISTRATION"
-      class="forg_password-link" 
       [routerLink]="['/', routesEnum.RESTORE_PASSWORD]"
       [queryParams]="{ email: email.value }" 
+      class="forg_password-link" 
     >
       Forgot <strong>password</strong>?
     </a>

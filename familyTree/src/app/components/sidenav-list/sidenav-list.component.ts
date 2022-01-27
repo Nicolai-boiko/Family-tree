@@ -10,7 +10,7 @@ export class SidenavListComponent {
   public routesEnum: typeof RoutesEnum = RoutesEnum;
   @Output() sidenavClose = new EventEmitter();
  
-  public onSidenavClose = () => {
+  onSidenavClose() {
     this.sidenavClose.emit();
   }
 }
