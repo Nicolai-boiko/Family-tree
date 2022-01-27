@@ -24,7 +24,8 @@
         Logout <mat-icon>logout</mat-icon>
       </button>
       <ng-template #loginBtn>
-        <a class="login_btn" [routerLink]="['/', routesEnum.LOG_IN]" mat-button>
-          Login <mat-icon>login</mat-icon></a>
+        <a class="login_btn" [routerLink]="['/', routesEnum.LOG_IN]" routerLinkActive="active" mat-button>
+          Login <mat-icon>login</mat-icon>
+        </a>
       </ng-template>
 </mat-toolbar>

@@ -9,7 +9,7 @@
   justify-content: center;
 }
 
-.form_container {
+.form-container {
   background-color: $formColor;
   border-radius: 10px;
   display: flex;
@@ -18,16 +18,16 @@
   padding: 1rem;
 }
 
-.password_btn {
+.password-btn {
   border: none;
   background-color: transparent;
 }
 
-.login-form_btns {
+.login-form-btns {
   display: flex;
   justify-content: space-between;
 }
 
-.forg_password-link {
+.forg-password-link {
   margin-top: 1rem;
 }
