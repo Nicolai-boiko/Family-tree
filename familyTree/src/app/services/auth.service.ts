@@ -51,7 +51,13 @@ export class AuthService {
 
   /* Sign out */
   signOut(): void {
-    this.angularFireAuth.signOut();
+    from(this.angularFireAuth.signOut()).pipe(
+      take(1),
+      tap(() => this.router.navigate(['/', RoutesEnum.LOG_IN])),
+      catchError((err) => {
+        return throwError(() => err);
+      }),
+    );
   }
 
   /* Reset password */
