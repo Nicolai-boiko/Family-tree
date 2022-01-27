@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { take } from 'rxjs';
 import { RoutesEnum } from 'src/app/app-routing.module';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -33,10 +34,11 @@ export class RestorePasswordPageComponent implements OnInit {
     });
   }
 
-  ressetPassword(): void {
+  resetPassword(): void {
     if (this.resetForm.valid) {
-      this.authenticationService.ressetPassword(this.emailControl.value);
-      this.emailSendFlag = this.authenticationService.isEmailSend;
+      this.authenticationService.resetPassword(this.emailControl.value).pipe(
+        take(1),
+      ).subscribe(() => this.emailSendFlag = true);
     }
   }
 }

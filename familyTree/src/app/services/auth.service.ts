@@ -11,7 +11,6 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   public userData: Observable<firebase.User | null> = this.angularFireAuth.authState;
-  public isEmailSend = false;
   constructor(
     private angularFireAuth: AngularFireAuth,
     private router: Router,
@@ -39,10 +38,7 @@ export class AuthService {
   }
 
   /* Reset password */
-  ressetPassword(email: string): void {
-    from(this.angularFireAuth.sendPasswordResetEmail(email)).pipe(
-      take(1),
-    )
-    .subscribe(() => this.isEmailSend = true);
+  resetPassword(email: string): Observable<void> {
+    return from(this.angularFireAuth.sendPasswordResetEmail(email))
   }
 }
