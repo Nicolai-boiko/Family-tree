@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
 import { BehaviorSubject, from, Observable, throwError } from 'rxjs';
 import { RoutesEnum } from '../app-routing.module';
-import { catchError, finalize, take, tap } from 'rxjs/operators';
+import { catchError, finalize, take, tap, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -23,41 +23,34 @@ export class AuthService {
   signUp(formValue: Record<string, string>): void {
     from(this.angularFireAuth.createUserWithEmailAndPassword(formValue['email'], formValue['password'])).pipe(
         take(1),
-        tap(() => {
-          this.isUserLogged.next(true);
-          this.router.navigate(['/', RoutesEnum.LOG_IN]);
-      }),
-        catchError((err) => {
-          this.isUserLogged.next(false);
-          return throwError(() => err);
-        }),
-    ).subscribe();
+    ).subscribe(() => {
+      this.isUserLogged.next(true);
+      this.router.navigate(['/', RoutesEnum.LOG_IN]);
+  });
   }
 
   /* Sign in */
   signIn(formValue: Record<string, string>): void {
     from(this.angularFireAuth.signInWithEmailAndPassword(formValue['email'], formValue['password'])).pipe(
       take(1),
-      tap(() => {
-        this.isUserLogged.next(true);
-        this.router.navigate(['/', RoutesEnum.TREE]);
-      }),
-      catchError((err) => {
-        this.isUserLogged.next(false);
-        return throwError(() => err);
-      }),
-  ).subscribe();
+  ).subscribe((user: any) => {
+    this.isUserLogged.next(true);
+    this.router.navigate(['/', RoutesEnum.TREE]);
+  });
   }
 
   /* Sign out */
   signOut(): void {
     from(this.angularFireAuth.signOut()).pipe(
       take(1),
-      tap(() => this.router.navigate(['/', RoutesEnum.LOG_IN])),
+      tap(() => {
+        this.isUserLogged.next(false);
+        this.router.navigate(['/', RoutesEnum.LOG_IN]);
+      }),
       catchError((err) => {
         return throwError(() => err);
       }),
-    );
+    ).subscribe();
   }
 
   /* Reset password */
