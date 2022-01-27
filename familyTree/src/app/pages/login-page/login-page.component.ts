@@ -11,8 +11,7 @@ import { LoginPageHelper } from './login-page.helper';
   styleUrls: ['./login-page.component.scss'],
 })
 export class LoginPageComponent implements OnInit {
-  public routesEnum: typeof RoutesEnum = RoutesEnum; //use in template only
-  public currentUrl: string = this.activatedRoute.snapshot.url[0].path;
+  public routesEnum: typeof RoutesEnum = RoutesEnum;
   public isRegistrationPage: boolean = this.activatedRoute.snapshot.url[0].path === RoutesEnum.REGISTRATION;
   public authForm!: FormGroup;
   public hidePassword = true;

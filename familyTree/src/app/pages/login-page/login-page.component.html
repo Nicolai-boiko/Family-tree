@@ -1,6 +1,6 @@
 <form [formGroup]="authForm" (ngSubmit)="onSubmit()" class="login-form">
-  <div class="form_container">
-    <h1>Login</h1>
+  <div class="form-container">
+    <h2>Login</h2>
     <mat-form-field appearance="outline">
       <mat-label>Email</mat-label>
       <input #email type="email" matInput formControlName="email" placeholder="Ex. pat@example.com" />
@@ -15,7 +15,7 @@
       <mat-error *ngIf="authForm.controls['password'].invalid">
         Invalid password
       </mat-error>
-      <button class="password_btn" type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
+      <button class="password-btn" type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
         <mat-icon>{{hidePassword ? "visibility_off" : "visibility"}}</mat-icon>
       </button>
     </mat-form-field>
@@ -46,12 +46,12 @@
       </mat-form-field>
     </ng-container>
 
-    <div class="login-form_btns" *ngIf="!isRegistrationPage">
+    <div class="login-form-btns" *ngIf="!isRegistrationPage">
       <a [routerLink]="['/', routesEnum.REGISTRATION]" mat-flat-button color="accent">Registration</a>
       <button mat-flat-button color="primary">Login</button>
     </div>
 
-    <div class="login-form_btns" *ngIf="isRegistrationPage">
+    <div class="login-form-btns" *ngIf="isRegistrationPage">
       <a [routerLink]="['/', routesEnum.LOG_IN]" mat-flat-button color="accent">Cancel</a>
       <button mat-flat-button color="primary">Confirm</button>
     </div>
@@ -60,7 +60,7 @@
       *ngIf="!isRegistrationPage"
       [routerLink]="['/', routesEnum.RESTORE_PASSWORD]"
       [queryParams]="{ email: email.value }" 
-      class="forg_password-link" 
+      class="forg-password-link" 
     >
       Forgot <strong>password</strong>?
     </a>
