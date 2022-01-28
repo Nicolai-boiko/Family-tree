@@ -12,7 +12,7 @@ export class HeaderComponent implements OnInit {
   public routesEnum: typeof RoutesEnum = RoutesEnum;
   public isLoggedIn = false;
 
-  @Output() public sidenavToggle: EventEmitter<any> = new EventEmitter();
+  @Output() public sidenavToggle: EventEmitter<void> = new EventEmitter();
   
   constructor(
     private authenticationService: AuthService,

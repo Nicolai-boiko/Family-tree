@@ -16,7 +16,7 @@
         </ul>
     </div>
     <button
-        class="login-btn"
+        class="login-button"
         *ngIf="isLoggedIn; else loginBtn"
         (click)="signOut()"
         mat-button
@@ -24,7 +24,11 @@
         Logout <mat-icon>logout</mat-icon>
       </button>
       <ng-template #loginBtn>
-        <a class="login-btn" [routerLink]="['/', routesEnum.LOG_IN]" routerLinkActive="active" mat-button>
+        <a  
+          [routerLink]="['/', routesEnum.LOG_IN]" 
+          routerLinkActive="active" 
+          class="login-button"
+          mat-button>
           Login <mat-icon>login</mat-icon>
         </a>
       </ng-template>

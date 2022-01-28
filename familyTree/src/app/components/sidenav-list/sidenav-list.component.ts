@@ -8,7 +8,7 @@ import { RoutesEnum } from 'src/app/app-routing.module';
 })
 export class SidenavListComponent {
   public routesEnum: typeof RoutesEnum = RoutesEnum;
-  @Output() public sidenavClose: EventEmitter<any> = new EventEmitter();
+  @Output() public sidenavClose: EventEmitter<void> = new EventEmitter();
  
   onSidenavClose(): void {
     this.sidenavClose.emit();
