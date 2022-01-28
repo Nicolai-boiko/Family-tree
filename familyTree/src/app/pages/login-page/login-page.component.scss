@@ -1,9 +1,16 @@
+@import "../../constants/colors.scss";
+@import "../../constants/values.scss";
+
 .login-form {
-  background-color: white;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  width: 100%;
+  height: $mainContentHeight;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-container {
+  background-color: $formColor;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -11,20 +18,16 @@
   padding: 1rem;
 }
 
-.password_btn {
+.password-button {
   border: none;
   background-color: transparent;
 }
 
-.login-form_btns {
+.login-form-buttons {
   display: flex;
   justify-content: space-between;
 }
 
-a {
-  text-decoration: none;
-}
-
-.forg_password-link {
+.restore-password-link {
   margin-top: 1rem;
 }

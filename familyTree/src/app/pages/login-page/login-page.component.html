@@ -1,92 +1,68 @@
-<form class="login-form" [formGroup]="loginForm" (ngSubmit)="submit()">
-  <h1>{{token === 'login' ? 'Login' : token === 'registration' ? 'Registration' : 'Restore password'}}</h1>
-  <ng-container *ngIf="flag">
+<form [formGroup]="authForm" (ngSubmit)="onSubmit()" class="login-form">
+  <div class="form-container">
+    <h2>{{isRegistrationPage ? 'Registration' : 'Login'}}</h2>
     <mat-form-field appearance="outline">
-      <mat-label>Name</mat-label>
-      <input matInput formControlName="firstName" />
-      <mat-error
-        *ngIf="
-          loginForm.controls['name'].invalid &&
-          loginForm.controls['name'].touched
-        "
-      >
-        Please enter a valid name
+      <mat-label>Email</mat-label>
+      <input #email type="email" matInput formControlName="email" placeholder="Ex. pat@example.com" />
+      <mat-error *ngIf="authForm.controls['email'].invalid">
+        Please enter a valid email address
       </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Second name</mat-label>
-      <input matInput formControlName="secondName" />
-      <mat-error
-        *ngIf="
-          loginForm.controls['secondName'].invalid &&
-          loginForm.controls['secondName'].touched
-        "
-      >
-        Please enter a valid second name
+      <mat-label>Enter your password</mat-label>
+      <input [type]="hidePassword ? 'password' : 'text'" formControlName="password" matInput/>
+      <mat-error *ngIf="authForm.controls['password'].invalid">
+        Invalid password
       </mat-error>
+      <button class="password-button" type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
+        <mat-icon>{{hidePassword ? "visibility_off" : "visibility"}}</mat-icon>
+      </button>
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Gender</mat-label>
-      <mat-select formControlName="gender">
-        <mat-option value="man">man</mat-option>
-        <mat-option value="woman">woman</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </ng-container>
+    <ng-container *ngIf="isRegistrationPage">
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="firstName"/>
+        <mat-error *ngIf="authForm.controls['firstName'].invalid && authForm.controls['firstName'].touched">
+          Please enter a valid name
+        </mat-error>
+      </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Email</mat-label>
-    <input
-      #email
-      type="email"
-      matInput
-      formControlName="email"
-      placeholder="Ex. pat@example.com"
-    />
-    <mat-error
-      *ngIf="
-        loginForm.controls['email'].invalid &&
-        loginForm.controls['email'].touched
-      "
-    >
-      Please enter a valid email address
-    </mat-error>
-  </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Second name</mat-label>
+        <input matInput formControlName="secondName" />
+        <mat-error *ngIf="authForm.controls['secondName'].invalid && authForm.controls['secondName'].touched">
+          Please enter a valid second name
+        </mat-error>
+      </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Enter your password</mat-label>
-    <input
-      matInput
-      [type]="hide ? 'password' : 'text'"
-      formControlName="password"
-    />
-    <mat-error *ngIf="loginForm.controls['password'].invalid">
-      Password min length is 8 symbols
-    </mat-error>
-    <button
-      class="password_btn"
-      type="button"
-      mat-icon-button
-      matSuffix
-      (click)="hide = !hide"
-      [attr.aria-label]="'Hide password'"
-      [attr.aria-pressed]="hide"
-    >
-      <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
-    </button>
-  </mat-form-field>
-
-  <div class="login-form_btns">
-    <ng-container *ngIf="!flag">
-      <a routerLink="/registration" mat-flat-button color="accent">Registration</a>
-      <button type="submit" mat-flat-button color="primary">Login</button>
+      <mat-form-field appearance="outline">
+        <mat-label>Gender</mat-label>
+        <mat-select formControlName="gender">
+          <mat-option value="male">Male</mat-option>
+          <mat-option value="female">Female</mat-option>
+        </mat-select>
+      </mat-form-field>
     </ng-container>
-    <ng-container *ngIf="flag">
-      <a routerLink="/login" mat-flat-button color="accent">Cancel</a>
-      <button type="submit" mat-flat-button color="primary">Confirm</button>
-    </ng-container>
+
+    <div class="login-form-buttons" *ngIf="!isRegistrationPage">
+      <a [routerLink]="['/', routesEnum.REGISTRATION]" mat-flat-button color="accent">Registration</a>
+      <button mat-flat-button color="primary">Login</button>
+    </div>
+
+    <div class="login-form-buttons" *ngIf="isRegistrationPage">
+      <a [routerLink]="['/', routesEnum.LOG_IN]" mat-flat-button color="accent">Cancel</a>
+      <button mat-flat-button color="primary">Confirm</button>
+    </div>
+
+    <a 
+      *ngIf="!isRegistrationPage"
+      [routerLink]="['/', routesEnum.RESTORE_PASSWORD]"
+      [queryParams]="{ email: email.value }" 
+      class="restore-password-link" 
+    >
+      Forgot <strong>password</strong>?
+    </a>
   </div>
-  <a class="forg_password-link" routerLink="/restore-password" [queryParams]="{'email': email.value}" *ngIf="!flag">Forgot <strong>password</strong>?</a>
 </form>

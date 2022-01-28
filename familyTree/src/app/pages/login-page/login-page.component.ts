@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { RoutesEnum } from 'src/app/app-routing.module';
+import { AuthService } from 'src/app/services/auth.service';
+import { LoginPageHelper } from './login-page.helper';
 
 @Component({
   selector: 'app-login-page',
@@ -8,40 +11,26 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./login-page.component.scss'],
 })
 export class LoginPageComponent implements OnInit {
-  constructor(private activatedRoute: ActivatedRoute) {}
+  public routesEnum: typeof RoutesEnum = RoutesEnum;
+  public isRegistrationPage: boolean = this.activatedRoute.snapshot.url[0].path === RoutesEnum.REGISTRATION;
+  public authForm!: FormGroup;
+  public hidePassword = true;
 
-  public token: string = this.activatedRoute.snapshot.url[0].path;
-  public flag: boolean = this.token === 'registration' ? true : false;
-  public loginForm!: FormGroup;
-  public hide: boolean = true;
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private authenticationService: AuthService,
+  ) {}
+
   ngOnInit(): void {
-    this.loginForm = new FormGroup({
-      firstName: new FormControl('', [
-        Validators.required,
-        Validators.pattern(/[a-zA-Z]/g),
-        Validators.maxLength(50),
-      ]),
-      secondName: new FormControl('', [
-        Validators.required,
-        Validators.pattern(/[a-zA-Z]/g),
-        Validators.maxLength(50),
-      ]),
-      gender: new FormControl('', [Validators.required]),
-      email: new FormControl('', [
-        Validators.required,
-        Validators.email,
-        Validators.maxLength(50),
-      ]),
-      password: new FormControl('', [
-        Validators.required,
-        Validators.minLength(8),
-      ]),
-    });
+    this.authForm = new FormGroup(LoginPageHelper.getFormData(this.isRegistrationPage));
   }
 
-  submit() {
-    if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
+  onSubmit(): void {
+    const formValue = this.authForm.getRawValue();
+    if (this.authForm.valid) {
+      this.isRegistrationPage
+          ? this.authenticationService.signUp(formValue)
+          : this.authenticationService.signIn(formValue);
     }
   }
 }

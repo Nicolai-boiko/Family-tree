@@ -1,26 +1,29 @@
 @import "../../constants/colors.scss";
+a {
+  text-decoration: none;
+  color: white;
+}
+
+a:hover, a:active{
+  color: lightgray;
+}
+
+.navigation-items{
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
 
 .menu-spacer {
   flex: 1 1 auto;
 }
 
-.menu_icon {
-  margin-right: 1rem;
-  text-align: end;
-}
-mat-sidenav-content {
-  background-color: $bodyColor;
+.login-button {
+  background: white;
+  color: black;
+  margin-left: 1rem;
 }
 
-a {
-  text-decoration: none;
-  color: #fff;
-}
-
-header {
-  height: 93vh;
-}
-
-.mat-toolbar {
-  background: black;
+.mat-toolbar.mat-primary {
+  background: $headerColor;
 }

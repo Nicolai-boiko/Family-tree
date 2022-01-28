@@ -1,28 +1,35 @@
-<header>
-  <mat-toolbar color="primary">
-    <mat-toolbar-row>
-      <button mat-icon-button (click)="sidenav.toggle()" fxShow="true" fxHide.gt-sm>
-        <mat-icon>menu</mat-icon>
+<mat-toolbar color="primary">
+  <div fxHide.gt-xs>
+      <button mat-icon-button (click)="onToggleSidenav()">
+          <mat-icon>menu</mat-icon>
       </button>
-      <a routerLink="/">Family Tree</a>
-      <span class="menu-spacer"></span>
-      <div fxShow="true" fxHide.lt-md>
-        <!-- The following menu items will be hidden on both SM and XS screen sizes -->
-        <a routerLink="/tree" routerLinkActive="active" (click)="sidenav.close()" mat-button>Tree</a>
-        <a routerLink="/login" routerLinkActive="active" (click)="sidenav.close()" mat-button>Log</a>
-      </div>
-    </mat-toolbar-row>
-  </mat-toolbar>
-
-  <mat-sidenav-container fxFlexFill>
-    <mat-sidenav #sidenav>
-      <mat-nav-list>
-        <a routerLink="/tree" routerLinkActive="active" mat-list-item (click)="sidenav.close()">Tree</a>
-        <a routerLink="/login" routerLinkActive="active" mat-list-item (click)="sidenav.close()">Log</a>
-      </mat-nav-list>
-    </mat-sidenav>
-    <mat-sidenav-content fxFlexFill>
-      <ng-content></ng-content>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-</header>
+  </div>
+  <div>
+      <a [routerLink]="['/', routesEnum.HOME]">Family Tree</a>
+  </div>
+  <span class="menu-spacer"></span>
+  <div fxHide.xs>
+      <ul fxLayout fxLayoutGap="3rem" class="navigation-items">
+          <li>
+              <a [routerLink]="['/', routesEnum.TREE]">Tree</a>
+          </li>
+        </ul>
+    </div>
+    <button
+        class="login-button"
+        *ngIf="isLoggedIn; else loginBtn"
+        (click)="signOut()"
+        mat-button
+      >
+        Logout <mat-icon>logout</mat-icon>
+      </button>
+      <ng-template #loginBtn>
+        <a  
+          [routerLink]="['/', routesEnum.LOG_IN]" 
+          routerLinkActive="active" 
+          class="login-button"
+          mat-button>
+          Login <mat-icon>login</mat-icon>
+        </a>
+      </ng-template>
+</mat-toolbar>

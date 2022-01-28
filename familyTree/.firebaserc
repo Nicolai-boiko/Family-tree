@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "family-tree-4aaf6": {
+      "hosting": {
+        "familyTree": [
+          "family-tree-4aaf6"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "family-tree-4aaf6"
+  }
+}
