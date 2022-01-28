@@ -39,6 +39,6 @@ export class AuthService {
 
   /* Reset password */
   resetPassword(email: string): Observable<void> {
-    return from(this.angularFireAuth.sendPasswordResetEmail(email))
+    return from(this.angularFireAuth.sendPasswordResetEmail(email));
   }
 }
