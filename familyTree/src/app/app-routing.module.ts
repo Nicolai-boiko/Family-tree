@@ -9,6 +9,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { notAuthGuard } from './guards/notAuth.guard';
 
 export enum RoutesEnum {
+  HOME = 'home',
   LOG_IN = 'log-in',
   REGISTRATION = 'registration',
   RESTORE_PASSWORD = 'restore-password',
@@ -16,7 +17,8 @@ export enum RoutesEnum {
 }
 
 const routes: Routes = [
-  { path: '', component: HomePageComponent },
+  { path: '', redirectTo: `/${RoutesEnum.HOME}` },
+  { path: RoutesEnum.HOME, component: HomePageComponent },
   { path: RoutesEnum.TREE, component: TreeComponent, canActivate: [AuthGuard] },
   { path: RoutesEnum.LOG_IN, component: LoginPageComponent, canActivate: [notAuthGuard] },
   { path: RoutesEnum.REGISTRATION, component: LoginPageComponent, canActivate: [notAuthGuard] },

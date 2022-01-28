@@ -1,0 +1,14 @@
+@import "./constants/colors.scss";
+
+mat-sidenav-container, mat-sidenav-content, mat-sidenav {
+  height: 100%;
+  background: $bodyGradientColor;
+}
+
+mat-sidenav-container mat-sidenav {
+  background: white;
+}
+
+mat-sidenav {
+  width: 12.5rem;
+}

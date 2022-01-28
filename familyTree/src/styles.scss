@@ -11,16 +11,13 @@ body {
   background-color: $bodyColor;
 }
 
-html {
+html, body {
   height: 100%;
 }
 
 p, h1, h2, h3 {
   margin: 0;
 }
-
-html { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 a {
   text-decoration: none;

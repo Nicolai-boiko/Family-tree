@@ -1,0 +1,10 @@
+<mat-nav-list>
+    <a [routerLink]="['/', routesEnum.HOME]" (click)="onSidenavClose()" mat-list-item>
+        <mat-icon>home</mat-icon>
+        <span class="nav-caption">Home</span>
+    </a>
+    <a [routerLink]="['/', routesEnum.TREE]" (click)="onSidenavClose()" mat-list-item>
+        <mat-icon>family_restroom</mat-icon>
+        <span class="nav-caption">Your Tree</span>   
+    </a>
+</mat-nav-list>

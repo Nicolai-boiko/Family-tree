@@ -1,11 +1,12 @@
 @import "../../constants/colors.scss";
+@import "../../constants/values.scss";
 
 .login-form {
   width: 100%;
-  height: 100%;
+  height: $mainContentHeight;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
 .form-container {
@@ -17,16 +18,16 @@
   padding: 1rem;
 }
 
-.password-btn {
+.password-button {
   border: none;
   background-color: transparent;
 }
 
-.login-form-btns {
+.login-form-buttons {
   display: flex;
   justify-content: space-between;
 }
 
-.forg-password-link {
+.restore-password-link {
   margin-top: 1rem;
 }

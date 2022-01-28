@@ -7,6 +7,11 @@ import { AppRoutingModule } from '../../app-routing.module';
 
 @NgModule({
   declarations: [ErrorPageComponent],
-  imports: [CommonModule, MatIconModule, MatButtonModule, AppRoutingModule],
+  imports: [
+    CommonModule, 
+    MatIconModule, 
+    MatButtonModule, 
+    AppRoutingModule,
+  ],
 })
 export class ErrorPageModule {}
