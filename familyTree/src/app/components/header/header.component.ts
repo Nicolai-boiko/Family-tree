@@ -40,8 +40,10 @@ export class HeaderComponent implements OnInit {
     dialogRef.afterClosed().pipe(
       take(1)
     ).subscribe((data: EYesOrNo) => {
-      if(data === EYesOrNo.YES) { this.authenticationService.signOut() }
-    })
+      if(data === EYesOrNo.YES) { 
+        this.authenticationService.signOut(); 
+      }
+    });
   }
   
   onToggleSidenav(): void {
