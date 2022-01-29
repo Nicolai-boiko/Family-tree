@@ -17,7 +17,7 @@ export enum RoutesEnum {
 }
 
 const routes: Routes = [
-  { path: '', redirectTo: `/${RoutesEnum.HOME}` },
+  { path: '', redirectTo: `/${RoutesEnum.HOME}`, pathMatch: 'full' },
   { path: RoutesEnum.HOME, component: HomePageComponent },
   { path: RoutesEnum.TREE, component: TreeComponent, canActivate: [AuthGuard] },
   { path: RoutesEnum.LOG_IN, component: LoginPageComponent, canActivate: [notAuthGuard] },
