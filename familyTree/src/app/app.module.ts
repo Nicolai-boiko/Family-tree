@@ -13,6 +13,7 @@ import { RestorePasswordPageModule } from './pages/restore-password-page/restore
 import { LayoutModule } from './layout/layout.module';
 import { SidenavListModule } from './components/sidenav-list/sidenav-list.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { ToastrModule } from 'ngx-toastr';
 
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
@@ -36,6 +37,7 @@ import { AngularFireModule } from '@angular/fire/compat';
     LayoutModule,
     MatSidenavModule,
     SidenavListModule,
+    ToastrModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),

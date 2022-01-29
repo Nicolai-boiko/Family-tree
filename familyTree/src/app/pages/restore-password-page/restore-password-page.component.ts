@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { take } from 'rxjs';
+import { catchError, of, take, tap } from 'rxjs';
 import { RoutesEnum } from 'src/app/app-routing.module';
 import { AuthService } from 'src/app/services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-restore-password-page',
@@ -21,7 +22,8 @@ export class RestorePasswordPageComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private authenticationService: AuthService
+    private authenticationService: AuthService,
+    private toastr: ToastrService,
   ) {}
 
   ngOnInit(): void {
@@ -38,7 +40,12 @@ export class RestorePasswordPageComponent implements OnInit {
     if (this.resetForm.valid) {
       this.authenticationService.resetPassword(this.emailControl.value).pipe(
         take(1),
-      ).subscribe(() => this.emailSendFlag = true);
+        tap(() => this.emailSendFlag = true),
+        catchError((error) => {
+          this.toastr.error(`${error.message}`, `Code: ${error.code}`);
+          return of(error);
+        }),
+      ).subscribe();
     }
   }
 }
