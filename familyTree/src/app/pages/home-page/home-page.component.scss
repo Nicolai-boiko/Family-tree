@@ -1,3 +1,7 @@
-p {
-  width: 100%;
+@import "../../constants/colors.scss";
+@import "../../constants/values.scss";
+
+.home-page-container {
+  height: $mainContentHeight;
+  background: top / 100% no-repeat url("../../../assets/img/family.png");
 }
