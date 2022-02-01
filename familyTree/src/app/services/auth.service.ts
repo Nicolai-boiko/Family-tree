@@ -6,6 +6,7 @@ import { RoutesEnum } from '../app-routing.module';
 import { finalize, catchError, take, tap} from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { IUser } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -21,24 +22,13 @@ export class AuthService {
   ) {}
 
   /* Sign up Observable<firebase.auth.UserCredential> */
-  signUp(formValue: Record<string, string>): void {
-    this.$showLoader.next(true);
-    from(this.angularFireAuth.createUserWithEmailAndPassword(formValue['email'], formValue['password'])).pipe(
-        take(1),
-        tap(() => {
-          this.router.navigate(['/', RoutesEnum.LOG_IN]);
-          this.toastr.success('You are successfully registered!', '');
-        }),
-        finalize(() => this.$showLoader.next(false)),
-        catchError((error) => {
-          this.toastr.error(`${error.message}`, `Code: ${error.code}`);
-          return of(error);
-        }),
-    ).subscribe();
+  signUp({ email, password  }: IUser): Observable<firebase.auth.UserCredential> {
+    return from<Promise<firebase.auth.UserCredential>>(this.angularFireAuth.createUserWithEmailAndPassword(email, password as string));
   }
 
   /* Sign in */
-  signIn(formValue: Record<string, string>): void {
+  // ToDo rework like signUp
+  signIn(formValue: any): any {
     this.$showLoader.next(true);
     from(this.angularFireAuth.signInWithEmailAndPassword(formValue['email'], formValue['password'])).pipe(
       take(1),
@@ -55,6 +45,7 @@ export class AuthService {
   }
 
   /* Sign out */
+  // ToDo rework like signUp
   signOut(): void {
     this.$showLoader.next(true);
     from(this.angularFireAuth.signOut()).pipe(
@@ -72,6 +63,7 @@ export class AuthService {
   }
 
   /* Reset password */
+  // ToDo rework like signUp
   resetPassword(email: string): Observable<void> {
     return from(this.angularFireAuth.sendPasswordResetEmail(email));
   }

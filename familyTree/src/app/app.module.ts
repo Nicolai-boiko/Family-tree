@@ -22,13 +22,23 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideDatabase, getDatabase } from '@angular/fire/database';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { AngularFireModule } from '@angular/fire/compat';
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { appReducer } from './store/reducers/app.reducer';
+import { getInitialState } from './store/state/app.state';
+import { EffectsModule } from '@ngrx/effects';
+import { AuthEffects } from './store/effects/auth.effects';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     BrowserAnimationsModule,
+    AppRoutingModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    StoreModule.forRoot(appReducer, { initialState: getInitialState() }),
+    EffectsModule.forRoot([AuthEffects]),
+    StoreDevtoolsModule.instrument({ logOnly: environment.production }),
     HomePageModule,
     HeaderModule,
     FooterModule,
@@ -40,7 +50,6 @@ import { AngularFireModule } from '@angular/fire/compat';
     SidenavListModule,
     LoaderModule,
     ToastrModule.forRoot(),
-    AngularFireModule.initializeApp(environment.firebase),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideDatabase(() => getDatabase()),
@@ -49,4 +58,5 @@ import { AngularFireModule } from '@angular/fire/compat';
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+}

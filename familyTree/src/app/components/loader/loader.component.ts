@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AuthService } from 'src/app/services/auth.service';
+import { select, Store } from '@ngrx/store';
+import { IAppState } from '../../store/state/app.state';
+import { isAuthLoading } from '../../store/selectors/auth.state.selectors';
 
 @Component({
   selector: 'app-loader',
@@ -8,8 +10,6 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./loader.component.scss']
 })
 export class LoaderComponent {
-  public showLoader$: Observable<boolean> = this.authService.showLoader$
-  constructor (
-    public authService: AuthService,
-  ) {}
+  public isAuthLoading$: Observable<boolean> = this.store.pipe(select(isAuthLoading));
+  constructor (private readonly store: Store<IAppState>) {}
 }

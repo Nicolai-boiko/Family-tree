@@ -4,6 +4,11 @@ import { ActivatedRoute } from '@angular/router';
 import { RoutesEnum } from 'src/app/app-routing.module';
 import { AuthService } from 'src/app/services/auth.service';
 import { LoginPageHelper } from './login-page.helper';
+import { GenderEnum } from '../../constants/Enums/common.enums';
+import { IUser } from '../../models';
+import { IAuthState } from '../../store/state/auth.state';
+import { Store } from '@ngrx/store';
+import { SignUpWithEmail } from '../../store/actions/auth-state.actions';
 
 @Component({
   selector: 'app-login-page',
@@ -12,13 +17,15 @@ import { LoginPageHelper } from './login-page.helper';
 })
 export class LoginPageComponent implements OnInit {
   public routesEnum: typeof RoutesEnum = RoutesEnum;
+  public sexEnum: typeof GenderEnum = GenderEnum;
   public isRegistrationPage: boolean = this.activatedRoute.snapshot.url[0].path === RoutesEnum.REGISTRATION;
   public authForm!: FormGroup;
   public hidePassword = true;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private authenticationService: AuthService,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly authenticationService: AuthService,
+    private readonly store: Store<IAuthState>,
   ) {}
 
   ngOnInit(): void {
@@ -26,11 +33,12 @@ export class LoginPageComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const formValue = this.authForm.getRawValue();
     if (this.authForm.valid) {
+      const userData: IUser = this.authForm.getRawValue() as IUser;
+      
       this.isRegistrationPage
-          ? this.authenticationService.signUp(formValue)
-          : this.authenticationService.signIn(formValue);
+          ? this.store.dispatch<SignUpWithEmail>(new SignUpWithEmail(userData))
+          : this.authenticationService.signIn(userData);
     }
   }
 }
