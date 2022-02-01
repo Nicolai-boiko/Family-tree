@@ -6,7 +6,7 @@
       <mat-form-field appearance="outline">
         <mat-label>Name</mat-label>
         <input matInput formControlName="firstName"/>
-        <mat-error *ngIf="authForm.controls['firstName'].invalid && authForm.controls['firstName'].touched">
+        <mat-error *ngIf="firstNameControl.invalid && firstNameControl.touched">
           Please enter a valid name
         </mat-error>
       </mat-form-field>
@@ -14,7 +14,7 @@
       <mat-form-field appearance="outline">
         <mat-label>Second name</mat-label>
         <input matInput formControlName="secondName" />
-        <mat-error *ngIf="authForm.controls['secondName'].invalid && authForm.controls['secondName'].touched">
+        <mat-error *ngIf="secondNameControl.invalid && secondNameControl.touched">
           Please enter a valid second name
         </mat-error>
       </mat-form-field>
@@ -30,14 +30,13 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Email</mat-label>
-      <input 
-        #email 
+      <input
         type="email" 
         matInput 
         formControlName="email" 
         placeholder="Ex. pat@example.com"
       />
-      <mat-error *ngIf="authForm.controls['email'].invalid">
+      <mat-error *ngIf="emailControl.invalid">
         Please enter a valid email address
       </mat-error>
     </mat-form-field>
@@ -45,7 +44,7 @@
     <mat-form-field appearance="outline">
       <mat-label>Enter your password</mat-label>
       <input [type]="hidePassword ? 'password' : 'text'" formControlName="password" matInput/>
-      <mat-error *ngIf="authForm.controls['password'].invalid">
+      <mat-error *ngIf="passwordControl.invalid">
         Invalid password
       </mat-error>
 
@@ -63,7 +62,7 @@
     <a 
       *ngIf="!isRegistrationPage"
       [routerLink]="['/', routesEnum.RESTORE_PASSWORD]"
-      [queryParams]="{ email: email.value }" 
+      [queryParams]="{ email: emailControl.value }" 
       class="restore-password-link" 
     >
       Forgot <strong>password</strong>?
@@ -71,7 +70,7 @@
 
     <div class="login-form-buttons">
       <a 
-        [routerLink]="isRegistrationPage ? ['/', routesEnum.LOG_IN] : ['/', routesEnum.REGISTRATION]" 
+        [routerLink]="['/', isRegistrationPage ? routesEnum.LOG_IN : routesEnum.REGISTRATION]" 
         mat-flat-button 
         color="accent"
       >
