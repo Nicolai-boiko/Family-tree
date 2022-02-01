@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -7,6 +8,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./loader.component.scss']
 })
 export class LoaderComponent {
+  public showLoader: Observable<boolean> = this.authService.showLoader$
   constructor (
     public authService: AuthService,
   ) {}
