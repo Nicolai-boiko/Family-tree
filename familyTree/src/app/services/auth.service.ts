@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
-import { from, Observable, of } from 'rxjs';
+import { BehaviorSubject, from, Observable, of } from 'rxjs';
 import { RoutesEnum } from '../app-routing.module';
-import { catchError, take, tap} from 'rxjs/operators';
+import { finalize, catchError, take, tap} from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
@@ -12,6 +12,8 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class AuthService {
   public userData: Observable<firebase.User | null> = this.angularFireAuth.authState;
+  private $showLoader: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public showLoader$: Observable<boolean> = this.$showLoader.asObservable();
   constructor(
     private angularFireAuth: AngularFireAuth,
     private router: Router,
@@ -20,12 +22,14 @@ export class AuthService {
 
   /* Sign up Observable<firebase.auth.UserCredential> */
   signUp(formValue: Record<string, string>): void {
+    this.$showLoader.next(true);
     from(this.angularFireAuth.createUserWithEmailAndPassword(formValue['email'], formValue['password'])).pipe(
         take(1),
         tap(() => {
           this.router.navigate(['/', RoutesEnum.LOG_IN]);
           this.toastr.success('You are successfully registered!', '');
         }),
+        finalize(() => this.$showLoader.next(false)),
         catchError((error) => {
           this.toastr.error(`${error.message}`, `Code: ${error.code}`);
           return of(error);
@@ -35,12 +39,14 @@ export class AuthService {
 
   /* Sign in */
   signIn(formValue: Record<string, string>): void {
+    this.$showLoader.next(true);
     from(this.angularFireAuth.signInWithEmailAndPassword(formValue['email'], formValue['password'])).pipe(
       take(1),
       tap(() => {
         this.router.navigate(['/', RoutesEnum.TREE]);
         this.toastr.success('You are successfully logged in!', '');
       }),
+      finalize(() => this.$showLoader.next(false)),
       catchError((error) => {
         this.toastr.error(`${error.message}`, `Code: ${error.code}`);
         return of(error);
@@ -50,12 +56,14 @@ export class AuthService {
 
   /* Sign out */
   signOut(): void {
+    this.$showLoader.next(true);
     from(this.angularFireAuth.signOut()).pipe(
       take(1),
       tap(() => {
-          this.router.navigate(['/', RoutesEnum.LOG_IN]);
-          this.toastr.success('You are sign out!', '');
-        }),
+        this.router.navigate(['/', RoutesEnum.LOG_IN]);
+        this.toastr.success('You are sign out!', '');
+      }),
+      finalize(() => this.$showLoader.next(false)),
       catchError((error) => {
         this.toastr.error(`${error.message}`, `Code: ${error.code}`);
         return of(error);
