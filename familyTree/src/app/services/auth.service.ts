@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   public userData: Observable<firebase.User | null> = this.angularFireAuth.authState;
-  public showLoader: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public $showLoader: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   constructor(
     private angularFireAuth: AngularFireAuth,
     private router: Router,
@@ -19,28 +19,28 @@ export class AuthService {
 
   /* Sign up Observable<firebase.auth.UserCredential> */
   signUp(formValue: Record<string, string>): void {
-    this.showLoader.next(true);
+    this.$showLoader.next(true);
     from(this.angularFireAuth.createUserWithEmailAndPassword(formValue['email'], formValue['password'])).pipe(
         take(1),
-        finalize(() => this.showLoader.next(false)),
+        finalize(() => this.$showLoader.next(false)),
     ).subscribe(() => this.router.navigate(['/', RoutesEnum.LOG_IN]));
   }
 
   /* Sign in */
   signIn(formValue: Record<string, string>): void {
-    this.showLoader.next(true);
+    this.$showLoader.next(true);
     from(this.angularFireAuth.signInWithEmailAndPassword(formValue['email'], formValue['password'])).pipe(
       take(1),
-      finalize(() => this.showLoader.next(false)),
+      finalize(() => this.$showLoader.next(false)),
   ).subscribe(() => this.router.navigate(['/', RoutesEnum.TREE]));
   }
 
   /* Sign out */
   signOut(): void {
-    this.showLoader.next(true);
+    this.$showLoader.next(true);
     from(this.angularFireAuth.signOut()).pipe(
       take(1),
-      finalize(() => this.showLoader.next(false)),
+      finalize(() => this.$showLoader.next(false)),
     ).subscribe(() => this.router.navigate(['/', RoutesEnum.LOG_IN]));
   }
 

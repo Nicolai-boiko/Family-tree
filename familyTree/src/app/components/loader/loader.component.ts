@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -6,13 +6,8 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './loader.component.html',
   styleUrls: ['./loader.component.scss']
 })
-export class LoaderComponent implements OnInit {
-  public showLoader: boolean = false;
+export class LoaderComponent {
   constructor (
-    private authService: AuthService,
+    public authService: AuthService,
   ) {}
-  
-  ngOnInit(): void {
-    this.authService.showLoader.subscribe((state: boolean) => this.showLoader = state);
-  }
 }
