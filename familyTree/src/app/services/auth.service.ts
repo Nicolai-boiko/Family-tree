@@ -12,7 +12,8 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class AuthService {
   public userData: Observable<firebase.User | null> = this.angularFireAuth.authState;
-  public $showLoader: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private $showLoader: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public showLoader$: Observable<boolean> = this.$showLoader.asObservable();
   constructor(
     private angularFireAuth: AngularFireAuth,
     private router: Router,
