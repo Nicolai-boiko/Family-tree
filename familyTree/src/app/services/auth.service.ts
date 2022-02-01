@@ -53,7 +53,7 @@ export class AuthService {
     from(this.angularFireAuth.signOut()).pipe(
       take(1),
       tap(() => {
-          this.router.navigate(['/', RoutesEnum.LOG_IN]);
+          this.router.navigate(['/', RoutesEnum.HOME]);
           this.toastr.success('You are sign out!', '');
         }),
       catchError((error) => {
