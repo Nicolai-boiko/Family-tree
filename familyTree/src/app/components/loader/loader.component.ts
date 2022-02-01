@@ -8,7 +8,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./loader.component.scss']
 })
 export class LoaderComponent {
-  public showLoader: Observable<boolean> = this.authService.showLoader$
+  public showLoader$: Observable<boolean> = this.authService.showLoader$
   constructor (
     public authService: AuthService,
   ) {}
