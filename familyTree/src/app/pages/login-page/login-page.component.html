@@ -30,7 +30,13 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Email</mat-label>
-      <input #email type="email" matInput formControlName="email" placeholder="Ex. pat@example.com" />
+      <input 
+        #email 
+        type="email" 
+        matInput 
+        formControlName="email" 
+        placeholder="Ex. pat@example.com"
+      />
       <mat-error *ngIf="authForm.controls['email'].invalid">
         Please enter a valid email address
       </mat-error>
@@ -42,7 +48,14 @@
       <mat-error *ngIf="authForm.controls['password'].invalid">
         Invalid password
       </mat-error>
-      <button class="password-button" type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
+
+      <button 
+        (click)="hidePassword = !hidePassword"
+        type="button" 
+        mat-icon-button 
+        matSuffix 
+        class="password-button" 
+      >
         <mat-icon>{{hidePassword ? "visibility_off" : "visibility"}}</mat-icon>
       </button>
     </mat-form-field>
@@ -56,14 +69,15 @@
       Forgot <strong>password</strong>?
     </a>
 
-    <div class="login-form-buttons" *ngIf="!isRegistrationPage">
-      <a [routerLink]="['/', routesEnum.REGISTRATION]" mat-flat-button color="accent">Registration</a>
-      <button mat-flat-button color="primary">Login</button>
-    </div>
-
-    <div class="login-form-buttons" *ngIf="isRegistrationPage">
-      <a [routerLink]="['/', routesEnum.LOG_IN]" mat-flat-button color="accent">Back to login</a>
-      <button mat-flat-button color="primary">Confirm</button>
+    <div class="login-form-buttons">
+      <a 
+        [routerLink]="isRegistrationPage ? ['/', routesEnum.LOG_IN] : ['/', routesEnum.REGISTRATION]" 
+        mat-flat-button 
+        color="accent"
+      >
+        {{isRegistrationPage ? 'Back to login' : 'Registration'}}
+      </a>
+      <button mat-flat-button color="primary">{{isRegistrationPage ? 'Confirm' : 'Login'}}</button>
     </div>
   </div>
 </form>
