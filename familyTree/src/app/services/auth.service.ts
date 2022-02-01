@@ -37,7 +37,10 @@ export class AuthService {
   signIn(formValue: Record<string, string>): void {
     from(this.angularFireAuth.signInWithEmailAndPassword(formValue['email'], formValue['password'])).pipe(
       take(1),
-      tap(() => this.router.navigate(['/', RoutesEnum.TREE])),
+      tap(() => {
+        this.router.navigate(['/', RoutesEnum.TREE]);
+        this.toastr.success('You are successfully logged in!', '');
+      }),
       catchError((error) => {
         this.toastr.error(`${error.message}`, `Code: ${error.code}`);
         return of(error);
@@ -49,7 +52,10 @@ export class AuthService {
   signOut(): void {
     from(this.angularFireAuth.signOut()).pipe(
       take(1),
-      tap(() => this.router.navigate(['/', RoutesEnum.LOG_IN])),
+      tap(() => {
+          this.router.navigate(['/', RoutesEnum.LOG_IN]);
+          this.toastr.success('You are sign out!', '');
+        }),
       catchError((error) => {
         this.toastr.error(`${error.message}`, `Code: ${error.code}`);
         return of(error);

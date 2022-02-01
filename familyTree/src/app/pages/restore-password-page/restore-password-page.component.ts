@@ -40,7 +40,10 @@ export class RestorePasswordPageComponent implements OnInit {
     if (this.resetForm.valid) {
       this.authenticationService.resetPassword(this.emailControl.value).pipe(
         take(1),
-        tap(() => this.emailSendFlag = true),
+        tap(() => {
+          this.toastr.success('Password has been reset ', '');
+          this.emailSendFlag = true;
+        }),
         catchError((error) => {
           this.toastr.error(`${error.message}`, `Code: ${error.code}`);
           return of(error);
