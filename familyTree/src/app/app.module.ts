@@ -26,6 +26,7 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    AppRoutingModule,
     StoreModule.forRoot(appReducer, { initialState: getInitialState() }),
     EffectsModule.forRoot([AuthEffects]),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
