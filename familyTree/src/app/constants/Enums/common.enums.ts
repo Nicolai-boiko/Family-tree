@@ -7,11 +7,11 @@ export enum RoutesEnum {
 }
 
 export enum YesOrNoEnum {
-    YES = 'yes',
-    NO = 'no',
-  }
+  YES = 'yes',
+  NO = 'no',
+}
 
-  export enum GenderEnum {
-    MALE = 'male',
-    FEMALE = 'female',
-  }
+export enum GenderEnum {
+  MALE = 'male',
+  FEMALE = 'female',
+}
