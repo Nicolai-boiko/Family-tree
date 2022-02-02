@@ -4,17 +4,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { HomePageModule } from './pages/home-page/home-page.module';
-import { HeaderModule } from './components/header/header.module';
-import { FooterModule } from './components/footer/footer.module';
-import { ErrorPageModule } from './pages/error-page/error-page.module';
-import { LoginPageModule } from './pages/login-page/login-page.module';
-import { RestorePasswordPageModule } from './pages/restore-password-page/restore-password-page.module';
 import { LayoutModule } from './layout/layout.module';
-import { SidenavListModule } from './components/sidenav-list/sidenav-list.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { LoaderModule } from './components/loader/loader.module';
 import { ToastrModule } from 'ngx-toastr';
+import { ComponentsModule } from './components/components.module';
+import { PagesModule } from './pages/pages.module';
 
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
@@ -29,16 +23,10 @@ import { AngularFireModule } from '@angular/fire/compat';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    HomePageModule,
-    HeaderModule,
-    FooterModule,
-    ErrorPageModule,
-    LoginPageModule,
-    RestorePasswordPageModule,
     LayoutModule,
     MatSidenavModule,
-    SidenavListModule,
-    LoaderModule,
+    ComponentsModule,
+    PagesModule,
     ToastrModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
