@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'familyTree';
+  public title = 'familyTree';
+  static toastrSettings: Record<string, string> = {
+    positionClass: 'toast-bottom-right',
+  };
 }

@@ -39,9 +39,7 @@ import { AngularFireModule } from '@angular/fire/compat';
     MatSidenavModule,
     SidenavListModule,
     LoaderModule,
-    ToastrModule.forRoot({
-      positionClass: 'toast-bottom-right',
-    }),
+    ToastrModule.forRoot(AppComponent.toastrSettings),
     AngularFireModule.initializeApp(environment.firebase),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
