@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RoutesEnum } from 'src/app/app-routing.module';
 import { AuthService } from 'src/app/services/auth.service';
@@ -21,6 +21,19 @@ export class LoginPageComponent implements OnInit {
   public isRegistrationPage: boolean = this.activatedRoute.snapshot.url[0].path === RoutesEnum.REGISTRATION;
   public authForm!: FormGroup;
   public hidePassword = true;
+  
+  get firstNameControl(): FormControl {
+    return this.authForm.get('firstName') as FormControl;
+  }
+  get secondNameControl(): FormControl {
+    return this.authForm.get('secondName') as FormControl;
+  }
+  get emailControl(): FormControl {
+    return this.authForm.get('email') as FormControl;
+  }
+  get passwordControl(): FormControl {
+    return this.authForm.get('password') as FormControl;
+  }
 
   constructor(
     private readonly activatedRoute: ActivatedRoute,

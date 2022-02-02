@@ -1,0 +1,7 @@
+@import "../../constants/colors.scss";
+@import "../../constants/values.scss";
+
+.tree-page-container {
+  height: $mainContentHeight;
+  background: center / contain no-repeat url("../../../assets/img/tree.png");
+}

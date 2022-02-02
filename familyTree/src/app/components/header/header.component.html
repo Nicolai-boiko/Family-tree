@@ -8,28 +8,28 @@
       <a [routerLink]="['/', routesEnum.HOME]">Family Tree</a>
   </div>
   <span class="menu-spacer"></span>
-  <div fxHide.xs>
-      <ul fxLayout fxLayoutGap="3rem" class="navigation-items">
-          <li>
-              <a [routerLink]="['/', routesEnum.TREE]">Tree</a>
-          </li>
-        </ul>
-    </div>
-    <button
-        *ngIf="isLoggedIn; else loginBtn"
-        (click)="onLogout()"
-        class="login-button"
-        mat-button
-      >
-        Logout <mat-icon>logout</mat-icon>
-      </button>
-      <ng-template #loginBtn>
-        <a  
-          [routerLink]="['/', routesEnum.LOG_IN]" 
-          routerLinkActive="active" 
-          class="login-button"
-          mat-button>
-          Login <mat-icon>login</mat-icon>
-        </a>
-      </ng-template>
+  <div *ngIf="isLoggedIn" fxHide.xs>
+    <ul fxLayout fxLayoutGap="3rem" class="navigation-items">
+        <li>
+            <a [routerLink]="['/', routesEnum.TREE]" routerLinkActive="active">Tree</a>
+        </li>
+      </ul>
+  </div>
+  <button
+      *ngIf="isLoggedIn; else loginBtn"
+      (click)="onLogout()"
+      class="login-button"
+      mat-button
+    >
+      Logout <mat-icon>logout</mat-icon>
+  </button>
+  <ng-template #loginBtn>
+    <a  
+      [routerLink]="['/', routesEnum.LOG_IN]"
+      class="login-button"
+      mat-button
+    >
+      Login <mat-icon>login</mat-icon>
+    </a>
+  </ng-template>
 </mat-toolbar>

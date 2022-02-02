@@ -1,30 +1,12 @@
 <form [formGroup]="authForm" (ngSubmit)="onSubmit()" class="login-form">
   <div class="form-container">
     <h2>{{isRegistrationPage ? 'Registration' : 'Login'}}</h2>
-    <mat-form-field appearance="outline">
-      <mat-label>Email</mat-label>
-      <input #email type="email" matInput formControlName="email" placeholder="Ex. pat@example.com" />
-      <mat-error *ngIf="authForm.controls['email'].invalid">
-        Please enter a valid email address
-      </mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Enter your password</mat-label>
-      <input [type]="hidePassword ? 'password' : 'text'" formControlName="password" matInput/>
-      <mat-error *ngIf="authForm.controls['password'].invalid">
-        Invalid password
-      </mat-error>
-      <button class="password-button" type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
-        <mat-icon>{{hidePassword ? "visibility_off" : "visibility"}}</mat-icon>
-      </button>
-    </mat-form-field>
 
     <ng-container *ngIf="isRegistrationPage">
       <mat-form-field appearance="outline">
         <mat-label>Name</mat-label>
         <input matInput formControlName="firstName"/>
-        <mat-error *ngIf="authForm.controls['firstName'].invalid && authForm.controls['firstName'].touched">
+        <mat-error *ngIf="firstNameControl.invalid && firstNameControl.touched">
           Please enter a valid name
         </mat-error>
       </mat-form-field>
@@ -32,7 +14,7 @@
       <mat-form-field appearance="outline">
         <mat-label>Second name</mat-label>
         <input matInput formControlName="secondName" />
-        <mat-error *ngIf="authForm.controls['secondName'].invalid && authForm.controls['secondName'].touched">
+        <mat-error *ngIf="secondNameControl.invalid && secondNameControl.touched">
           Please enter a valid second name
         </mat-error>
       </mat-form-field>
@@ -46,23 +28,55 @@
       </mat-form-field>
     </ng-container>
 
-    <div class="login-form-buttons" *ngIf="!isRegistrationPage">
-      <a [routerLink]="['/', routesEnum.REGISTRATION]" mat-flat-button color="accent">Registration</a>
-      <button mat-flat-button color="primary">Login</button>
-    </div>
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input
+        type="email" 
+        matInput 
+        formControlName="email" 
+        placeholder="Ex. pat@example.com"
+      />
+      <mat-error *ngIf="emailControl.invalid">
+        Please enter a valid email address
+      </mat-error>
+    </mat-form-field>
 
-    <div class="login-form-buttons" *ngIf="isRegistrationPage">
-      <a [routerLink]="['/', routesEnum.LOG_IN]" mat-flat-button color="accent">Cancel</a>
-      <button mat-flat-button color="primary">Confirm</button>
-    </div>
+    <mat-form-field appearance="outline">
+      <mat-label>Enter your password</mat-label>
+      <input [type]="hidePassword ? 'password' : 'text'" formControlName="password" matInput/>
+      <mat-error *ngIf="passwordControl.invalid">
+        Invalid password
+      </mat-error>
+
+      <button 
+        (click)="hidePassword = !hidePassword"
+        type="button" 
+        mat-icon-button 
+        matSuffix 
+        class="password-button" 
+      >
+        <mat-icon>{{hidePassword ? "visibility_off" : "visibility"}}</mat-icon>
+      </button>
+    </mat-form-field>
 
     <a 
       *ngIf="!isRegistrationPage"
       [routerLink]="['/', routesEnum.RESTORE_PASSWORD]"
-      [queryParams]="{ email: email.value }" 
+      [queryParams]="{ email: emailControl.value }" 
       class="restore-password-link" 
     >
       Forgot <strong>password</strong>?
     </a>
+
+    <div class="login-form-buttons">
+      <a 
+        [routerLink]="['/', isRegistrationPage ? routesEnum.LOG_IN : routesEnum.REGISTRATION]" 
+        mat-flat-button 
+        color="accent"
+      >
+        {{isRegistrationPage ? 'Back to login' : 'Registration'}}
+      </a>
+      <button mat-flat-button color="primary">{{isRegistrationPage ? 'Confirm' : 'Login'}}</button>
+    </div>
   </div>
 </form>
