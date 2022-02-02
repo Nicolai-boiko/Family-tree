@@ -1,0 +1,21 @@
+@import '../../constants/colors.scss';
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 3;
+}
+
+.wrapper-footer {
+  height: 3rem;
+  background: $footerColor;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+img {
+  width: 2rem;
+  height: 2rem;
+}

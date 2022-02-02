@@ -1,18 +1,35 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { LayoutModule } from './layout/layout.module';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { ToastrModule } from 'ngx-toastr';
+import { TOASTR_CONFIG } from './constants/common.settings';
+import { ComponentsModule } from './components/components.module';
+import { PagesModule } from './pages/pages.module';
+
+import { environment } from '../environments/environment';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    LayoutModule,
+    MatSidenavModule,
+    ComponentsModule,
+    PagesModule,
+    ToastrModule.forRoot(TOASTR_CONFIG),
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

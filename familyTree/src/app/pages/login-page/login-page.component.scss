@@ -1,0 +1,33 @@
+@import "../../constants/colors.scss";
+@import "../../constants/values.scss";
+
+.login-form {
+  width: 100%;
+  height: $mainContentHeight;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-container {
+  background-color: $formColor;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 15rem;
+  padding: 1rem;
+}
+
+.password-button {
+  border: none;
+  background-color: transparent;
+}
+
+.login-form-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.restore-password-link {
+  margin-bottom: 1rem;
+}
