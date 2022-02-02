@@ -3,5 +3,11 @@
 
 .tree-page-container {
   height: $mainContentHeight;
-  background: top / 100% no-repeat url("../../../assets/img/tree.png");
+  background: center / 100% no-repeat url("../../../assets/img/tree.png");
+}
+
+@media (min-width: 850px) {
+  .tree-page-container {
+    background: top / 100% no-repeat url("../../../assets/img/tree.png");
+  }
 }
