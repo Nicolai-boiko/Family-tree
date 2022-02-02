@@ -6,12 +6,12 @@ export enum RoutesEnum {
   TREE = 'tree',
 }
 
-export enum EYesOrNo {
+export enum YesOrNoEnum {
     YES = 'yes',
     NO = 'no',
   }
 
-  export enum EGender {
+  export enum GenderEnum {
     MALE = 'male',
     FEMALE = 'female',
   }

@@ -5,7 +5,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import firebase from 'firebase/compat/app';
 import { ModalComponent } from '../modal/modal.component';
 import { take } from 'rxjs';
-import { EYesOrNo } from 'src/app/constants/Enums/common.enums';
+import { YesOrNoEnum } from 'src/app/constants/Enums/common.enums';
 
 @Component({
   selector: 'app-header',
@@ -14,7 +14,7 @@ import { EYesOrNo } from 'src/app/constants/Enums/common.enums';
 })
 export class HeaderComponent implements OnInit {
   public routesEnum: typeof RoutesEnum = RoutesEnum;
-  public eYesOrNo: typeof EYesOrNo = EYesOrNo;
+  public eYesOrNo: typeof YesOrNoEnum = YesOrNoEnum;
   public isLoggedIn = false;
 
   @Output() public sidenavToggle: EventEmitter<void> = new EventEmitter();
@@ -39,8 +39,8 @@ export class HeaderComponent implements OnInit {
     });
     dialogRef.afterClosed().pipe(
       take(1)
-    ).subscribe((data: EYesOrNo) => {
-      if(data === EYesOrNo.YES) { 
+    ).subscribe((data: YesOrNoEnum) => {
+      if(data === YesOrNoEnum.YES) { 
         this.authenticationService.signOut(); 
       }
     });
