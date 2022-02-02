@@ -10,12 +10,9 @@ import { ToastrModule } from 'ngx-toastr';
 import { ComponentsModule } from './components/components.module';
 import { PagesModule } from './pages/pages.module';
 
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
-import { provideAuth, getAuth } from '@angular/fire/auth';
-import { provideDatabase, getDatabase } from '@angular/fire/database';
-import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 
 @NgModule({
   declarations: [AppComponent],
@@ -29,10 +26,7 @@ import { AngularFireModule } from '@angular/fire/compat';
     PagesModule,
     ToastrModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase),
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideAuth(() => getAuth()),
-    provideDatabase(() => getDatabase()),
-    provideFirestore(() => getFirestore()),
+    AngularFirestoreModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
