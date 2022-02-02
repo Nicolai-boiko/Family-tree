@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from './layout/layout.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ToastrModule } from 'ngx-toastr';
+import { TOASTR_CONFIG } from './constants/common.settings';
 import { ComponentsModule } from './components/components.module';
 import { PagesModule } from './pages/pages.module';
 
@@ -24,7 +25,7 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
     MatSidenavModule,
     ComponentsModule,
     PagesModule,
-    ToastrModule.forRoot(),
+    ToastrModule.forRoot(TOASTR_CONFIG),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
   ],
