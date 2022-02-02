@@ -7,7 +7,4 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   public title = 'familyTree';
-  static toastrSettings: Record<string, string> = {
-    positionClass: 'toast-bottom-right',
-  };
 }
