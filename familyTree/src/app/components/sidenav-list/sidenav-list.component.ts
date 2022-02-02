@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { RoutesEnum } from 'src/app/app-routing.module';
+import { RoutesEnum } from 'src/app/constants/Enums/common.enums';
  
 @Component({
   selector: 'app-sidenav-list',

@@ -1,10 +1,10 @@
 $headerColor: #d83f87;
-$bodyColor: white;
+$bodyColor: var(--light-background);
 $bodyGradientColor: linear-gradient(
   90deg,
   rgba(42, 27, 61, 1) 0%,
   rgba(50, 33, 84, 1) 29%,
   rgba(68, 49, 141, 1) 100%
 );
-$footerColor: white;
-$formColor: white;
+$footerColor: var(--light-background);
+$formColor: var(--light-background);

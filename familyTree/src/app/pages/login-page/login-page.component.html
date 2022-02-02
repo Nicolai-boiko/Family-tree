@@ -22,8 +22,8 @@
       <mat-form-field appearance="outline">
         <mat-label>Gender</mat-label>
         <mat-select formControlName="gender">
-          <mat-option value="male">Male</mat-option>
-          <mat-option value="female">Female</mat-option>
+          <mat-option [value]="gender.MALE">{{gender.MALE | titlecase}}</mat-option>
+          <mat-option [value]="gender.FEMALE">{{gender.FEMALE | titlecase}}</mat-option>
         </mat-select>
       </mat-form-field>
     </ng-container>

@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { RoutesEnum } from 'src/app/app-routing.module';
+import { RoutesEnum } from 'src/app/constants/Enums/common.enums';
 import { AuthService } from 'src/app/services/auth.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import firebase from 'firebase/compat/app';
