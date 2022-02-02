@@ -3,11 +3,5 @@
 
 .home-page-container {
   height: $mainContentHeight;
-  background: center / 100% no-repeat url("../../../assets/img/family.png");
-}
-
-@media (min-width: 850px) {
-  .home-page-container {
-    background: top / 100% no-repeat url("../../../assets/img/family.png");
-  }
+  background: center / contain no-repeat url("../../../assets/img/family.png");
 }
