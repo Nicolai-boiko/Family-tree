@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
 import { BehaviorSubject, from, Observable, of } from 'rxjs';
-import { RoutesEnum } from '../app-routing.module';
+import { RoutesEnum } from '../constants/Enums/common.enums';
 import { finalize, catchError, take, tap} from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { User } from '../constants/Interfaces/common.interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -21,9 +22,9 @@ export class AuthService {
   ) {}
 
   /* Sign up Observable<firebase.auth.UserCredential> */
-  signUp(formValue: Record<string, string>): void {
+  signUp({ email, password }: User): void {
     this.$showLoader.next(true);
-    from(this.angularFireAuth.createUserWithEmailAndPassword(formValue['email'], formValue['password'])).pipe(
+    from(this.angularFireAuth.createUserWithEmailAndPassword(email, password)).pipe(
         take(1),
         tap(() => {
           this.router.navigate(['/', RoutesEnum.LOG_IN]);
@@ -38,9 +39,9 @@ export class AuthService {
   }
 
   /* Sign in */
-  signIn(formValue: Record<string, string>): void {
+  signIn({ email, password }: User): void {
     this.$showLoader.next(true);
-    from(this.angularFireAuth.signInWithEmailAndPassword(formValue['email'], formValue['password'])).pipe(
+    from(this.angularFireAuth.signInWithEmailAndPassword(email, password)).pipe(
       take(1),
       tap(() => {
         this.router.navigate(['/', RoutesEnum.TREE]);

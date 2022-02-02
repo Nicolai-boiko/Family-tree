@@ -3,7 +3,7 @@ import { CanActivate, UrlTree } from '@angular/router';
 import { Observable, map } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
-import { RoutesEnum } from '../app-routing.module';
+import { RoutesEnum } from '../constants/Enums/common.enums';
 
 @Injectable({
   providedIn: 'root'

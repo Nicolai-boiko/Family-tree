@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { RoutesEnum } from 'src/app/app-routing.module';
+import { RoutesEnum } from 'src/app/constants/Enums/common.enums';
 import { AuthService } from 'src/app/services/auth.service';
 import { LoginPageHelper } from './login-page.helper';
+import { GenderEnum } from 'src/app/constants/Enums/common.enums';
 
 @Component({
   selector: 'app-login-page',
@@ -12,6 +13,7 @@ import { LoginPageHelper } from './login-page.helper';
 })
 export class LoginPageComponent implements OnInit {
   public routesEnum: typeof RoutesEnum = RoutesEnum;
+  public gender: typeof GenderEnum = GenderEnum;
   public isRegistrationPage: boolean = this.activatedRoute.snapshot.url[0].path === RoutesEnum.REGISTRATION;
   public authForm!: FormGroup;
   public hidePassword = true;

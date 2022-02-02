@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, of, take, tap } from 'rxjs';
-import { RoutesEnum } from 'src/app/app-routing.module';
+import { RoutesEnum } from 'src/app/constants/Enums/common.enums';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 

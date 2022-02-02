@@ -7,14 +7,7 @@ import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { RestorePasswordPageComponent } from './pages/restore-password-page/restore-password-page.component';
 import { AuthGuard } from './guards/auth.guard';
 import { notAuthGuard } from './guards/notAuth.guard';
-
-export enum RoutesEnum {
-  HOME = 'home',
-  LOG_IN = 'log-in',
-  REGISTRATION = 'registration',
-  RESTORE_PASSWORD = 'restore-password',
-  TREE = 'tree',
-}
+import { RoutesEnum } from './constants/Enums/common.enums';
 
 const routes: Routes = [
   { path: '', redirectTo: `/${RoutesEnum.HOME}`, pathMatch: 'full' },
