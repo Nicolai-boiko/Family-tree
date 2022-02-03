@@ -1,5 +1,6 @@
-import { Action } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 import { FirebaseError, IUser } from 'src/app/models';
+import firebase from 'firebase/compat';
 
 export enum AuthStateActionsEnum {
   SignUpWithEmail = '[auth-state] Sign-up with email',
@@ -12,34 +13,17 @@ export enum AuthStateActionsEnum {
   SignInWithEmailError = '[auth-state] Sign-in with email error',
 }
 
-export class SignUpWithEmail implements Action {
-  public readonly type = AuthStateActionsEnum.SignUpWithEmail;
-  constructor(public payload: IUser) {}
-}
+export const signUpWithEmail = createAction(
+  AuthStateActionsEnum.SignUpWithEmail,
+  props<{ user: IUser }>(),
+);
 
-export class SignUpWithEmailSuccess implements Action {
-  public readonly type = AuthStateActionsEnum.SignUpWithEmailSuccess;
-  // ToDo need to put the right type here
-  constructor(public payload: { data: any }) {}
-}
+export const signUpWithEmailSuccess = createAction(
+  AuthStateActionsEnum.SignUpWithEmailSuccess,
+  props<{ data: firebase.auth.UserCredential }>(),
+);
 
-export class SignUpWithEmailError implements Action {
-  public readonly type = AuthStateActionsEnum.SignUpWithEmailError;
-  constructor(public payload: FirebaseError) {}
-}
-
-export class LogoutStart implements Action {
-  public readonly type = AuthStateActionsEnum.LogoutStart;
-}
-
-export class LogoutEnd implements Action {
-  public readonly type = AuthStateActionsEnum.LogoutEnd;
-}
-
-export type AuthStateActions =
-  | SignUpWithEmail
-  | SignUpWithEmailError
-  | SignUpWithEmailSuccess
-  | LogoutStart
-  | LogoutEnd
-  ;
+export const signUpWithEmailError = createAction(
+  AuthStateActionsEnum.SignUpWithEmailError,
+  props<{ error: FirebaseError }>(),
+);

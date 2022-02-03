@@ -1,35 +1,40 @@
-import { IAuthState, initialAuthState } from '../state/auth.state';
-import { AuthStateActions, AuthStateActionsEnum } from '../actions/auth-state.actions';
-import { IUser } from '../../models';
+import { initialAuthState } from '../state/auth.state';
+import { createFeature, createReducer, on } from '@ngrx/store';
+import * as AuthStateActions from '../actions/auth-state.actions';
 
-export const authStateReducer = (
-  state: IAuthState = initialAuthState,
-  action: AuthStateActions,
-): IAuthState => {
-  switch (action.type) {
-    case AuthStateActionsEnum.SignUpWithEmail:
-      return {
-        ...state,
-        user: {
-          ...action.payload,
-          password: null,
-        },
-        isLoading: true,
-        errorMessage: null,
-      };
-    case AuthStateActionsEnum.SignUpWithEmailSuccess:
-      return {
-        ...state,
-        isLoading: false,
-      };
-    case AuthStateActionsEnum.SignUpWithEmailError:
-      return {
-        ...state,
-        isLoading: false,
-        user: null,
-        errorMessage: action.payload,
-      };
-    default:
-      return state;
-  }
-};
+export const AUTH_FEATURE_NAME = 'authState';
+
+export const authFeature = createFeature({
+  name: AUTH_FEATURE_NAME,
+  reducer: createReducer(
+    initialAuthState,
+    on(AuthStateActions.signUpWithEmail, (state, { user }) => ({
+      ...state,
+      user: {
+        ...user,
+        password: null,
+      },
+      isLoading: true,
+      errorMessage: null,
+      infoMessage: null,
+    })),
+    on(AuthStateActions.signUpWithEmailSuccess, (state) => ({
+      ...state,
+      isLoading: false,
+    })),
+    on(AuthStateActions.signUpWithEmailError, (state, { error: { code, name } }) => ({
+      ...state,
+      isLoading: false,
+      user: null,
+      errorMessage: { code, name },
+    })),
+  ),
+});
+
+export const {
+  selectIsLoading,
+  selectUser,
+  selectErrorMessage,
+  selectInfoMessage,
+  reducer,
+} = authFeature;

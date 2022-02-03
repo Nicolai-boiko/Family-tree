@@ -8,7 +8,7 @@ import { GenderEnum } from '../../constants/Enums/common.enums';
 import { IUser } from '../../models';
 import { IAuthState } from '../../store/state/auth.state';
 import { Store } from '@ngrx/store';
-import { SignUpWithEmail } from '../../store/actions/auth-state.actions';
+import { signUpWithEmail } from '../../store/actions/auth-state.actions';
 
 @Component({
   selector: 'app-login-page',
@@ -47,11 +47,11 @@ export class LoginPageComponent implements OnInit {
 
   onSubmit(): void {
     if (this.authForm.valid) {
-      const userData: IUser = this.authForm.getRawValue() as IUser;
+      const user: IUser = this.authForm.getRawValue() as IUser;
       
       this.isRegistrationPage
-          ? this.store.dispatch<SignUpWithEmail>(new SignUpWithEmail(userData))
-          : this.authenticationService.signIn(userData);
+          ? this.store.dispatch(signUpWithEmail({ user }))
+          : this.authenticationService.signIn(user);
     }
   }
 }
