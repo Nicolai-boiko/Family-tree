@@ -25,7 +25,7 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {   
-    this.authenticationService.userData.subscribe((user: firebase.User | null) => {    
+    this.authenticationService.userData$.subscribe((user: firebase.User | null) => {    
       this.isLoggedIn = !!(user && user.uid)
     });
   }

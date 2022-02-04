@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
+import { getFirestore, setDoc, doc } from 'firebase/firestore';
 import { BehaviorSubject, from, Observable, of } from 'rxjs';
 import { RoutesEnum } from '../constants/Enums/common.enums';
 import { finalize, catchError, take, tap} from 'rxjs/operators';
@@ -12,9 +13,10 @@ import { User } from '../constants/Interfaces/common.interfaces';
   providedIn: 'root',
 })
 export class AuthService {
-  public userData: Observable<firebase.User | null> = this.angularFireAuth.authState;
+  public userData$: Observable<firebase.User | null> = this.angularFireAuth.authState;
   private $showLoader: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public showLoader$: Observable<boolean> = this.$showLoader.asObservable();
+  public firestore = getFirestore();
   constructor(
     private angularFireAuth: AngularFireAuth,
     private router: Router,
@@ -22,11 +24,18 @@ export class AuthService {
   ) {}
 
   /* Sign up Observable<firebase.auth.UserCredential> */
-  signUp({ email, password }: User): void {
+  signUp(user: User): void {
     this.$showLoader.next(true);
-    from(this.angularFireAuth.createUserWithEmailAndPassword(email, password)).pipe(
+    from(this.angularFireAuth.createUserWithEmailAndPassword(user.email, user.password)).pipe(
         take(1),
         tap(() => {
+          let userData = {
+            ...user,
+            registrationDate: (new Date).toLocaleTimeString,
+            uid: '',
+          };
+          this.angularFireAuth.user.subscribe(user => user !== null ? userData.uid = user.uid : user);
+          setDoc(doc(this.firestore, `Users/${userData.uid}`), userData);
           this.router.navigate(['/', RoutesEnum.LOG_IN]);
           this.toastr.success('You are successfully registered!', '');
         }),

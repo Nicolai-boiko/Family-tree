@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { GenderEnum } from 'src/app/constants/Enums/common.enums';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 @Component({
   selector: 'app-edit-user-page',
@@ -27,7 +28,9 @@ export class EditUserPageComponent implements OnInit {
   get postcodeControl(): FormControl {
     return this.profileForm.get('postcode') as FormControl;
   }
-  constructor() { }
+  constructor(
+    private angularFireAuth: AngularFireAuth,
+  ) { }
 
   ngOnInit(): void {
     this.profileForm = new FormGroup({

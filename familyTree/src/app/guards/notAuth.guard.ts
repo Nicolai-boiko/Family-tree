@@ -13,7 +13,7 @@ export class notAuthGuard implements CanActivate {
     private router: Router,
   ){}
   canActivate(): Observable<boolean | UrlTree> {
-    return this.authService.userData.pipe(
+    return this.authService.userData$.pipe(
       map((user) => user && user.uid ? this.router.createUrlTree(['/']) : true),
     );
   }
