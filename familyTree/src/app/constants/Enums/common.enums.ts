@@ -4,6 +4,7 @@ export enum RoutesEnum {
   REGISTRATION = 'registration',
   RESTORE_PASSWORD = 'restore-password',
   TREE = 'tree',
+  EDIT_USER = 'edit-user',
 }
 
 export enum YesOrNoEnum {
