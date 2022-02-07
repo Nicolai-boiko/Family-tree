@@ -29,3 +29,8 @@
   background: center / cover no-repeat url(../../../assets/img/man.png);
   margin-bottom: 1rem;
 }
+
+.profile-form-buttons {
+  display: flex;
+  justify-content: space-between;
+}

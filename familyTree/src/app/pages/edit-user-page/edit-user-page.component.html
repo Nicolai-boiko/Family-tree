@@ -50,5 +50,9 @@
         Please enter a valid postcode
       </mat-error>
     </mat-form-field>
+    <div class="profile-form-buttons">
+      <a [routerLink]="['/', routesEnum.HOME]" mat-flat-button color="accent">Cancel</a>
+      <button mat-flat-button color="primary">Save changes</button>
+    </div>
   </div>
 </form>

@@ -14,6 +14,8 @@ import { PagesModule } from './pages/pages.module';
 import { environment } from '../environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,6 +30,8 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
     ToastrModule.forRoot(TOASTR_CONFIG),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideFirestore(() => getFirestore()),
   ],
   providers: [],
   bootstrap: [AppComponent],

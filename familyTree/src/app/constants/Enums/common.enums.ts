@@ -16,3 +16,5 @@ export enum GenderEnum {
   MALE = 'male',
   FEMALE = 'female',
 }
+
+export const USER_COLLECTION = 'Users'

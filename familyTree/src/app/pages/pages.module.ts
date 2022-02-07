@@ -15,6 +15,8 @@ import { EditUserPageModule } from './edit-user-page/edit-user-page.module';
     ErrorPageModule,
     LoginPageModule,
     RestorePasswordPageModule,
+    TreeModule,
+    EditUserPageModule,
   ],
   exports: [
     HomePageModule,

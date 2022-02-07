@@ -1,41 +1,46 @@
 import { Injectable } from '@angular/core';
+
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
-import { getFirestore, setDoc, doc } from 'firebase/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
+
 import { BehaviorSubject, from, Observable, of } from 'rxjs';
 import { RoutesEnum } from '../constants/Enums/common.enums';
-import { finalize, catchError, take, tap} from 'rxjs/operators';
+import { finalize, catchError, take, tap, map} from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { User } from '../constants/Interfaces/common.interfaces';
+import { IUser } from '../constants/Interfaces/common.interfaces';
+import { USER_COLLECTION } from '../constants/Enums/common.enums';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   public userData$: Observable<firebase.User | null> = this.angularFireAuth.authState;
-  private $showLoader: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public $showLoader: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public showLoader$: Observable<boolean> = this.$showLoader.asObservable();
-  public firestore = getFirestore();
+  private usersCollection: AngularFirestoreCollection<IUser> = this.afs.collection<IUser>(USER_COLLECTION);
+  
   constructor(
     private angularFireAuth: AngularFireAuth,
+    private readonly afs: AngularFirestore,
     private router: Router,
     private toastr: ToastrService,
   ) {}
 
   /* Sign up Observable<firebase.auth.UserCredential> */
-  signUp(user: User): void {
+  signUp(user: IUser): void {
     this.$showLoader.next(true);
     from(this.angularFireAuth.createUserWithEmailAndPassword(user.email, user.password)).pipe(
         take(1),
-        tap(() => {
-          let userData = {
+        tap((firebaseUserCredentials) => {
+          const userUID = firebaseUserCredentials.user?.uid;
+          this.usersCollection.doc(userUID).set({
             ...user,
-            registrationDate: (new Date).toLocaleTimeString,
-            uid: '',
-          };
-          this.angularFireAuth.user.subscribe(user => user !== null ? userData.uid = user.uid : user);
-          setDoc(doc(this.firestore, `Users/${userData.uid}`), userData);
+            password: '',
+            registrationDate: new Date().toLocaleString(),
+            uid: userUID,
+          });
           this.router.navigate(['/', RoutesEnum.LOG_IN]);
           this.toastr.success('You are successfully registered!', '');
         }),
@@ -48,7 +53,7 @@ export class AuthService {
   }
 
   /* Sign in */
-  signIn({ email, password }: User): void {
+  signIn({ email, password }: IUser): void {
     this.$showLoader.next(true);
     from(this.angularFireAuth.signInWithEmailAndPassword(email, password)).pipe(
       take(1),
@@ -61,7 +66,7 @@ export class AuthService {
         this.toastr.error(`${error.message}`, `Code: ${error.code}`);
         return of(error);
       }),
-  ).subscribe();
+    ).subscribe();
   }
 
   /* Sign out */
