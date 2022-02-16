@@ -73,6 +73,17 @@ export const authFeature = createFeature({
             ...state,
             isLoading: false,
         })),
+        on(AuthStateActions.UserIsLoggedIn, (state, { data }) => ({
+            ...state,
+            user: {
+                email: data.email as string,
+                password: null,
+            },
+        })),
+        on(AuthStateActions.UserIsLoggedOut, (state) => ({
+            ...state,
+            user: null,
+        })),
     ),
 });
 

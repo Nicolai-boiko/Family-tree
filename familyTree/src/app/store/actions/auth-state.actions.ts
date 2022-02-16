@@ -14,6 +14,8 @@ export enum AuthStateActionsEnum {
     SendPasswordResetEmail = '[auth-state] Send password reset email',
     SendPasswordResetEmailSuccess = '[auth-state] Send password reset email succeeded',
     SendPasswordResetEmailError = '[auth-state] Send password reset email error',
+    UserIsLoggedIn = '[auth-state] Check user auth is logged in',
+    UserIsLoggedOut = '[auth-state] Check user auth is logged out',
 }
 
 export const signUpWithEmail = createAction(
@@ -66,4 +68,13 @@ export const SendPasswordResetEmailSuccess = createAction(
 export const SendPasswordResetEmailError = createAction(
     AuthStateActionsEnum.SendPasswordResetEmailError,
     props<{ error: FirebaseError }>(),
+);
+
+export const UserIsLoggedIn = createAction(
+    AuthStateActionsEnum.UserIsLoggedIn,
+    props<{ data: firebase.User }>(),
+);
+
+export const UserIsLoggedOut = createAction(
+    AuthStateActionsEnum.UserIsLoggedOut,
 );
