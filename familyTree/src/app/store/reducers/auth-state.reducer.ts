@@ -38,7 +38,7 @@ export const authFeature = createFeature({
         on(AuthStateActions.signInWithEmailSuccess, (state, { data }) => ({
             ...state,
             isLoading: false,
-            
+            infoMessage: 'null kek',
         })),
         on(AuthStateActions.signInWithEmailError, (state, { error: { code, name } }) => ({
             ...state,

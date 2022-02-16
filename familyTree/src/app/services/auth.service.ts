@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from "firebase/compat";
-import { BehaviorSubject, from, Observable, take, tap } from 'rxjs';
+import { BehaviorSubject, from, Observable, } from 'rxjs';
 import { IUser } from '../constants/Interfaces/common.interfaces';
 import { Store } from '@ngrx/store';
 import { IAuthState } from '../store/state/auth.state';
@@ -13,8 +13,6 @@ import { UserIsLoggedOut } from '../store/actions/auth-state.actions';
 })
 export class AuthService {
   public userData: Observable<firebase.User | null> = this.angularFireAuth.authState; // переделать header
-  private $showLoader: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  public showLoader$: Observable<boolean> = this.$showLoader.asObservable(); //переделать loader
   constructor(
     private angularFireAuth: AngularFireAuth,
     private store: Store<IAuthState>,
@@ -23,7 +21,6 @@ export class AuthService {
   /* Check is user logged in firebase.auth.User */
   checkUserAuth() {
     this.angularFireAuth.onAuthStateChanged((data: firebase.User | null) => {
-      console.log(data);
       /* data
         ? this.store.dispatch(UserIsLoggedIn({ data }))
         : this.store.dispatch(UserIsLoggedOut()); */
