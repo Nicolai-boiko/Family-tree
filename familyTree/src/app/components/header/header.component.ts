@@ -6,6 +6,10 @@ import firebase from 'firebase/compat/app';
 import { ModalComponent } from '../modal/modal.component';
 import { take } from 'rxjs';
 import { YesOrNoEnum } from 'src/app/constants/Enums/common.enums';
+import { IAuthState } from '../../store/state/auth.state';
+import { Store } from '@ngrx/store';
+import { LogoutStart } from 'src/app/store/actions/auth-state.actions';
+import { authFeature } from 'src/app/store/reducers/auth-state.reducer';
 
 @Component({
   selector: 'app-header',
@@ -22,6 +26,7 @@ export class HeaderComponent implements OnInit {
   constructor(
     private authenticationService: AuthService,
     public dialog: MatDialog,
+    private store: Store<IAuthState>,
   ) {}
 
   ngOnInit(): void {   
@@ -41,7 +46,7 @@ export class HeaderComponent implements OnInit {
       take(1)
     ).subscribe((data: YesOrNoEnum) => {
       if(data === YesOrNoEnum.YES) { 
-        this.authenticationService.signOut(); 
+        this.store.dispatch(LogoutStart()); 
       }
     });
   }
