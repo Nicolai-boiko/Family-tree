@@ -6,7 +6,7 @@ import { IAuthState } from '../../store/state/auth.state';
 import { Store } from '@ngrx/store';
 import { authFeature } from 'src/app/store/reducers/auth-state.reducer';
 import { SendPasswordResetEmail } from 'src/app/store/actions/auth-state.actions';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-restore-password-page',

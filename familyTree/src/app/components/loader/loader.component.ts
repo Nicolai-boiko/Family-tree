@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AuthService } from 'src/app/services/auth.service';
+import { IAuthState } from '../../store/state/auth.state';
+import { Store } from '@ngrx/store';
+import { authFeature } from 'src/app/store/reducers/auth-state.reducer';
 
 @Component({
   selector: 'app-loader',
@@ -8,8 +10,8 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./loader.component.scss']
 })
 export class LoaderComponent {
-  public showLoader$: Observable<boolean> = this.authService.showLoader$
+  public showLoader$: Observable<boolean> = this.store.select(authFeature.selectIsLoading);
   constructor (
-    public authService: AuthService,
+    private store: Store<IAuthState>,
   ) {}
 }
