@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { catchError, of, take, tap } from 'rxjs';
 import { RoutesEnum } from 'src/app/constants/Enums/common.enums';
-import { AuthService } from 'src/app/services/auth.service';
-import { ToastrService } from 'ngx-toastr';
+import { IAuthState } from '../../store/state/auth.state';
+import { Store } from '@ngrx/store';
+import { authFeature } from 'src/app/store/reducers/auth-state.reducer';
+import { SendPasswordResetEmail } from 'src/app/store/actions/auth-state.actions';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-restore-password-page',
@@ -15,15 +17,14 @@ export class RestorePasswordPageComponent implements OnInit {
   public routesEnum: typeof RoutesEnum = RoutesEnum;
   public resetForm!: FormGroup;
   public userEmail: string = this.activatedRoute.snapshot.queryParams['email'];
-  public emailSendFlag = false;
+  public isEmailSend: Observable<boolean> = this.store.select(authFeature.selectIsEmailSend);
   get emailControl(): FormControl {
     return this.resetForm.get('email') as FormControl;
   }
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private authenticationService: AuthService,
-    private toastr: ToastrService,
+    private store: Store<IAuthState>,
   ) {}
 
   ngOnInit(): void {
@@ -38,17 +39,8 @@ export class RestorePasswordPageComponent implements OnInit {
 
   resetPassword(): void {
     if (this.resetForm.valid) {
-      this.authenticationService.resetPassword(this.emailControl.value).pipe(
-        take(1),
-        tap(() => {
-          this.toastr.success('Password has been reset ', '');
-          this.emailSendFlag = true;
-        }),
-        catchError((error) => {
-          this.toastr.error(`${error.message}`, `Code: ${error.code}`);
-          return of(error);
-        }),
-      ).subscribe();
+      const email: string = this.emailControl.value;
+      this.store.dispatch(SendPasswordResetEmail({ email }));
     }
   }
 }

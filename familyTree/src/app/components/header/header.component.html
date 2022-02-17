@@ -8,7 +8,7 @@
       <a [routerLink]="['/', routesEnum.HOME]">Family Tree</a>
   </div>
   <span class="menu-spacer"></span>
-  <div *ngIf="isLoggedIn" fxHide.xs>
+  <div *ngIf="isLoggedIn$ | async" fxHide.xs>
     <ul fxLayout fxLayoutGap="3rem" class="navigation-items">
         <li>
             <a [routerLink]="['/', routesEnum.TREE]" routerLinkActive="active">Tree</a>
@@ -19,7 +19,7 @@
       </ul>
   </div>
   <button
-      *ngIf="isLoggedIn; else loginBtn"
+      *ngIf="isLoggedIn$ | async; else loginBtn"
       (click)="onLogout()"
       class="login-button"
       mat-button

@@ -1,34 +1,31 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { RoutesEnum } from 'src/app/constants/Enums/common.enums';
-import { AuthService } from 'src/app/services/auth.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import firebase from 'firebase/compat/app';
 import { ModalComponent } from '../modal/modal.component';
-import { take } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { YesOrNoEnum } from 'src/app/constants/Enums/common.enums';
+import { IAuthState } from '../../store/state/auth.state';
+import { Store } from '@ngrx/store';
+import { LogoutStart } from 'src/app/store/actions/auth-state.actions';
+import { authFeature } from 'src/app/store/reducers/auth-state.reducer';
+import { IUser } from 'src/app/constants/Interfaces/common.interfaces';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
   public routesEnum: typeof RoutesEnum = RoutesEnum;
   public eYesOrNo: typeof YesOrNoEnum = YesOrNoEnum;
-  public isLoggedIn = false;
+  public isLoggedIn$: Observable<IUser | null> = this.store.select(authFeature.selectUser);
 
   @Output() public sidenavToggle: EventEmitter<void> = new EventEmitter();
   
   constructor(
-    private authenticationService: AuthService,
     public dialog: MatDialog,
+    private store: Store<IAuthState>,
   ) {}
-
-  ngOnInit(): void {   
-    this.authenticationService.userData$.subscribe((user: firebase.User | null) => {    
-      this.isLoggedIn = !!(user && user.uid)
-    });
-  }
   
   onLogout(): void {
     let dialogRef: MatDialogRef<ModalComponent> = this.dialog.open(ModalComponent, {
@@ -41,7 +38,7 @@ export class HeaderComponent implements OnInit {
       take(1)
     ).subscribe((data: YesOrNoEnum) => {
       if(data === YesOrNoEnum.YES) { 
-        this.authenticationService.signOut(); 
+        this.store.dispatch(LogoutStart()); 
       }
     });
   }

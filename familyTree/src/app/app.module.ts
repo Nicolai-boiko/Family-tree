@@ -14,8 +14,13 @@ import { PagesModule } from './pages/pages.module';
 import { environment } from '../environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { getInitialState } from './store/state/app.state';
+import { EffectsModule } from '@ngrx/effects';
+import { AuthEffects } from './store/effects/auth.effects';
+import { appReducer } from './store/reducers/app.reducers';
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,8 +35,9 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
     ToastrModule.forRoot(TOASTR_CONFIG),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideFirestore(() => getFirestore()),
+    StoreModule.forRoot(appReducer, { initialState: getInitialState() }),
+    EffectsModule.forRoot([AuthEffects]),
+    StoreDevtoolsModule.instrument({ logOnly: environment.production }),
   ],
   providers: [],
   bootstrap: [AppComponent],
