@@ -8,12 +8,8 @@ export const authFeature = createFeature({
     name: AUTH_FEATURE_NAME,
     reducer: createReducer(
         initialAuthState,
-        on(AuthStateActions.signUpWithEmail, (state, { user }) => ({
+        on(AuthStateActions.signUpWithEmail, (state) => ({
             ...state,
-            user: {
-                ...user,
-                password: null,
-            },
             isLoading: true,
             errorMessage: null,
             infoMessage: null,
@@ -35,10 +31,10 @@ export const authFeature = createFeature({
             errorMessage: null,
             infoMessage: null,
         })),
-        on(AuthStateActions.signInWithEmailSuccess, (state, { data }) => ({
+        on(AuthStateActions.signInWithEmailSuccess, (state) => ({
             ...state,
             isLoading: false,
-            infoMessage: 'null kek',
+            infoMessage: null,
         })),
         on(AuthStateActions.signInWithEmailError, (state, { error: { code, name } }) => ({
             ...state,
@@ -76,6 +72,7 @@ export const authFeature = createFeature({
         on(AuthStateActions.UserIsLoggedIn, (state, { data }) => ({
             ...state,
             user: {
+                ...state.user,
                 email: data.email as string,
                 password: null,
             },

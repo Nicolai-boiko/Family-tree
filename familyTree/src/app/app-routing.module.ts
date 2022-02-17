@@ -12,10 +12,10 @@ import { RoutesEnum } from './constants/Enums/common.enums';
 const routes: Routes = [
   { path: '', redirectTo: `/${RoutesEnum.HOME}`, pathMatch: 'full' },
   { path: RoutesEnum.HOME, component: HomePageComponent },
-  { path: RoutesEnum.TREE, component: TreeComponent, /* canActivate: [AuthGuard] */ },
-  { path: RoutesEnum.LOG_IN, component: LoginPageComponent, /* canActivate: [notAuthGuard] */ },
-  { path: RoutesEnum.REGISTRATION, component: LoginPageComponent, /* canActivate: [notAuthGuard] */ },
-  { path: RoutesEnum.RESTORE_PASSWORD, component: RestorePasswordPageComponent,/*  canActivate: [notAuthGuard] */ },
+  { path: RoutesEnum.TREE, component: TreeComponent, canActivate: [AuthGuard] },
+  { path: RoutesEnum.LOG_IN, component: LoginPageComponent, canActivate: [notAuthGuard] },
+  { path: RoutesEnum.REGISTRATION, component: LoginPageComponent, canActivate: [notAuthGuard] },
+  { path: RoutesEnum.RESTORE_PASSWORD, component: RestorePasswordPageComponent, canActivate: [notAuthGuard] },
   { path: '**', component: ErrorPageComponent },
 ];
 

@@ -1,29 +1,37 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from "firebase/compat";
-import { BehaviorSubject, from, Observable, } from 'rxjs';
+import { from, Observable, } from 'rxjs';
 import { IUser } from '../constants/Interfaces/common.interfaces';
 import { Store } from '@ngrx/store';
 import { IAuthState } from '../store/state/auth.state';
 import { UserIsLoggedIn } from '../store/actions/auth-state.actions';
 import { UserIsLoggedOut } from '../store/actions/auth-state.actions';
+import { RoutesEnum } from '../constants/Enums/common.enums';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  public userData: Observable<firebase.User | null> = this.angularFireAuth.authState; // переделать header
+  public userData: Observable<firebase.User | null> = this.angularFireAuth.authState;
   constructor(
     private angularFireAuth: AngularFireAuth,
     private store: Store<IAuthState>,
+    private route: Router,
   ) {}
 
   /* Check is user logged in firebase.auth.User */
   checkUserAuth() {
     this.angularFireAuth.onAuthStateChanged((data: firebase.User | null) => {
-      /* data
-        ? this.store.dispatch(UserIsLoggedIn({ data }))
-        : this.store.dispatch(UserIsLoggedOut()); */
+      if(data) {
+        Object.freeze(data);
+        this.store.dispatch(UserIsLoggedIn({ data }));
+        this.route.navigate(['/', RoutesEnum.TREE]);
+      } else {
+        this.store.dispatch(UserIsLoggedOut());
+        this.route.navigate(['/', RoutesEnum.HOME]);
+      }
     });
   }
 

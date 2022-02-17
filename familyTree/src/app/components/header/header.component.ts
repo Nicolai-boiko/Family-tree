@@ -1,8 +1,6 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { RoutesEnum } from 'src/app/constants/Enums/common.enums';
-import { AuthService } from 'src/app/services/auth.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import firebase from 'firebase/compat/app';
 import { ModalComponent } from '../modal/modal.component';
 import { Observable, take } from 'rxjs';
 import { YesOrNoEnum } from 'src/app/constants/Enums/common.enums';

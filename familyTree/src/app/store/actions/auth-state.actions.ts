@@ -25,7 +25,6 @@ export const signUpWithEmail = createAction(
 
 export const signUpWithEmailSuccess = createAction(
     AuthStateActionsEnum.SignUpWithEmailSuccess,
-    props<{ data: firebase.auth.UserCredential }>(),
 );
 
 export const signUpWithEmailError = createAction(
@@ -40,7 +39,6 @@ export const signInWithEmail = createAction(
 
 export const signInWithEmailSuccess = createAction(
     AuthStateActionsEnum.SignInWithEmailSuccess,
-    props<{ data: firebase.auth.UserCredential }>(),
 );
 
 export const signInWithEmailError = createAction(
