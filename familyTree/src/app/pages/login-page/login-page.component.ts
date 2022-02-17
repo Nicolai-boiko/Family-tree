@@ -2,9 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RoutesEnum } from 'src/app/constants/Enums/common.enums';
-import { AuthService } from 'src/app/services/auth.service';
 import { LoginPageHelper } from './login-page.helper';
 import { GenderEnum } from 'src/app/constants/Enums/common.enums';
+import { IUser } from 'src/app/constants/Interfaces/common.interfaces';
+import { IAuthState } from '../../store/state/auth.state';
+import { Store } from '@ngrx/store';
+import { signUpWithEmail } from 'src/app/store/actions/auth-state.actions';
+import { signInWithEmail } from 'src/app/store/actions/auth-state.actions';
 
 @Component({
   selector: 'app-login-page',
@@ -33,7 +37,7 @@ export class LoginPageComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private authenticationService: AuthService,
+    private store: Store<IAuthState>,
   ) {}
 
   ngOnInit(): void {
@@ -41,11 +45,12 @@ export class LoginPageComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const formValue = this.authForm.getRawValue();
     if (this.authForm.valid) {
+      const user: IUser = this.authForm.getRawValue() as IUser;
+      
       this.isRegistrationPage
-          ? this.authenticationService.signUp(formValue)
-          : this.authenticationService.signIn(formValue);
+          ? this.store.dispatch(signUpWithEmail({ user }))
+          : this.store.dispatch(signInWithEmail({ user }));
     }
   }
 }

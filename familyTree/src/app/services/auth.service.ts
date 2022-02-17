@@ -1,79 +1,57 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import firebase from 'firebase/compat/app';
-import { BehaviorSubject, from, Observable, of } from 'rxjs';
+import firebase from "firebase/compat";
+import { from, Observable, } from 'rxjs';
+import { IUser } from '../constants/Interfaces/common.interfaces';
+import { Store } from '@ngrx/store';
+import { IAuthState } from '../store/state/auth.state';
+import { UserIsLoggedIn } from '../store/actions/auth-state.actions';
+import { UserIsLoggedOut } from '../store/actions/auth-state.actions';
 import { RoutesEnum } from '../constants/Enums/common.enums';
-import { finalize, catchError, take, tap} from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { User } from '../constants/Interfaces/common.interfaces';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   public userData: Observable<firebase.User | null> = this.angularFireAuth.authState;
-  private $showLoader: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  public showLoader$: Observable<boolean> = this.$showLoader.asObservable();
   constructor(
     private angularFireAuth: AngularFireAuth,
-    private router: Router,
-    private toastr: ToastrService,
+    private store: Store<IAuthState>,
+    private route: Router,
   ) {}
 
+  /* Check is user logged in firebase.auth.User */
+  checkUserAuth() {
+    this.angularFireAuth.onAuthStateChanged((data: firebase.User | null) => {
+      if(data) {
+        Object.freeze(data);
+        this.store.dispatch(UserIsLoggedIn({ data }));
+        this.route.navigate(['/', RoutesEnum.TREE]);
+      } else {
+        this.store.dispatch(UserIsLoggedOut());
+        this.route.navigate(['/', RoutesEnum.HOME]);
+      }
+    });
+  }
+
   /* Sign up Observable<firebase.auth.UserCredential> */
-  signUp({ email, password }: User): void {
-    this.$showLoader.next(true);
-    from(this.angularFireAuth.createUserWithEmailAndPassword(email, password)).pipe(
-        take(1),
-        tap(() => {
-          this.router.navigate(['/', RoutesEnum.LOG_IN]);
-          this.toastr.success('You are successfully registered!', '');
-        }),
-        finalize(() => this.$showLoader.next(false)),
-        catchError((error) => {
-          this.toastr.error(`${error.message}`, `Code: ${error.code}`);
-          return of(error);
-        }),
-    ).subscribe();
+  signUp({ email, password }: IUser): Observable<firebase.auth.UserCredential> {
+    return from<Promise<firebase.auth.UserCredential>>(this.angularFireAuth.createUserWithEmailAndPassword(email, password as string));
   }
 
   /* Sign in */
-  signIn({ email, password }: User): void {
-    this.$showLoader.next(true);
-    from(this.angularFireAuth.signInWithEmailAndPassword(email, password)).pipe(
-      take(1),
-      tap(() => {
-        this.router.navigate(['/', RoutesEnum.TREE]);
-        this.toastr.success('You are successfully logged in!', '');
-      }),
-      finalize(() => this.$showLoader.next(false)),
-      catchError((error) => {
-        this.toastr.error(`${error.message}`, `Code: ${error.code}`);
-        return of(error);
-      }),
-  ).subscribe();
+  signIn({ email, password }: IUser): Observable<firebase.auth.UserCredential> {
+    return from<Promise<firebase.auth.UserCredential>>(this.angularFireAuth.signInWithEmailAndPassword(email, password as string));
   }
 
   /* Sign out */
-  signOut(): void {
-    this.$showLoader.next(true);
-    from(this.angularFireAuth.signOut()).pipe(
-      take(1),
-      tap(() => {
-        this.router.navigate(['/', RoutesEnum.HOME]);
-        this.toastr.success('You are sign out!', '');
-      }),
-      finalize(() => this.$showLoader.next(false)),
-      catchError((error) => {
-        this.toastr.error(`${error.message}`, `Code: ${error.code}`);
-        return of(error);
-      }),
-    ).subscribe();
+  signOut(): Observable<void> {
+    return from<Promise<void>>(this.angularFireAuth.signOut());
   }
 
   /* Reset password */
   resetPassword(email: string): Observable<void> {
-    return from(this.angularFireAuth.sendPasswordResetEmail(email));
+    return from<Promise<void>>(this.angularFireAuth.sendPasswordResetEmail(email));
   }
 }
