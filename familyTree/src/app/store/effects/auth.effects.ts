@@ -25,7 +25,10 @@ export class AuthEffects {
   signUpWithEmail$: Observable<any> = createEffect(() => this.actions.pipe(
     ofType(AuthStateActionsEnum.SignUpWithEmail),
     switchMap(({ user }) => this.authService.signUp(user).pipe(
-      map((data: firebase.auth.UserCredential) => ({ type: AuthStateActionsEnum.SignUpWithEmailSuccess, data })),
+      map((data: firebase.auth.UserCredential) => {
+        Object.freeze(data);
+        return { type: AuthStateActionsEnum.SignUpWithEmailSuccess, data };
+      }),
       catchError((error: FirebaseError) => of({ type: AuthStateActionsEnum.SignUpWithEmailError, error })),
     )),
   ));
@@ -49,7 +52,11 @@ export class AuthEffects {
   signInWithEmail$: Observable<any> = createEffect(() => this.actions.pipe(
     ofType(AuthStateActionsEnum.SignInWithEmail),
     switchMap(({ user }) => this.authService.signIn(user).pipe(
-      map((data: firebase.auth.UserCredential) => ({ type: AuthStateActionsEnum.SignInWithEmailSuccess, data })),
+      map((data: firebase.auth.UserCredential) => {
+        Object.freeze(data);
+        return { type: AuthStateActionsEnum.SignInWithEmailSuccess, data };
+      }
+        ),
       catchError((error: FirebaseError) => of({ type: AuthStateActionsEnum.SignInWithEmailError, error })),
     )),
   ));
