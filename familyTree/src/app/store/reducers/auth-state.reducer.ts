@@ -13,6 +13,7 @@ export const authFeature = createFeature({
             isLoading: true,
             errorMessage: null,
             infoMessage: null,
+            isEmailSend: false,
         })),
         on(AuthStateActions.signUpWithEmailSuccess, (state) => ({
             ...state,
@@ -26,10 +27,15 @@ export const authFeature = createFeature({
         })),
         on(AuthStateActions.signInWithEmail, (state, { user }) => ({
             ...state,
-            user,
+            user: {
+                ...state.user,
+                email: user.email,
+                password: null,
+            },
             isLoading: true,
             errorMessage: null,
             infoMessage: null,
+            isEmailSend: false,
         })),
         on(AuthStateActions.signInWithEmailSuccess, (state) => ({
             ...state,
@@ -65,9 +71,10 @@ export const authFeature = createFeature({
             isLoading: false,
             isEmailSend: true,
         })),
-        on(AuthStateActions.SendPasswordResetEmailError, (state) => ({
+        on(AuthStateActions.SendPasswordResetEmailError, (state, { error: { code, name } }) => ({
             ...state,
             isLoading: false,
+            errorMessage: { code, name },
         })),
         on(AuthStateActions.UserIsLoggedIn, (state, { data }) => ({
             ...state,

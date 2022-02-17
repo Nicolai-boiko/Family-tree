@@ -5,17 +5,13 @@ import { Observable, of } from 'rxjs';
 import { AuthStateActionsEnum } from '../actions/auth-state.actions';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { FirebaseError } from 'firebase/app';
-import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import firebase from 'firebase/compat';
-import { RoutesEnum } from 'src/app/constants/Enums/common.enums';
 
 @Injectable()
 export class AuthEffects {
   constructor(
     private readonly actions: Actions,
     private readonly authService: AuthService,
-    private readonly router: Router,
     private readonly toastr: ToastrService,
   ) {}
 
