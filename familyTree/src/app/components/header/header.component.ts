@@ -6,7 +6,7 @@ import { Observable, take } from 'rxjs';
 import { YesOrNoEnum } from 'src/app/constants/Enums/common.enums';
 import { IAuthState } from '../../store/state/auth.state';
 import { Store } from '@ngrx/store';
-import { LogoutStart } from 'src/app/store/actions/auth-state.actions';
+import { CoreActions } from 'src/app/store/actions/auth-state.actions';
 import { authFeature } from 'src/app/store/reducers/auth-state.reducer';
 import { IUser } from 'src/app/constants/Interfaces/common.interfaces';
 
@@ -38,7 +38,7 @@ export class HeaderComponent {
       take(1)
     ).subscribe((data: YesOrNoEnum) => {
       if(data === YesOrNoEnum.YES) { 
-        this.store.dispatch(LogoutStart()); 
+        this.store.dispatch(CoreActions.logoutStart()); 
       }
     });
   }

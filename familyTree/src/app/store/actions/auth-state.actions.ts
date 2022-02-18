@@ -46,33 +46,49 @@ export const signInWithEmailError = createAction(
     props<{ error: FirebaseError }>(),
 );
 
-export const LogoutStart = createAction(
+export const logoutStart = createAction(
     AuthStateActionsEnum.LogoutStart,
 );
 
-export const LogoutEnd = createAction(
+export const logoutEnd = createAction(
     AuthStateActionsEnum.LogoutEnd,
 );
 
-export const SendPasswordResetEmail = createAction(
+export const sendPasswordResetEmail = createAction(
     AuthStateActionsEnum.SendPasswordResetEmail,
     props<{ email: string }>(),
 );
 
-export const SendPasswordResetEmailSuccess = createAction(
+export const sendPasswordResetEmailSuccess = createAction(
     AuthStateActionsEnum.SendPasswordResetEmailSuccess,
 );
 
-export const SendPasswordResetEmailError = createAction(
+export const sendPasswordResetEmailError = createAction(
     AuthStateActionsEnum.SendPasswordResetEmailError,
     props<{ error: FirebaseError }>(),
 );
 
-export const UserIsLoggedIn = createAction(
+export const userIsLoggedIn = createAction(
     AuthStateActionsEnum.UserIsLoggedIn,
     props<{ data: firebase.User }>(),
 );
 
-export const UserIsLoggedOut = createAction(
+export const userIsLoggedOut = createAction(
     AuthStateActionsEnum.UserIsLoggedOut,
 );
+
+export const CoreActions = {
+    signInWithEmail,
+    signInWithEmailError,
+    signInWithEmailSuccess,
+    signUpWithEmail,
+    signUpWithEmailError,
+    signUpWithEmailSuccess,
+    sendPasswordResetEmail,
+    sendPasswordResetEmailError,
+    sendPasswordResetEmailSuccess,
+    logoutStart,
+    logoutEnd,
+    userIsLoggedIn,
+    userIsLoggedOut,
+}
