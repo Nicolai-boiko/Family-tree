@@ -1,6 +1,6 @@
 import { initialAuthState } from '../state/auth.state';
 import { createFeature, createReducer, on } from '@ngrx/store';
-import * as AuthStateActions from '../actions/auth-state.actions';
+import { CoreActions } from '../actions/auth-state.actions';
 
 export const AUTH_FEATURE_NAME = 'authState';
 
@@ -8,24 +8,24 @@ export const authFeature = createFeature({
     name: AUTH_FEATURE_NAME,
     reducer: createReducer(
         initialAuthState,
-        on(AuthStateActions.signUpWithEmail, (state) => ({
+        on(CoreActions.signUpWithEmail, (state) => ({
             ...state,
             isLoading: true,
             errorMessage: null,
             infoMessage: null,
             isEmailSend: false,
         })),
-        on(AuthStateActions.signUpWithEmailSuccess, (state) => ({
+        on(CoreActions.signUpWithEmailSuccess, (state) => ({
             ...state,
             isLoading: false,
         })),
-        on(AuthStateActions.signUpWithEmailError, (state, { error: { code, name } }) => ({
+        on(CoreActions.signUpWithEmailError, (state, { error: { code, name } }) => ({
             ...state,
             user: null,
             isLoading: false,
             errorMessage: { code, name },
         })),
-        on(AuthStateActions.signInWithEmail, (state, { user }) => ({
+        on(CoreActions.signInWithEmail, (state, { user }) => ({
             ...state,
             user: {
                 ...state.user,
@@ -37,46 +37,46 @@ export const authFeature = createFeature({
             infoMessage: null,
             isEmailSend: false,
         })),
-        on(AuthStateActions.signInWithEmailSuccess, (state) => ({
+        on(CoreActions.signInWithEmailSuccess, (state) => ({
             ...state,
             isLoading: false,
             infoMessage: null,
         })),
-        on(AuthStateActions.signInWithEmailError, (state, { error: { code, name } }) => ({
+        on(CoreActions.signInWithEmailError, (state, { error: { code, name } }) => ({
             ...state,
             user: null,
             isLoading: false,
             errorMessage: { code, name },
         })),
-        on(AuthStateActions.LogoutStart, (state) => ({
+        on(CoreActions.logoutStart, (state) => ({
             ...state,
             isLoading: true,
             errorMessage: null,
             infoMessage: null,
         })),
-        on(AuthStateActions.LogoutEnd, (state) => ({
+        on(CoreActions.logoutEnd, (state) => ({
             ...state,
             user: null,
             isLoading: false,
         })),
-        on(AuthStateActions.SendPasswordResetEmail, (state) => ({
+        on(CoreActions.sendPasswordResetEmail, (state) => ({
             ...state,
             isLoading: true,
             isEmailSend: false,
             errorMessage: null,
             infoMessage: null,
         })),
-        on(AuthStateActions.SendPasswordResetEmailSuccess, (state) => ({
+        on(CoreActions.sendPasswordResetEmailSuccess, (state) => ({
             ...state,
             isLoading: false,
             isEmailSend: true,
         })),
-        on(AuthStateActions.SendPasswordResetEmailError, (state, { error: { code, name } }) => ({
+        on(CoreActions.sendPasswordResetEmailError, (state, { error: { code, name } }) => ({
             ...state,
             isLoading: false,
             errorMessage: { code, name },
         })),
-        on(AuthStateActions.UserIsLoggedIn, (state, { data }) => ({
+        on(CoreActions.userIsLoggedIn, (state, { data }) => ({
             ...state,
             user: {
                 ...state.user,
@@ -84,7 +84,7 @@ export const authFeature = createFeature({
                 password: null,
             },
         })),
-        on(AuthStateActions.UserIsLoggedOut, (state) => ({
+        on(CoreActions.userIsLoggedOut, (state) => ({
             ...state,
             user: null,
         })),

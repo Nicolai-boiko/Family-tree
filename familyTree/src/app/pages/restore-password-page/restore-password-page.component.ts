@@ -5,7 +5,7 @@ import { RoutesEnum } from 'src/app/constants/Enums/common.enums';
 import { IAuthState } from '../../store/state/auth.state';
 import { Store } from '@ngrx/store';
 import { authFeature } from 'src/app/store/reducers/auth-state.reducer';
-import { SendPasswordResetEmail } from 'src/app/store/actions/auth-state.actions';
+import { CoreActions } from 'src/app/store/actions/auth-state.actions';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -40,7 +40,7 @@ export class RestorePasswordPageComponent implements OnInit {
   resetPassword(): void {
     if (this.resetForm.valid) {
       const email: string = this.emailControl.value;
-      this.store.dispatch(SendPasswordResetEmail({ email }));
+      this.store.dispatch(CoreActions.sendPasswordResetEmail({ email }));
     }
   }
 }
