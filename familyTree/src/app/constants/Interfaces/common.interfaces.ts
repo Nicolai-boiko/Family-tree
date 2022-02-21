@@ -6,10 +6,14 @@ export interface IUser {
   secondName?: string;
   thirdName?: string | null;
   gender?: GenderEnum;
-  birth?: Date | null;
-  death?: Date | null;
   id?: string | null;
   photoUrl?: string;
+  registrationDate?: string;
+  uid?: string;
+  country?: string;
+  city?: string;
+  postcode?: string;
+  birthday?: string;
 }
 
 export interface FirebaseError {

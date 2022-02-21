@@ -16,6 +16,10 @@ export enum AuthStateActionsEnum {
     SendPasswordResetEmailError = '[auth-state] Send password reset email error',
     UserIsLoggedIn = '[auth-state] Check user auth is logged in',
     UserIsLoggedOut = '[auth-state] Check user auth is logged out',
+    GetUserCollection = '[auth-state] Get user collection',
+    GetUserCollectionSuccess = '[auth-state] Get user collection success',
+    GetUserCollectionError = '[auth-state] Get user collection error',
+    UpdateUserCollection = '[auth-state] Update user collection ',
 }
 
 export const signUpWithEmail = createAction(
@@ -25,6 +29,7 @@ export const signUpWithEmail = createAction(
 
 export const signUpWithEmailSuccess = createAction(
     AuthStateActionsEnum.SignUpWithEmailSuccess,
+    props<{ user: IUser, data: firebase.auth.UserCredential }>(),
 );
 
 export const signUpWithEmailError = createAction(
@@ -77,6 +82,26 @@ export const userIsLoggedOut = createAction(
     AuthStateActionsEnum.UserIsLoggedOut,
 );
 
+export const getUserCollection = createAction(
+    AuthStateActionsEnum.GetUserCollection,
+    props<{ data: firebase.User }>(),
+);
+
+export const getUserCollectionSuccess = createAction(
+    AuthStateActionsEnum.GetUserCollectionSuccess,
+    props<{ collection: IUser }>(),
+);
+
+export const getUserCollectionError = createAction(
+    AuthStateActionsEnum.GetUserCollectionError,
+    props<{ error: FirebaseError }>(),
+);
+
+export const updateUserCollection = createAction(
+    AuthStateActionsEnum.UpdateUserCollection,
+    props<{ user: IUser }>(),
+);
+
 export const CoreActions = {
     signInWithEmail,
     signInWithEmailError,
@@ -91,4 +116,8 @@ export const CoreActions = {
     logoutEnd,
     userIsLoggedIn,
     userIsLoggedOut,
+    getUserCollection,
+    getUserCollectionSuccess,
+    getUserCollectionError,
+    updateUserCollection,
 }

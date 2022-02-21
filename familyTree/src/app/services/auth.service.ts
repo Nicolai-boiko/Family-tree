@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from "firebase/compat";
-import { from, Observable} from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { IUser } from '../constants/Interfaces/common.interfaces';
 import { Store } from '@ngrx/store';
 import { IAuthState } from '../store/state/auth.state';
@@ -18,14 +18,14 @@ export class AuthService {
 
   /* Check is user logged in firebase.auth.User */
   checkUserAuth() {
-    this.angularFireAuth.onAuthStateChanged((data: firebase.User | null) => {
+    this.angularFireAuth.onIdTokenChanged((data: firebase.User | null) => {
       if(data) {
         Object.freeze(data);
         this.store.dispatch(CoreActions.userIsLoggedIn({ data }));
       } else {
         this.store.dispatch(CoreActions.userIsLoggedOut());
       }
-    });
+    })
   }
 
   /* Sign up Observable<firebase.auth.UserCredential> */

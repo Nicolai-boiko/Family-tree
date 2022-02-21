@@ -76,17 +76,17 @@ export const authFeature = createFeature({
             isLoading: false,
             errorMessage: { code, name },
         })),
-        on(CoreActions.userIsLoggedIn, (state, { data }) => ({
+        on(CoreActions.getUserCollectionSuccess, (state, { collection }) => ({
             ...state,
             user: {
-                ...state.user,
-                email: data.email as string,
-                password: null,
+                ...collection,
             },
         })),
-        on(CoreActions.userIsLoggedOut, (state) => ({
+        on(CoreActions.getUserCollectionError, (state, { error: { code, name } }) => ({
             ...state,
             user: null,
+            isLoading: false,
+            errorMessage: { code, name },
         })),
     ),
 });
