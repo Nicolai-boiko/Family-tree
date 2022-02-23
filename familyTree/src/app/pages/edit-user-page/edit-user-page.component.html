@@ -2,6 +2,11 @@
     <div class="profile-container">
       <div class="profile-image"></div>
       <mat-form-field appearance="outline">
+        <mat-label>Registration date</mat-label>
+        <input matInput readonly formControlName="registrationDate"/>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
         <mat-label>Name</mat-label>
         <input matInput formControlName="firstName"/>
         <mat-error *ngIf="firstNameControl.invalid && firstNameControl.touched">
@@ -17,14 +22,9 @@
         </mat-error>
       </mat-form-field>
   
-      <h2>Registration date</h2>
-  
       <mat-form-field appearance="outline">
-        <mat-label>Gender</mat-label>
-        <mat-select formControlName="gender">
-          <mat-option [value]="gender.MALE">{{gender.MALE | titlecase}}</mat-option>
-          <mat-option [value]="gender.FEMALE">{{gender.FEMALE | titlecase}}</mat-option>
-        </mat-select>
+          <mat-label>Gender</mat-label>
+          <input matInput readonly formControlName="gender"/>
       </mat-form-field>
   
       <mat-form-field appearance="outline">

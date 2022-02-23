@@ -19,7 +19,9 @@ export enum AuthStateActionsEnum {
     GetUserCollection = '[auth-state] Get user collection',
     GetUserCollectionSuccess = '[auth-state] Get user collection success',
     GetUserCollectionError = '[auth-state] Get user collection error',
-    UpdateUserCollection = '[auth-state] Update user collection ',
+    UpdateUserCollection = '[auth-state] Update user collection',
+    UpdateUserCollectionSuccess = '[auth-state] Update user collection success',
+    UpdateUserCollectionError = '[auth-state] Update user collection error',
 }
 
 export const signUpWithEmail = createAction(
@@ -102,6 +104,16 @@ export const updateUserCollection = createAction(
     props<{ user: IUser }>(),
 );
 
+export const updateUserCollectionSuccess = createAction(
+    AuthStateActionsEnum.UpdateUserCollectionSuccess,
+    props<{ storeUser: IUser }>(),
+);
+
+export const updateUserCollectionError = createAction(
+    AuthStateActionsEnum.UpdateUserCollectionError,
+    props<{ error: FirebaseError }>(),
+);
+
 export const CoreActions = {
     signInWithEmail,
     signInWithEmailError,
@@ -120,4 +132,6 @@ export const CoreActions = {
     getUserCollectionSuccess,
     getUserCollectionError,
     updateUserCollection,
+    updateUserCollectionSuccess,
+    updateUserCollectionError,
 }

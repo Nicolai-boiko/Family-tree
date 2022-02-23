@@ -1,8 +1,8 @@
 <form [formGroup]="authForm" (ngSubmit)="onSubmit()" class="login-form">
   <div class="form-container">
-    <h2>{{isRegistrationPage ? 'Registration' : 'Login'}}</h2>
+    <h2>{{pageURL === routesEnum.REGISTRATION ? 'Registration' : 'Login'}}</h2>
 
-    <ng-container *ngIf="isRegistrationPage">
+    <ng-container *ngIf="pageURL === routesEnum.REGISTRATION">
       <mat-form-field appearance="outline">
         <mat-label>Name</mat-label>
         <input matInput formControlName="firstName"/>
@@ -60,7 +60,7 @@
     </mat-form-field>
 
     <a 
-      *ngIf="!isRegistrationPage"
+      *ngIf="pageURL !== routesEnum.REGISTRATION"
       [routerLink]="['/', routesEnum.RESTORE_PASSWORD]"
       [queryParams]="{ email: emailControl.value }" 
       class="restore-password-link" 
@@ -70,13 +70,13 @@
 
     <div class="login-form-buttons">
       <a 
-        [routerLink]="['/', isRegistrationPage ? routesEnum.LOG_IN : routesEnum.REGISTRATION]" 
+        [routerLink]="['/', pageURL === routesEnum.REGISTRATION ? routesEnum.LOG_IN : routesEnum.REGISTRATION]" 
         mat-flat-button 
         color="accent"
       >
-        {{isRegistrationPage ? 'Back to login' : 'Registration'}}
+        {{pageURL === routesEnum.REGISTRATION ? 'Back to login' : 'Registration'}}
       </a>
-      <button mat-flat-button color="primary">{{isRegistrationPage ? 'Confirm' : 'Login'}}</button>
+      <button mat-flat-button color="primary">{{pageURL === routesEnum.REGISTRATION ? 'Confirm' : 'Login'}}</button>
     </div>
   </div>
 </form>

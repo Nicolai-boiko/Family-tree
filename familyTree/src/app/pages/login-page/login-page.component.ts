@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RoutesEnum } from 'src/app/constants/Enums/common.enums';
-import { LoginPageHelper } from './login-page.helper';
+import { FormHelper } from '../form.helper';
 import { GenderEnum } from 'src/app/constants/Enums/common.enums';
 import { IUser } from 'src/app/constants/Interfaces/common.interfaces';
 import { IAuthState } from '../../store/state/auth.state';
@@ -17,7 +17,7 @@ import { CoreActions } from 'src/app/store/actions/auth-state.actions';
 export class LoginPageComponent implements OnInit {
   public routesEnum: typeof RoutesEnum = RoutesEnum;
   public gender: typeof GenderEnum = GenderEnum;
-  public isRegistrationPage: boolean = this.activatedRoute.snapshot.url[0].path === RoutesEnum.REGISTRATION;
+  public pageURL: string = this.activatedRoute.snapshot.url[0].path;
   public authForm!: FormGroup;
   public hidePassword = true;
   
@@ -40,14 +40,14 @@ export class LoginPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.authForm = new FormGroup(LoginPageHelper.getFormData(this.isRegistrationPage));
+    this.authForm = new FormGroup(FormHelper.getFormData(this.pageURL));
   }
 
   onSubmit(): void {
     if (this.authForm.valid) {
       const user: IUser = this.authForm.getRawValue() as IUser;
       
-      this.isRegistrationPage
+      this.pageURL === RoutesEnum.REGISTRATION
           ? this.store.dispatch(CoreActions.signUpWithEmail({ user }))
           : this.store.dispatch(CoreActions.signInWithEmail({ user }));
     }
