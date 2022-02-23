@@ -58,6 +58,11 @@ export const authFeature = createFeature({
             ...state,
             user: null,
             isLoading: false,
+            isInitializing: false,
+        })),
+        on(CoreActions.userIsLoggedOut, (state) => ({
+            ...state,
+            isInitializing: false,
         })),
         on(CoreActions.sendPasswordResetEmail, (state) => ({
             ...state,
@@ -86,6 +91,7 @@ export const authFeature = createFeature({
                 ...collection,
             },
             isLoading: false,
+            isInitializing: false,
         })),
         on(CoreActions.getUserCollectionError, (state, { error: { code, name } }) => ({
             ...state,
