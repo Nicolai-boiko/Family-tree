@@ -6,6 +6,7 @@ export interface IAuthState {
   infoMessage: string | null;
   isLoading: boolean;
   isEmailSend: boolean;
+  isInitializing: boolean,
 }
 
 export const initialAuthState: IAuthState = {
@@ -14,4 +15,5 @@ export const initialAuthState: IAuthState = {
   infoMessage: null,
   isLoading: false,
   isEmailSend: false,  
+  isInitializing: true,
 };
