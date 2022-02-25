@@ -5,13 +5,11 @@ import { Observable, of } from 'rxjs';
 import { CoreActions } from '../actions/auth-state.actions';
 import { catchError, map, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
 import { FirebaseError } from 'firebase/app';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { ToastrService } from 'ngx-toastr';
 import { RoutesEnum } from 'src/app/constants/Enums/common.enums';
 import { Router } from '@angular/router';
-import { USER_COLLECTION } from 'src/app/constants/Enums/common.enums';
 import { IUser } from 'src/app/constants/Interfaces/common.interfaces';
-import { Store } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 import { IAuthState } from '../state/auth.state';
 import { authFeature } from '../reducers/auth-state.reducer';
 import firebase from "firebase/compat";
@@ -23,7 +21,6 @@ export class AuthEffects {
     private authService: AuthService,
     private toastr: ToastrService,
     private route: Router,
-    private afs: AngularFirestore,
     private store: Store<IAuthState>,
   ) {}
 
@@ -106,7 +103,7 @@ export class AuthEffects {
   getUserCollection$: Observable<any> = createEffect(() => this.actions.pipe(
     ofType(CoreActions.getUserCollection),
     switchMap(({ data }) => this.authService.getCollection(data).pipe(
-      map((collection) => CoreActions.getUserCollectionSuccess({ collection })),
+      map((userCollection) => CoreActions.getUserCollectionSuccess({ userCollection })),
       catchError((error: FirebaseError) => of(CoreActions.getUserCollectionError({ error }))),
     ))
   ));
@@ -118,18 +115,19 @@ export class AuthEffects {
 
   updateUserCollection$: Observable<any> = createEffect(() => this.actions.pipe(
     ofType(CoreActions.updateUserCollection),
+    map((action) => action.user),
     withLatestFrom(this.store.select(authFeature.selectUser)),
-      map(([{ user }, storeUser ]) => {
-        this.authService.updateCollection(user, storeUser as IUser)
-        return CoreActions.updateUserCollectionSuccess({ storeUser: storeUser as IUser })
+    map(([ userFormData , storeUser ]: [IUser, IUser | null]) => {
+      this.authService.updateCollection(userFormData, storeUser?.uid)
+      return CoreActions.updateUserCollectionSuccess({ storeUser: storeUser as IUser })
     }),
       catchError((error: FirebaseError) => of(CoreActions.updateUserCollectionError({ error }))),
   ));
 
   updateUserCollectionSuccess$: Observable<any> = createEffect(() => this.actions.pipe(
     ofType(CoreActions.updateUserCollectionSuccess),
+    map(({storeUser}) => CoreActions.getUserCollection({ data: storeUser as unknown as firebase.User })),
     tap(() => this.toastr.success('New data has saved', 'Success')),
-    map(({storeUser}) => CoreActions.getUserCollection({ data: storeUser as unknown as firebase.User }))
   ));
 
   updateUserCollectionError$: Observable<any> = createEffect(() => this.actions.pipe(

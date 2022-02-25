@@ -47,13 +47,13 @@ export class EditUserPageComponent implements OnInit, OnDestroy {
       this.profileForm = new FormGroup(FormHelper.getFormData(RoutesEnum.EDIT_USER));
       this.subscription = this.store.select(authFeature.selectUser).subscribe(((user) => {
         this.profileForm.patchValue({
-          firstName: user?.firstName,
-          secondName: user?.secondName,
-          gender: user?.gender,
-          country: user?.country,
-          city: user?.city,
-          postcode: user?.postcode,
-          registrationDate: user?.registrationDate,
+          firstName: user?.firstName || '',
+          secondName: user?.secondName || '',
+          gender: user?.gender || '',
+          country: user?.country || '',
+          city: user?.city || '',
+          postcode: user?.postcode || '',
+          registrationDate: user?.registrationDate || '',
         })
       }))
   }

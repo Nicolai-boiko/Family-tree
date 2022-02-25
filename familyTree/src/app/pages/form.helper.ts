@@ -2,7 +2,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { RoutesEnum } from 'src/app/constants/Enums/common.enums';
 
 export class FormHelper {
-  static getFormData(isRegister: string): Record<string, FormControl> {
+  static getFormData(isRegister: RoutesEnum): Record<string, FormControl> {
     let formBase: Record<string, FormControl> = {
       email: new FormControl('', [
         Validators.required,
@@ -14,36 +14,27 @@ export class FormHelper {
         Validators.minLength(8),
       ]),
     };
+    const extendForm: Record<string, FormControl> = {
+      firstName: new FormControl('', [
+        Validators.required,
+        Validators.pattern(/[a-zA-Z]/g),
+        Validators.maxLength(50),
+      ]),
+      secondName: new FormControl('', [
+        Validators.required,
+        Validators.pattern(/[a-zA-Z]/g),
+        Validators.maxLength(50),
+      ]),
+      gender: new FormControl('', [Validators.required]),
+    };
     if (isRegister === RoutesEnum.REGISTRATION) {
       formBase = {
         ...formBase,
-        firstName: new FormControl('', [
-          Validators.required,
-          Validators.pattern(/[a-zA-Z]/g),
-          Validators.maxLength(50),
-        ]),
-        secondName: new FormControl('', [
-          Validators.required,
-          Validators.pattern(/[a-zA-Z]/g),
-          Validators.maxLength(50),
-        ]),
-        gender: new FormControl('', [Validators.required]),
+        ...extendForm,
       };
     } else if (isRegister === RoutesEnum.EDIT_USER) {
       formBase = {
-        firstName: new FormControl('', [
-          Validators.required,
-          Validators.pattern(/[a-zA-Z]/g),
-          Validators.maxLength(50),
-        ]),
-        secondName: new FormControl('', [
-          Validators.required,
-          Validators.pattern(/[a-zA-Z]/g),
-          Validators.maxLength(50),
-        ]),
-        gender: new FormControl('', [
-          Validators.required,
-        ]),
+        ...extendForm,
         country: new FormControl('', [
           Validators.pattern(/[a-zA-Z]/g),
           Validators.maxLength(50),

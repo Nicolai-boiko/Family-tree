@@ -91,7 +91,7 @@ export const getUserCollection = createAction(
 
 export const getUserCollectionSuccess = createAction(
     AuthStateActionsEnum.GetUserCollectionSuccess,
-    props<{ collection: IUser }>(),
+    props<{ userCollection: IUser }>(),
 );
 
 export const getUserCollectionError = createAction(

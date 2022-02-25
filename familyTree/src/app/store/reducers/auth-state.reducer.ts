@@ -85,10 +85,11 @@ export const authFeature = createFeature({
             ...state,
             isLoading: true,
         })),
-        on(CoreActions.getUserCollectionSuccess, (state, { collection }) => ({
+        on(CoreActions.getUserCollectionSuccess, (state, { userCollection }) => ({
             ...state,
             user: {
-                ...collection,
+                ...state.user,
+                ...userCollection,
             },
             isLoading: false,
             isInitializing: false,
@@ -121,5 +122,6 @@ export const {
     selectErrorMessage,
     selectInfoMessage,
     selectIsEmailSend,
+    selectIsInitializing,
     reducer,
   } = authFeature;
