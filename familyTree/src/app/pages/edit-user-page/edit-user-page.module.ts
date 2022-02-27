@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { AppRoutingModule } from 'src/app/app-routing.module';
+import { AngularFireStorageModule, BUCKET } from '@angular/fire/compat/storage';
 
 @NgModule({
   declarations: [EditUserPageComponent],
@@ -18,6 +19,7 @@ import { AppRoutingModule } from 'src/app/app-routing.module';
     MatSelectModule,
     MatButtonModule,
     AppRoutingModule,
+    AngularFireStorageModule,
   ],
   exports: [EditUserPageComponent],
 })

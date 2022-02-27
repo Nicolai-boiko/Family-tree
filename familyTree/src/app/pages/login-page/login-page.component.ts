@@ -40,7 +40,7 @@ export class LoginPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.authForm = new FormGroup(FormHelper.getFormData(this.pageURL));
+    this.authForm = new FormGroup(FormHelper.getFormData(this.pageURL as RoutesEnum));
   }
 
   onSubmit(): void {

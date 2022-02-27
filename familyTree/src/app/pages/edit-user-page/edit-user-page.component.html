@@ -1,10 +1,14 @@
 <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-form">
     <div class="profile-container">
-      <div class="profile-image"></div>
-      <mat-form-field appearance="outline">
-        <mat-label>Registration date</mat-label>
-        <input matInput readonly formControlName="registrationDate"/>
-      </mat-form-field>
+      <label class="profile-image" for="upload-photo">
+        <img class="profile-image" [src]="(downloadURL | async) ? (downloadURL | async) : '../../../assets/img/man.png'" alt="user_photo">
+      </label>
+      <input (change)="uploadPhoto($event)" type="file" id="upload-photo"  class="profile-image-upload">
+      <button (click)="deletePhoto()" type="button">Delete photo</button>
+      <div class="registration-date">
+        <label for="reg-date">Registration date:</label>
+        <input id="reg-date" matInput readonly formControlName="registrationDate"/>
+      </div>
 
       <mat-form-field appearance="outline">
         <mat-label>Name</mat-label>
