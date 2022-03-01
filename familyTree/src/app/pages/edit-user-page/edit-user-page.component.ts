@@ -55,7 +55,7 @@ export class EditUserPageComponent implements OnInit, OnDestroy {
           postcode: user?.postcode || '',
           registrationDate: user?.registrationDate || '',
         })
-      }))
+      }));
   }
 
   onSubmit(): void {
