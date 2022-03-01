@@ -48,6 +48,7 @@ export class FormHelper {
           Validators.maxLength(8),
         ]),
         registrationDate: new FormControl(''),
+        photoUrl: new FormControl(''),
       }
     }
     return formBase;

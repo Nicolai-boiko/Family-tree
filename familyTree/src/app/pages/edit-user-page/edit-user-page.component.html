@@ -1,10 +1,31 @@
 <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-form">
     <div class="profile-container">
       <label class="profile-image" for="upload-photo">
-        <img class="profile-image" [src]="(downloadURL | async) ? (downloadURL | async) : '../../../assets/img/man.png'" alt="user_photo">
+        <img 
+          [src]="(downloadURL$ | async) ? (downloadURL$ | async) : '../../../assets/img/man.png'"
+          class="profile-image" 
+          alt="user_photo"
+        >
       </label>
-      <input (change)="uploadPhoto($event)" type="file" id="upload-photo"  class="profile-image-upload">
-      <button (click)="deletePhoto()" type="button">Delete photo</button>
+
+      <input 
+        (change)="uploadPhoto($event)" 
+        type="file" 
+        id="upload-photo" 
+        class="profile-image-upload"
+      >
+
+      <mat-progress-bar 
+        *ngIf="uploadProgress$ | async"
+        [value]="uploadProgress$ | async"
+        mode="determinate" 
+        color="accent" 
+        class="upload-progress"
+      >
+      </mat-progress-bar>
+
+      <button (click)="deletePhoto()" type="button" class="delete-photo-button">Delete photo</button>
+
       <div class="registration-date">
         <label for="reg-date">Registration date:</label>
         <input id="reg-date" matInput readonly formControlName="registrationDate"/>

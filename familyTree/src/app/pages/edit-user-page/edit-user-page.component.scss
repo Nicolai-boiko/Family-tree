@@ -10,6 +10,7 @@
 }
 
 .profile-container {
+  position: relative;
   background-color: $formColor;
   border-radius: 10px;
   display: flex;
@@ -49,8 +50,21 @@
 }
 
 .registration-date {
-  align-self: center;
+  position: absolute;
+  top: 1rem;
   width: auto;
-  text-align: center;
+  font-size: 0.8rem;
   box-sizing: border-box;
+}
+
+.upload-progress {
+  width: 10rem;
+  align-self: center;
+  margin-bottom: 1rem;
+}
+
+.delete-photo-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
 }

@@ -1,4 +1,4 @@
-import { initialAuthState } from '../state/auth.state';
+import { initialAuthState, UploadStatus } from '../state/auth.state';
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { CoreActions } from '../actions/auth-state.actions';
 
@@ -113,6 +113,33 @@ export const authFeature = createFeature({
             isLoading: false,
             errorMessage: { code, name },
         })),
+        on(CoreActions.uploadUserPhoto, (state) => ({
+            ...state,
+            progressStatus: UploadStatus.Started,
+            loadProgress: 0,
+        })),
+        on(CoreActions.uploadUserPhotoProgress, (state, { loadProgress }) => ({
+            ...state,
+            progressStatus: UploadStatus.Running, 
+            loadProgress,
+        })),
+        on(CoreActions.uploadUserPhotoSuccess, (state) => ({
+            ...state,
+            progressStatus: UploadStatus.Success,
+            loadProgress: 0,
+        })),
+        on(CoreActions.uploadUserPhotoError, (state, { error: { code, name } }) => ({
+            ...state,
+            progressStatus: UploadStatus.Failed,
+            errorMessage: { code, name },
+        })),
+        on(CoreActions.updateUserPhotoURL, (state, { downloadURL }) => ({
+            ...state,
+            user : {
+                ...state.user,
+                photoUrl: downloadURL,
+            },
+        })),
     ),
 });
 
@@ -123,5 +150,6 @@ export const {
     selectInfoMessage,
     selectIsEmailSend,
     selectIsInitializing,
+    selectLoadProgress,
     reducer,
   } = authFeature;

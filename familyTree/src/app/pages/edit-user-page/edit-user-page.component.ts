@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { GenderEnum } from 'src/app/constants/Enums/common.enums';
 import { IUser } from 'src/app/constants/Interfaces/common.interfaces';
 import { RoutesEnum } from 'src/app/constants/Enums/common.enums';
@@ -7,11 +7,10 @@ import { Store } from '@ngrx/store';
 import { IAuthState } from 'src/app/store/state/auth.state';
 import { authFeature } from 'src/app/store/reducers/auth-state.reducer';
 import { CoreActions } from 'src/app/store/actions/auth-state.actions';
-import { finalize, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { FormHelper } from '../form.helper';
-import { AngularFireStorage } from '@angular/fire/compat/storage';
 
-import { ToastrService } from 'ngx-toastr';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-edit-user-page',
@@ -25,7 +24,9 @@ export class EditUserPageComponent implements OnInit, OnDestroy {
   public routesEnum: typeof RoutesEnum = RoutesEnum;
   public user!: IUser;
   public uploadPercent!: Observable<number | undefined>;
-  public downloadURL!: Observable<string>;
+  private downloadURL: BehaviorSubject<string> = new BehaviorSubject('');
+  public downloadURL$: Observable<string> = this.downloadURL.asObservable();
+  public uploadProgress$: Observable<number> = this.store.select(authFeature.selectLoadProgress);
   private subscription!: Subscription;
 
   get firstNameControl(): FormControl {
@@ -46,8 +47,7 @@ export class EditUserPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<IAuthState>,
-    private storage: AngularFireStorage,
-    private toastr: ToastrService,
+    public authService: AuthService,
   ) { }
 
   ngOnInit(): void {
@@ -61,37 +61,30 @@ export class EditUserPageComponent implements OnInit, OnDestroy {
           city: user?.city || '',
           postcode: user?.postcode || '',
           registrationDate: user?.registrationDate || '',
-        })
-      }))
+          photoUrl: user?.photoUrl || '',
+        });
+        if(user?.photoUrl) {
+          this.downloadURL.next(user.photoUrl);
+        } else {
+          this.downloadURL.next('');
+        }
+      }));
   }
 
   onSubmit(): void {
-    const user: IUser = this.profileForm.getRawValue();
-    this.store.dispatch(CoreActions.updateUserCollection({ user }));
-  }
-
-  uploadPhoto(event: Event) { 
-    const target = event.target as HTMLInputElement;
-    if (target.files !== null) {
-      if (target.files.length > 0) {
-        const file = target.files[0];
-        if (file.size > 5 * 1024 * 1024) {
-          this.toastr.error('To big file', '');
-        } else {
-          const filePath = 'name-your-file-path-here';
-          const fileRef = this.storage.ref(filePath);
-          const task = this.storage.upload(filePath, file);
-          this.uploadPercent = task.percentageChanges();
-          task.snapshotChanges().pipe(
-            finalize(() => this.downloadURL = fileRef.getDownloadURL()),
-          ).subscribe();
-        }
-      }
+    if(this.profileForm.valid) {
+      const user: IUser = this.profileForm.getRawValue();
+      this.store.dispatch(CoreActions.updateUserCollection({ user }));
     }
   }
 
-  deletePhoto() {
-    this.downloadURL = new Observable<''>();
+  uploadPhoto(event: Event): void { 
+    this.store.dispatch(CoreActions.uploadUserPhoto({ event }));
+  }
+
+  deletePhoto(): void {
+    this.downloadURL.next('');
+    this.profileForm.controls['photoUrl'].setValue('');
   }
   
   ngOnDestroy(): void {

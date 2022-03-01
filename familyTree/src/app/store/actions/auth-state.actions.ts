@@ -22,6 +22,11 @@ export enum AuthStateActionsEnum {
     UpdateUserCollection = '[auth-state] Update user collection',
     UpdateUserCollectionSuccess = '[auth-state] Update user collection success',
     UpdateUserCollectionError = '[auth-state] Update user collection error',
+    UploadUserPhoto = '[auth-state] Upload user photo',
+    UploadUserPhotoProgress = '[auth-state] Upload user photo progress',
+    UploadUserPhotoSuccess = '[auth-state] Upload user photo success',
+    UploadUserPhotoError = '[auth-state] Upload user photo error',
+    UpdateUserPhotoURL = '[auth-state] Update user photo',
 }
 
 export const signUpWithEmail = createAction(
@@ -114,6 +119,31 @@ export const updateUserCollectionError = createAction(
     props<{ error: FirebaseError }>(),
 );
 
+export const uploadUserPhoto = createAction(
+    AuthStateActionsEnum.UploadUserPhoto,
+    props<{ event: Event }>(),
+);
+
+export const uploadUserPhotoProgress = createAction(
+    AuthStateActionsEnum.UploadUserPhotoProgress,
+    props<{ loadProgress: number }>(),
+);
+
+export const uploadUserPhotoSuccess = createAction(
+    AuthStateActionsEnum.UploadUserPhotoSuccess,
+    props<{ taskRef: string }>(),
+);
+
+export const uploadUserPhotoError = createAction(
+    AuthStateActionsEnum.UploadUserPhotoError,
+    props<{ error: FirebaseError }>(),
+);
+
+export const updateUserPhotoURL = createAction(
+    AuthStateActionsEnum.UpdateUserPhotoURL,
+    props<{ downloadURL: string }>(),
+);
+
 export const CoreActions = {
     signInWithEmail,
     signInWithEmailError,
@@ -134,4 +164,9 @@ export const CoreActions = {
     updateUserCollection,
     updateUserCollectionSuccess,
     updateUserCollectionError,
+    uploadUserPhoto,
+    uploadUserPhotoProgress,
+    uploadUserPhotoSuccess,
+    uploadUserPhotoError,
+    updateUserPhotoURL,
 }

@@ -1,7 +1,7 @@
 import { GenderEnum } from '../Enums/common.enums';
 export interface IUser {
-  email: string;
-  password: string | null;
+  email?: string;
+  password?: string | null;
   firstName?: string;
   secondName?: string;
   thirdName?: string | null;

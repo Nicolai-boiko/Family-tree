@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { AuthService } from '../../services/auth.service';
 import { Observable, of } from 'rxjs';
 import { CoreActions } from '../actions/auth-state.actions';
-import { catchError, map, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
+import { catchError, concatMap, filter, map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { FirebaseError } from 'firebase/app';
 import { ToastrService } from 'ngx-toastr';
 import { RoutesEnum } from 'src/app/constants/Enums/common.enums';
@@ -16,14 +16,6 @@ import firebase from "firebase/compat";
 
 @Injectable()
 export class AuthEffects {
-  constructor(
-    private actions: Actions,
-    private authService: AuthService,
-    private toastr: ToastrService,
-    private route: Router,
-    private store: Store<IAuthState>,
-  ) {}
-
   signUpWithEmail$: Observable<any> = createEffect(() => this.actions.pipe(
     ofType(CoreActions.signUpWithEmail),
     switchMap(({ user }) => this.authService.signUp(user).pipe(
@@ -134,4 +126,49 @@ export class AuthEffects {
     ofType(CoreActions.updateUserCollectionError),
     tap(({ error: { code, name } }) => this.toastr.error(code, name)),
   ), { dispatch: false });
+
+  uploadUserPhoto$: Observable<any> = createEffect(() => this.actions.pipe(
+    ofType(CoreActions.uploadUserPhoto),
+    map((action) => action.event),
+    withLatestFrom(this.store.select(authFeature.selectUser)),
+    concatMap(([ event , storeUser ]) => this.authService.uploadUserPhoto(event, storeUser?.uid).pipe(
+      filter(Boolean),
+      map((taskSnapshot: firebase.storage.UploadTaskSnapshot) => this.getActionFromUploadTaskSnapshot(taskSnapshot)),
+      catchError((error: FirebaseError) => of(CoreActions.uploadUserPhotoError({ error }))),
+    ))
+  ));
+
+  uploadUserPhotoSuccess$: Observable<any> = createEffect(() => this.actions.pipe(
+    ofType(CoreActions.uploadUserPhotoSuccess),
+    concatMap(({ taskRef }) => this.authService.getPhotoURL(taskRef).pipe(
+      map((downloadURL) => CoreActions.updateUserPhotoURL({ downloadURL })),
+    )),
+    tap(() => this.toastr.success('New photo has uploaded', 'Success')),
+  ));
+
+  uploadUserPhotoError$: Observable<any> = createEffect(() => this.actions.pipe(
+    ofType(CoreActions.uploadUserPhotoError),
+    tap(({ error: { code, name } }) => this.toastr.error(code, name)),
+  ), { dispatch: false });
+
+  constructor(
+    private actions: Actions,
+    private authService: AuthService,
+    private toastr: ToastrService,
+    private route: Router,
+    private store: Store<IAuthState>,
+  ) {}
+
+  private getActionFromUploadTaskSnapshot(taskSnapshot: firebase.storage.UploadTaskSnapshot): Action {
+    switch(taskSnapshot.state) {
+      case 'running':
+        const { bytesTransferred: loaded, totalBytes: total } = taskSnapshot;
+
+        return CoreActions.uploadUserPhotoProgress({ loadProgress: Math.round(loaded / total * 100) });
+      case 'success':
+        return CoreActions.uploadUserPhotoSuccess({ taskRef: taskSnapshot.ref.fullPath });
+      default: 
+        return CoreActions.uploadUserPhotoError({ error: { message: "Photo doesn't updated", code: ''} });
+    }
+  }
 }

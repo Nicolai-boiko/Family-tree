@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from "firebase/compat";
-import { from, map, Observable, switchMap, take, tap } from 'rxjs';
+import { finalize, from, map, Observable, of, switchMap, take, tap } from 'rxjs';
 import { IUser } from '../constants/Interfaces/common.interfaces';
 import { Store } from '@ngrx/store';
 import { IAuthState } from '../store/state/auth.state';
@@ -9,6 +9,7 @@ import { CoreActions } from '../store/actions/auth-state.actions';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { USER_COLLECTION } from 'src/app/constants/Enums/common.enums';
 import { authFeature } from '../store/reducers/auth-state.reducer';
+import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from '@angular/fire/compat/storage';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,7 @@ export class AuthService {
     private angularFireAuth: AngularFireAuth,
     private store: Store<IAuthState>,
     private afs: AngularFirestore,
+    private storage: AngularFireStorage,
   ) {}
 
   /* Check is user logged in firebase.auth.User */
@@ -52,7 +54,7 @@ export class AuthService {
         delete collection[data.uid];
         return collection;
       }),
-    )
+    );
   }
   /* Update user collection in firebase */
   updateCollection(userFormData: IUser, uid: string | undefined): void {
@@ -61,12 +63,12 @@ export class AuthService {
 
   /* Sign up Observable<firebase.auth.UserCredential> */
   signUp({ email, password }: IUser): Observable<firebase.auth.UserCredential> {
-    return from<Promise<firebase.auth.UserCredential>>(this.angularFireAuth.createUserWithEmailAndPassword(email, password as string));
+    return from<Promise<firebase.auth.UserCredential>>(this.angularFireAuth.createUserWithEmailAndPassword(email as string, password as string));
   }
 
   /* Sign in */
   signIn({ email, password }: IUser): Observable<firebase.auth.UserCredential> {
-    return from<Promise<firebase.auth.UserCredential>>(this.angularFireAuth.signInWithEmailAndPassword(email, password as string));
+    return from<Promise<firebase.auth.UserCredential>>(this.angularFireAuth.signInWithEmailAndPassword(email as string, password as string));
   }
 
   /* Sign out */
@@ -77,5 +79,23 @@ export class AuthService {
   /* Reset password */
   resetPassword(email: string): Observable<void> {
     return from<Promise<void>>(this.angularFireAuth.sendPasswordResetEmail(email));
+  }
+
+  uploadUserPhoto(event: Event, uid: string | undefined): Observable<firebase.storage.UploadTaskSnapshot | undefined> {
+    const target = event.target as HTMLInputElement;
+    const fileList = target.files as FileList;
+    const file: File = fileList[0];
+    if (file.size > 5 * 1024 * 1024) {
+      throw new Error('To big file');
+    } else {
+      const filePath = uid as string;
+      const task: AngularFireUploadTask = this.storage.upload(filePath, file);
+
+      return task.snapshotChanges();
+    }
+  }
+
+  getPhotoURL(taskRef: string): Observable<string> {
+    return this.storage.ref(taskRef).getDownloadURL();
   }
 }
