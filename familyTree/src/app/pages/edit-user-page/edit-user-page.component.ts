@@ -18,16 +18,15 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./edit-user-page.component.scss']
 })
 export class EditUserPageComponent implements OnInit, OnDestroy {
-
-  public profileForm!: FormGroup;
+  public profileForm: FormGroup;
   public gender: typeof GenderEnum = GenderEnum;
   public routesEnum: typeof RoutesEnum = RoutesEnum;
-  public user!: IUser;
-  public uploadPercent!: Observable<number | undefined>;
+  public user: IUser;
+  public uploadPercent: Observable<number | undefined>;
   private downloadURL: BehaviorSubject<string> = new BehaviorSubject('');
   public downloadURL$: Observable<string> = this.downloadURL.asObservable();
   public uploadProgress$: Observable<number> = this.store.select(authFeature.selectLoadProgress);
-  private subscription!: Subscription;
+  private subscription: Subscription;
 
   get firstNameControl(): FormControl {
     return this.profileForm.get('firstName') as FormControl;
@@ -86,7 +85,7 @@ export class EditUserPageComponent implements OnInit, OnDestroy {
     this.downloadURL.next('');
     this.profileForm.controls['photoUrl'].setValue('');
   }
-  
+
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
