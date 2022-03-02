@@ -17,8 +17,8 @@ import { CoreActions } from 'src/app/store/actions/auth-state.actions';
 export class LoginPageComponent implements OnInit {
   public routesEnum: typeof RoutesEnum = RoutesEnum;
   public gender: typeof GenderEnum = GenderEnum;
-  public pageURL: string = this.activatedRoute.snapshot.url[0].path;
-  public authForm!: FormGroup;
+  public pageURL: RoutesEnum = this.activatedRoute.snapshot.url[0].path as RoutesEnum;
+  public authForm: FormGroup;
   public hidePassword = true;
   
   get firstNameControl(): FormControl {

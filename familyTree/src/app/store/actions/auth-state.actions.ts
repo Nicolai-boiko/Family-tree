@@ -86,7 +86,7 @@ export const userIsLoggedOut = createAction(
 
 export const getUserCollection = createAction(
     AuthStateActionsEnum.GetUserCollection,
-    props<{ data: firebase.User }>(),
+    props<{ userUID: string }>(),
 );
 
 export const getUserCollectionSuccess = createAction(
@@ -106,7 +106,7 @@ export const updateUserCollection = createAction(
 
 export const updateUserCollectionSuccess = createAction(
     AuthStateActionsEnum.UpdateUserCollectionSuccess,
-    props<{ storeUser: IUser }>(),
+    props<{ userUID: string }>(),
 );
 
 export const updateUserCollectionError = createAction(

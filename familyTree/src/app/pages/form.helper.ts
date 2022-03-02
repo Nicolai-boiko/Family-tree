@@ -48,7 +48,7 @@ export class FormHelper {
           Validators.maxLength(8),
         ]),
         registrationDate: new FormControl(''),
-      }
+      };
     }
     return formBase;
   }

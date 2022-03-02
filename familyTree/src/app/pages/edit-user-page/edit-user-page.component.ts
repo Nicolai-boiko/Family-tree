@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { GenderEnum } from 'src/app/constants/Enums/common.enums';
 import { IUser } from 'src/app/constants/Interfaces/common.interfaces';
 import { RoutesEnum } from 'src/app/constants/Enums/common.enums';
@@ -16,12 +16,11 @@ import { FormHelper } from '../form.helper';
   styleUrls: ['./edit-user-page.component.scss']
 })
 export class EditUserPageComponent implements OnInit, OnDestroy {
-
-  public profileForm!: FormGroup;
+  public profileForm: FormGroup;
   public gender: typeof GenderEnum = GenderEnum;
   public routesEnum: typeof RoutesEnum = RoutesEnum;
-  public user!: IUser;
-  private subscription!: Subscription;
+  public user: IUser;
+  private subscription: Subscription;
 
   get firstNameControl(): FormControl {
     return this.profileForm.get('firstName') as FormControl;
@@ -44,25 +43,25 @@ export class EditUserPageComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-      this.profileForm = new FormGroup(FormHelper.getFormData(RoutesEnum.EDIT_USER));
-      this.subscription = this.store.select(authFeature.selectUser).subscribe(((user) => {
-        this.profileForm.patchValue({
-          firstName: user?.firstName || '',
-          secondName: user?.secondName || '',
-          gender: user?.gender || '',
-          country: user?.country || '',
-          city: user?.city || '',
-          postcode: user?.postcode || '',
-          registrationDate: user?.registrationDate || '',
-        })
-      }));
+    this.profileForm = new FormGroup(FormHelper.getFormData(RoutesEnum.EDIT_USER));
+    this.subscription = this.store.select(authFeature.selectUser).subscribe(((user) => {
+      this.profileForm.patchValue({
+        firstName: user?.firstName || '',
+        secondName: user?.secondName || '',
+        gender: user?.gender || '',
+        country: user?.country || '',
+        city: user?.city || '',
+        postcode: user?.postcode || '',
+        registrationDate: user?.registrationDate || '',
+      });
+    }));
   }
 
   onSubmit(): void {
     const user: IUser = this.profileForm.getRawValue();
     this.store.dispatch(CoreActions.updateUserCollection({ user }));
   }
-  
+
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }

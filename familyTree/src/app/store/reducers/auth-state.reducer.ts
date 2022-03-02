@@ -1,4 +1,4 @@
-import { initialAuthState } from '../state/auth.state';
+import { IAuthState, initialAuthState } from '../state/auth.state';
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { CoreActions } from '../actions/auth-state.actions';
 
@@ -8,17 +8,29 @@ export const authFeature = createFeature({
     name: AUTH_FEATURE_NAME,
     reducer: createReducer(
         initialAuthState,
-        on(CoreActions.signUpWithEmail, (state) => ({
-            ...state,
-            isLoading: true,
-            errorMessage: null,
-            infoMessage: null,
-            isEmailSend: false,
-        })),
-        on(CoreActions.signUpWithEmailSuccess, (state) => ({
-            ...state,
-            isLoading: false,
-        })),
+        on(
+            CoreActions.signUpWithEmail,
+            CoreActions.sendPasswordResetEmail,
+            CoreActions.getUserCollection,
+            CoreActions.updateUserCollection,
+            CoreActions.logoutStart,
+            (state) => ({
+                ...state,
+                isLoading: true,
+                errorMessage: null,
+                infoMessage: null,
+                isEmailSend: false,
+            })
+        ),
+        on(
+            CoreActions.signUpWithEmailSuccess,
+            CoreActions.signInWithEmailSuccess,
+            CoreActions.updateUserCollectionSuccess,
+            (state) => ({
+                ...state,
+                isLoading: false,
+            })
+        ),
         on(CoreActions.signUpWithEmailError, (state, { error: { code, name } }) => ({
             ...state,
             user: null,
@@ -37,22 +49,11 @@ export const authFeature = createFeature({
             infoMessage: null,
             isEmailSend: false,
         })),
-        on(CoreActions.signInWithEmailSuccess, (state) => ({
-            ...state,
-            isLoading: false,
-            infoMessage: null,
-        })),
         on(CoreActions.signInWithEmailError, (state, { error: { code, name } }) => ({
             ...state,
             user: null,
             isLoading: false,
             errorMessage: { code, name },
-        })),
-        on(CoreActions.logoutStart, (state) => ({
-            ...state,
-            isLoading: true,
-            errorMessage: null,
-            infoMessage: null,
         })),
         on(CoreActions.logoutEnd, (state) => ({
             ...state,
@@ -64,13 +65,6 @@ export const authFeature = createFeature({
             ...state,
             isInitializing: false,
         })),
-        on(CoreActions.sendPasswordResetEmail, (state) => ({
-            ...state,
-            isLoading: true,
-            isEmailSend: false,
-            errorMessage: null,
-            infoMessage: null,
-        })),
         on(CoreActions.sendPasswordResetEmailSuccess, (state) => ({
             ...state,
             isLoading: false,
@@ -80,10 +74,6 @@ export const authFeature = createFeature({
             ...state,
             isLoading: false,
             errorMessage: { code, name },
-        })),
-        on(CoreActions.getUserCollection, (state) => ({
-            ...state,
-            isLoading: true,
         })),
         on(CoreActions.getUserCollectionSuccess, (state, { userCollection }) => ({
             ...state,
@@ -99,14 +89,6 @@ export const authFeature = createFeature({
             user: null,
             isLoading: false,
             errorMessage: { code, name },
-        })),
-        on(CoreActions.updateUserCollection, (state) => ({
-            ...state,
-            isLoading: true,
-        })),
-        on(CoreActions.updateUserCollectionSuccess, (state) => ({
-            ...state,
-            isLoading: false,
         })),
         on(CoreActions.updateUserCollectionError, (state, { error: { code, name } }) => ({
             ...state,
@@ -124,4 +106,7 @@ export const {
     selectIsEmailSend,
     selectIsInitializing,
     reducer,
-  } = authFeature;
+} = authFeature;
+
+export const selectUserUID = (state: IAuthState) => state.user?.uid;
+export const selectUserPhotoURL = (state: IAuthState) => state.user?.photoUrl;
