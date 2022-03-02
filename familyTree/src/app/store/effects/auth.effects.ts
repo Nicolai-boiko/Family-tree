@@ -26,7 +26,6 @@ export class AuthEffects {
 
   signUpWithEmailSuccess$: Observable<any> = createEffect(() => this.actions.pipe(
     ofType(CoreActions.signUpWithEmailSuccess),
-    filter(Boolean),
     map(({ user, data }) => this.authService.createCollection(user, data)),
     tap(() => {
       this.route.navigate(['/', RoutesEnum.TREE]);

@@ -24,12 +24,9 @@ export class AuthService {
   /* Check is user logged in firebase.auth.User */
   checkUserAuth(): void {
     this.angularFireAuth.onIdTokenChanged((data: firebase.User | null) => {
-      if (data) {
-        const userUID: string = data.uid;
-        this.store.dispatch(CoreActions.getUserCollection({ userUID }));
-      } else {
-        this.store.dispatch(CoreActions.userIsLoggedOut());
-      }
+      data
+        ? this.store.dispatch(CoreActions.getUserCollection({ userUID: data.uid }))
+        : this.store.dispatch(CoreActions.userIsLoggedOut());
     });
   }
 
