@@ -3,7 +3,7 @@ import { RoutesEnum } from 'src/app/constants/Enums/common.enums';
 
 export class FormHelper {
   static getFormData(isRegister: RoutesEnum): Record<string, FormControl> {
-    let formBase: Record<string, FormControl> = {
+    let loginForm: Record<string, FormControl> = {
       email: new FormControl('', [
         Validators.required,
         Validators.email,
@@ -14,7 +14,8 @@ export class FormHelper {
         Validators.minLength(8),
       ]),
     };
-    const extendForm: Record<string, FormControl> = {
+
+    const registerForm: Record<string, FormControl> = {
       firstName: new FormControl('', [
         Validators.required,
         Validators.pattern(/[a-zA-Z]/g),
@@ -27,29 +28,37 @@ export class FormHelper {
       ]),
       gender: new FormControl('', [Validators.required]),
     };
-    if (isRegister === RoutesEnum.REGISTRATION) {
-      formBase = {
-        ...formBase,
-        ...extendForm,
-      };
-    } else if (isRegister === RoutesEnum.EDIT_USER) {
-      formBase = {
-        ...extendForm,
-        country: new FormControl('', [
-          Validators.pattern(/[a-zA-Z]/g),
-          Validators.maxLength(50),
-        ]),
-        city: new FormControl('', [
-          Validators.pattern(/[a-zA-Z]/g),
-          Validators.maxLength(50),
-        ]),
-        postcode: new FormControl('', [
-          Validators.pattern(/\d/g),
-          Validators.maxLength(8),
-        ]),
-        registrationDate: new FormControl(''),
-      };
+
+    const profileForm: Record<string, FormControl> = {
+      country: new FormControl('', [
+        Validators.pattern(/[a-zA-Z]/g),
+        Validators.maxLength(50),
+      ]),
+      city: new FormControl('', [
+        Validators.pattern(/[a-zA-Z]/g),
+        Validators.maxLength(50),
+      ]),
+      postcode: new FormControl('', [
+        Validators.pattern(/\d/g),
+        Validators.maxLength(8),
+      ]),
+      registrationDate: new FormControl(''),
+      photoUrl: new FormControl(''),
+    };
+
+    switch (isRegister) {
+      case RoutesEnum.REGISTRATION:
+        return {
+          ...loginForm,
+          ...registerForm,
+        };
+      case RoutesEnum.EDIT_USER:
+        return {
+          ...registerForm,
+          ...profileForm,
+        };
+      default:
+        return loginForm;
     }
-    return formBase;
   }
 }

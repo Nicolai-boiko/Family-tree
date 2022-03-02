@@ -1,5 +1,5 @@
 import { IAuthState, initialAuthState, UploadStatus } from '../state/auth.state';
-import { createFeature, createReducer, on } from '@ngrx/store';
+import { createFeature, createReducer, createSelector, on } from '@ngrx/store';
 import { CoreActions } from '../actions/auth-state.actions';
 
 export const AUTH_FEATURE_NAME = 'authState';
@@ -102,7 +102,7 @@ export const authFeature = createFeature({
         })),
         on(CoreActions.uploadUserPhotoProgress, (state, { loadProgress }) => ({
             ...state,
-            progressStatus: UploadStatus.Running, 
+            progressStatus: UploadStatus.Running,
             loadProgress,
         })),
         on(CoreActions.uploadUserPhotoSuccess, (state) => ({
@@ -115,12 +115,19 @@ export const authFeature = createFeature({
             progressStatus: UploadStatus.Failed,
             errorMessage: { code, name },
         })),
-        on(CoreActions.updateUserPhotoURL, (state, { downloadURL }) => ({
+        on(CoreActions.writeUserPhotoURL, (state, { downloadURL }) => ({
             ...state,
-            user : {
+            user: {
                 ...state.user,
                 photoUrl: downloadURL,
             },
+        })),
+        on(CoreActions.clearPhotoUserURL, (state) => ({
+            ...state,
+            user: {
+                ...state.user,
+                photoUrl: '',
+            }
         })),
     ),
 });
@@ -136,5 +143,5 @@ export const {
     reducer,
 } = authFeature;
 
-export const selectUserUID = (state: IAuthState) => state.user?.uid;
-export const selectUserPhotoURL = (state: IAuthState) => state.user?.photoUrl;
+export const selectUserPhotoURL = createSelector(selectUser, (state) => state?.photoUrl);
+export const selectUserUID = createSelector(selectUser, (state) => state?.uid);

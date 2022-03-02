@@ -11,10 +11,11 @@
 
 .form-container {
   background-color: $formColor;
-  border-radius: 10px;
+  border-radius: $formBorderRadius;
   display: flex;
   flex-direction: column;
-  width: 15rem;
+  width: $formWidth;
+  max-width: $maxFormWidth;
   padding: 1rem;
   box-shadow: $formBoxShadow;
 }

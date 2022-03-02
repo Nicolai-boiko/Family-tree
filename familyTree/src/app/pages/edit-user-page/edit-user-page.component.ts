@@ -5,10 +5,11 @@ import { IUser } from 'src/app/constants/Interfaces/common.interfaces';
 import { RoutesEnum } from 'src/app/constants/Enums/common.enums';
 import { Store } from '@ngrx/store';
 import { IAuthState } from 'src/app/store/state/auth.state';
-import { authFeature } from 'src/app/store/reducers/auth-state.reducer';
+import { authFeature, selectUserPhotoURL } from 'src/app/store/reducers/auth-state.reducer';
 import { CoreActions } from 'src/app/store/actions/auth-state.actions';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { map, Observable, Subscription } from 'rxjs';
 import { FormHelper } from '../form.helper';
+import { ToastrService } from 'ngx-toastr';
 
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -23,8 +24,8 @@ export class EditUserPageComponent implements OnInit, OnDestroy {
   public routesEnum: typeof RoutesEnum = RoutesEnum;
   public user: IUser;
   public uploadPercent: Observable<number | undefined>;
-  private downloadURL: BehaviorSubject<string> = new BehaviorSubject('');
-  public downloadURL$: Observable<string> = this.downloadURL.asObservable();
+  public defaultPhoto: string;
+  public downloadPhotoURL$: Observable<string | undefined> = this.store.select(selectUserPhotoURL);
   public uploadProgress$: Observable<number> = this.store.select(authFeature.selectLoadProgress);
   private subscription: Subscription;
 
@@ -45,46 +46,57 @@ export class EditUserPageComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private store: Store<IAuthState>,
     public authService: AuthService,
+    public toastr: ToastrService,
+    private store: Store<IAuthState>,
   ) { }
 
   ngOnInit(): void {
-      this.profileForm = new FormGroup(FormHelper.getFormData(RoutesEnum.EDIT_USER));
-      this.subscription = this.store.select(authFeature.selectUser).subscribe(((user) => {
-        this.profileForm.patchValue({
-          firstName: user?.firstName || '',
-          secondName: user?.secondName || '',
-          gender: user?.gender || '',
-          country: user?.country || '',
-          city: user?.city || '',
-          postcode: user?.postcode || '',
-          registrationDate: user?.registrationDate || '',
-          photoUrl: user?.photoUrl || '',
-        });
-        if(user?.photoUrl) {
-          this.downloadURL.next(user.photoUrl);
+    this.store.select(authFeature.selectUser).pipe(
+      map(user => {
+        if (user) {
+          this.defaultPhoto = user.gender === 'male' ? '../../../assets/img/man.png' : '../../../assets/img/women.png';
         } else {
-          this.downloadURL.next('');
+          return;
         }
-      }));
+      })
+    ).subscribe();
+    this.profileForm = new FormGroup(FormHelper.getFormData(RoutesEnum.EDIT_USER));
+    this.subscription = this.store.select(authFeature.selectUser).subscribe(((user) => {
+      this.profileForm.patchValue({
+        firstName: user?.firstName || '',
+        secondName: user?.secondName || '',
+        gender: user?.gender || '',
+        country: user?.country || '',
+        city: user?.city || '',
+        postcode: user?.postcode || '',
+        registrationDate: user?.registrationDate || '',
+        photoUrl: user?.photoUrl || '',
+      });
+    }));
   }
 
   onSubmit(): void {
-    if(this.profileForm.valid) {
+    if (this.profileForm.valid) {
       const user: IUser = this.profileForm.getRawValue();
       this.store.dispatch(CoreActions.updateUserCollection({ user }));
     }
   }
 
-  uploadPhoto(event: Event): void { 
-    this.store.dispatch(CoreActions.uploadUserPhoto({ event }));
-  }
+  uploadPhoto(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const fileList = target.files as FileList;
+    const file: File = fileList[0];
+    if (file.size > 5 * 1024 * 1024) {
+      this.toastr.error('To big file');
+    } else {
+      this.store.dispatch(CoreActions.uploadUserPhoto({ file }));
+    }
+  };
 
   deletePhoto(): void {
-    this.downloadURL.next('');
-    this.profileForm.controls['photoUrl'].setValue('');
-  }
+    this.store.dispatch(CoreActions.clearPhotoUserURL());
+  };
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();

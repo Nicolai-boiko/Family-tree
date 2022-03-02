@@ -30,7 +30,7 @@ export class AuthEffects {
     map(({ user, data }) => this.authService.createCollection(user, data)),
     tap(() => {
       this.route.navigate(['/', RoutesEnum.TREE]);
-      this.toastr.success(`You are successfully registered!`, 'Success');
+      this.toastr.success(`You are successfully registered!`);
     }),
   ), { dispatch: false });
 
@@ -51,7 +51,7 @@ export class AuthEffects {
     ofType(CoreActions.signInWithEmailSuccess),
     tap(() => {
       this.route.navigate(['/', RoutesEnum.TREE]);
-      this.toastr.success(`You are successfully logged in!`, 'Success');
+      this.toastr.success(`You are successfully logged in!`);
     }),
   ), { dispatch: false });
 
@@ -71,7 +71,7 @@ export class AuthEffects {
     ofType(CoreActions.logoutEnd),
     tap(() => {
       this.route.navigate(['/', RoutesEnum.HOME]);
-      this.toastr.success(`You are successfully logged out!`, 'Success');
+      this.toastr.success(`You are successfully logged out!`);
     }),
   ), { dispatch: false });
 
@@ -85,7 +85,7 @@ export class AuthEffects {
 
   sendPasswordResetEmailSuccess$: Observable<any> = createEffect(() => this.actions.pipe(
     ofType(CoreActions.sendPasswordResetEmailSuccess),
-    tap(() => this.toastr.success(`Reset password information was send on your email!`, 'Success')),
+    tap(() => this.toastr.success(`Reset password information was send on your email!`)),
   ), { dispatch: false });
 
   sendPasswordResetEmailError$: Observable<any> = createEffect(() => this.actions.pipe(
@@ -120,7 +120,7 @@ export class AuthEffects {
   updateUserCollectionSuccess$: Observable<any> = createEffect(() => this.actions.pipe(
     ofType(CoreActions.updateUserCollectionSuccess),
     map(({ userUID }) => CoreActions.getUserCollection({ userUID })),
-    tap(() => this.toastr.success('New data has saved', 'Success')),
+    tap(() => this.toastr.success('New data has saved')),
   ));
 
   updateUserCollectionError$: Observable<any> = createEffect(() => this.actions.pipe(
@@ -130,9 +130,9 @@ export class AuthEffects {
 
   uploadUserPhoto$: Observable<any> = createEffect(() => this.actions.pipe(
     ofType(CoreActions.uploadUserPhoto),
-    map((action) => action.event),
-    withLatestFrom(this.store.select(selectUserUID)),
-    concatMap(([ event , userUID ]) => this.authService.uploadUserPhoto(event, userUID).pipe(
+    map((action) => action.file),
+    withLatestFrom(this.store.select(selectUserUID).pipe(filter(Boolean))),
+    concatMap(([file, userUID]: [File, string]) => this.authService.uploadUserPhoto(file, userUID).pipe(
       filter(Boolean),
       map((taskSnapshot: firebase.storage.UploadTaskSnapshot) => this.getActionFromUploadTaskSnapshot(taskSnapshot)),
       catchError((error: FirebaseError) => of(CoreActions.uploadUserPhotoError({ error }))),
@@ -141,10 +141,10 @@ export class AuthEffects {
 
   uploadUserPhotoSuccess$: Observable<any> = createEffect(() => this.actions.pipe(
     ofType(CoreActions.uploadUserPhotoSuccess),
-    concatMap(({ taskRef }) => this.authService.getPhotoURL(taskRef).pipe(
-      map((downloadURL) => CoreActions.updateUserPhotoURL({ downloadURL })),
+    switchMap(({ taskRef }) => this.authService.getPhotoURL(taskRef).pipe(
+      map((downloadURL: string) => CoreActions.writeUserPhotoURL({ downloadURL })),
     )),
-    tap(() => this.toastr.success('New photo has uploaded', 'Success')),
+    tap(() => this.toastr.success('New photo has uploaded')),
   ));
 
   uploadUserPhotoError$: Observable<any> = createEffect(() => this.actions.pipe(
@@ -158,18 +158,18 @@ export class AuthEffects {
     private toastr: ToastrService,
     private route: Router,
     private store: Store<IAuthState>,
-  ) {}
+  ) { }
 
   private getActionFromUploadTaskSnapshot(taskSnapshot: firebase.storage.UploadTaskSnapshot): Action {
-    switch(taskSnapshot.state) {
+    switch (taskSnapshot.state) {
       case 'running':
         const { bytesTransferred: loaded, totalBytes: total } = taskSnapshot;
 
         return CoreActions.uploadUserPhotoProgress({ loadProgress: Math.round(loaded / total * 100) });
       case 'success':
         return CoreActions.uploadUserPhotoSuccess({ taskRef: taskSnapshot.ref.fullPath });
-      default: 
-        return CoreActions.uploadUserPhotoError({ error: { message: "Photo doesn't updated", code: ''} });
+      default:
+        return CoreActions.uploadUserPhotoError({ error: { message: "Photo doesn't updated", code: '' } });
     }
   }
 }

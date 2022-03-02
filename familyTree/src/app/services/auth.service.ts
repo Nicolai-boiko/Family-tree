@@ -19,7 +19,7 @@ export class AuthService {
     private store: Store<IAuthState>,
     private afs: AngularFirestore,
     private storage: AngularFireStorage,
-  ) {}
+  ) { }
 
   /* Check is user logged in firebase.auth.User */
   checkUserAuth(): void {
@@ -35,7 +35,7 @@ export class AuthService {
 
   /* Create firebase user collection */
   createCollection(user: IUser, data: firebase.auth.UserCredential): void {
-    const userUID = data.user?.uid;
+    const userUID: string | undefined = data.user?.uid;
     if (userUID) {
       this.afs.collection<IUser>(USER_COLLECTION).doc(userUID).set({
         ...user,
@@ -49,10 +49,10 @@ export class AuthService {
   }
 
   /* Get user collection from firebase */
-  getCollection(UserUID: string): Observable<IUser> {
+  getCollection(userUID: string): Observable<IUser> {
     return this.afs.collection<IUser>(USER_COLLECTION).valueChanges().pipe(
       take(1),
-      map((collections: IUser[]) => collections.filter(users => users.uid === UserUID)[0]),
+      map((collections: IUser[]) => collections.filter(user => user.uid === userUID)[0]),
     );
   }
   /* Update user collection in firebase */
@@ -80,18 +80,8 @@ export class AuthService {
     return from<Promise<void>>(this.angularFireAuth.sendPasswordResetEmail(email));
   }
 
-  uploadUserPhoto(event: Event, uid: string | undefined): Observable<firebase.storage.UploadTaskSnapshot | undefined> {
-    const target = event.target as HTMLInputElement;
-    const fileList = target.files as FileList;
-    const file: File = fileList[0];
-    if (file.size > 5 * 1024 * 1024) {
-      throw new Error('To big file');
-    } else {
-      const filePath = uid as string;
-      const task: AngularFireUploadTask = this.storage.upload(filePath, file);
-
-      return task.snapshotChanges();
-    }
+  uploadUserPhoto(file: File, uid: string): Observable<firebase.storage.UploadTaskSnapshot | undefined> {
+    return this.storage.upload(uid, file).snapshotChanges();
   }
 
   getPhotoURL(taskRef: string): Observable<string> {
