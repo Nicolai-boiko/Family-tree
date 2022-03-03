@@ -47,7 +47,7 @@ export class AuthService {
   getCollection(userUID: string): Observable<IUser> {
     return this.afs.collection<IUser>(USER_COLLECTION).valueChanges().pipe(
       take(1), // Needed because of valueChanges() subscribe to changes and not unsubscribe in effects (firebase specificity)
-      map((collections: IUser[]) => collections.filter(users => users.uid === userUID)[0]),
+      map((collections: IUser[]) => collections.find(users => users.uid === userUID) || {} as IUser),
     );
   }
   /* Update user collection in firebase */
