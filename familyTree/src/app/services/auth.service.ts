@@ -22,15 +22,13 @@ export class AuthService {
   /* Check is user logged in firebase.auth.User */
   checkUserAuth(): void {
     this.angularFireAuth.onIdTokenChanged((data: firebase.User | null) => {
-      data
-        ? this.store.dispatch(CoreActions.getUserCollection({ userUID: data.uid }))
-        : this.store.dispatch(CoreActions.userIsLoggedOut());
+      this.store.dispatch(data ? CoreActions.getUserCollection({ userUID: data.uid }) : CoreActions.userIsLoggedOut());
     });
   }
 
   /* Create firebase user collection */
   createCollection(user: IUser, data: firebase.auth.UserCredential): void {
-    const userUID = data.user?.uid;
+    const userUID: string | undefined = data.user?.uid; // it comes from firebase better to handle it here
     if (userUID) {
       this.afs.collection<IUser>(USER_COLLECTION).doc(userUID).set({
         ...user,
@@ -46,7 +44,7 @@ export class AuthService {
   /* Get user collection from firebase */
   getCollection(UserUID: string): Observable<IUser> {
     return this.afs.collection<IUser>(USER_COLLECTION).valueChanges().pipe(
-      take(1),
+      take(1), // Needed because of valueChanges() subscribe to changes and not unsubscribe in effects (firebase specificity)
       map((collections: IUser[]) => collections.filter(users => users.uid === UserUID)[0]),
     );
   }

@@ -3,7 +3,7 @@ import { RoutesEnum } from 'src/app/constants/Enums/common.enums';
 
 export class FormHelper {
   static getFormData(isRegister: RoutesEnum): Record<string, FormControl> {
-    let loginForm: Record<string, FormControl> = {
+    const loginForm: Record<string, FormControl> = {
       email: new FormControl('', [
         Validators.required,
         Validators.email,
