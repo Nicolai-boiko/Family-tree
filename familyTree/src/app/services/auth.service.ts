@@ -8,7 +8,7 @@ import { IAuthState } from '../store/state/auth.state';
 import { CoreActions } from '../store/actions/auth-state.actions';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { USER_COLLECTION } from 'src/app/constants/Enums/common.enums';
-import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/compat/storage';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 @Injectable({
   providedIn: 'root',
@@ -24,15 +24,13 @@ export class AuthService {
   /* Check is user logged in firebase.auth.User */
   checkUserAuth(): void {
     this.angularFireAuth.onIdTokenChanged((data: firebase.User | null) => {
-      data
-        ? this.store.dispatch(CoreActions.getUserCollection({ userUID: data.uid }))
-        : this.store.dispatch(CoreActions.userIsLoggedOut());
+      this.store.dispatch(data ? CoreActions.getUserCollection({ userUID: data.uid }) : CoreActions.userIsLoggedOut());
     });
   }
 
   /* Create firebase user collection */
   createCollection(user: IUser, data: firebase.auth.UserCredential): void {
-    const userUID: string | undefined = data.user?.uid;
+    const userUID: string | undefined = data.user?.uid; // it comes from firebase better to handle it here
     if (userUID) {
       this.afs.collection<IUser>(USER_COLLECTION).doc(userUID).set({
         ...user,
@@ -48,8 +46,8 @@ export class AuthService {
   /* Get user collection from firebase */
   getCollection(userUID: string): Observable<IUser> {
     return this.afs.collection<IUser>(USER_COLLECTION).valueChanges().pipe(
-      take(1),
-      map((collections: IUser[]) => collections.filter(user => user.uid === userUID)[0]),
+      take(1), // Needed because of valueChanges() subscribe to changes and not unsubscribe in effects (firebase specificity)
+      map((collections: IUser[]) => collections.filter(users => users.uid === userUID)[0]),
     );
   }
   /* Update user collection in firebase */
