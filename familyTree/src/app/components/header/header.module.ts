@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AppRoutingModule } from '../../app-routing.module';
 import { ModalModule } from '../modal/modal.module';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [HeaderComponent],
@@ -21,8 +22,9 @@ import { ModalModule } from '../modal/modal.module';
     MatButtonModule,
     FlexLayoutModule,
     AppRoutingModule,
-    ModalModule,
+    ModalModule, 
+    MatMenuModule,
   ],
   exports: [HeaderComponent],
 })
-export class HeaderModule {}
+export class HeaderModule { }
