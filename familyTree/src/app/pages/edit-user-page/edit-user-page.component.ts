@@ -7,11 +7,12 @@ import { Store } from '@ngrx/store';
 import { IAuthState } from 'src/app/store/state/auth.state';
 import { authFeature, selectUserPhotoURL } from 'src/app/store/reducers/auth-state.reducer';
 import { CoreActions } from 'src/app/store/actions/auth-state.actions';
-import { map, Observable, Subscription } from 'rxjs';
+import { filter, map, Observable, Subscription } from 'rxjs';
 import { FormHelper } from '../form.helper';
 import { ToastrService } from 'ngx-toastr';
 
 import { AuthService } from 'src/app/services/auth.service';
+import { manPhotoURL, womenPhotoURL } from 'src/app/constants/common.constants';
 
 @Component({
   selector: 'app-edit-user-page',
@@ -19,14 +20,17 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./edit-user-page.component.scss']
 })
 export class EditUserPageComponent implements OnInit, OnDestroy {
+  public downloadPhotoURL$: Observable<string> = this.store.select(authFeature.selectUser).pipe(
+    filter(Boolean),
+    map((user: IUser) => user.photoUrl || (user.gender === 'male' ? manPhotoURL : womenPhotoURL))
+  );
+  public uploadProgress$: Observable<number> = this.store.select(authFeature.selectLoadProgress);
   public profileForm: FormGroup;
   public gender: typeof GenderEnum = GenderEnum;
   public routesEnum: typeof RoutesEnum = RoutesEnum;
   public user: IUser;
   public uploadPercent: Observable<number | undefined>;
   public defaultPhoto: string;
-  public downloadPhotoURL$: Observable<string | undefined> = this.store.select(selectUserPhotoURL);
-  public uploadProgress$: Observable<number> = this.store.select(authFeature.selectLoadProgress);
   private subscription: Subscription;
 
   get firstNameControl(): FormControl {
@@ -41,6 +45,12 @@ export class EditUserPageComponent implements OnInit, OnDestroy {
   get cityControl(): FormControl {
     return this.profileForm.get('city') as FormControl;
   }
+  get registrationDateControl(): FormControl {
+    return this.profileForm.get('registrationDate') as FormControl;
+  }
+  get genderControl(): FormControl {
+    return this.profileForm.get('gender') as FormControl;
+  }
   get postcodeControl(): FormControl {
     return this.profileForm.get('postcode') as FormControl;
   }
@@ -52,15 +62,6 @@ export class EditUserPageComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.store.select(authFeature.selectUser).pipe(
-      map(user => {
-        if (user) {
-          this.defaultPhoto = user.gender === 'male' ? '../../../assets/img/man.png' : '../../../assets/img/women.png';
-        } else {
-          return;
-        }
-      })
-    ).subscribe();
     this.profileForm = new FormGroup(FormHelper.getFormData(RoutesEnum.EDIT_USER));
     this.subscription = this.store.select(authFeature.selectUser).subscribe(((user) => {
       this.profileForm.patchValue({

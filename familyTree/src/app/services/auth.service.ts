@@ -38,8 +38,6 @@ export class AuthService {
         registrationDate: new Date().toLocaleString(),
         uid: userUID,
       });
-    } else {
-      return;
     }
   }
 

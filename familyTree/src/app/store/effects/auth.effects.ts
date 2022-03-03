@@ -141,7 +141,7 @@ export class AuthEffects {
   uploadUserPhotoSuccess$: Observable<any> = createEffect(() => this.actions.pipe(
     ofType(CoreActions.uploadUserPhotoSuccess),
     switchMap(({ taskRef }) => this.authService.getPhotoURL(taskRef).pipe(
-      map((downloadURL: string) => CoreActions.writeUserPhotoURL({ downloadURL })),
+      map((downloadURL: string) => CoreActions.writeFromFirebaseInUserPhotoURL({ downloadURL })),
     )),
     tap(() => this.toastr.success('New photo has uploaded')),
   ));

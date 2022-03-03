@@ -33,6 +33,9 @@ export class LoginPageComponent implements OnInit {
   get passwordControl(): FormControl {
     return this.authForm.get('password') as FormControl;
   }
+  get genderControl(): FormControl {
+    return this.authForm.get('gender') as FormControl;
+  }
 
   constructor(
     private activatedRoute: ActivatedRoute,

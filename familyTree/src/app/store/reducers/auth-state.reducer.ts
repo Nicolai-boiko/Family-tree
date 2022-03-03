@@ -115,7 +115,7 @@ export const authFeature = createFeature({
             progressStatus: UploadStatus.Failed,
             errorMessage: { code, name },
         })),
-        on(CoreActions.writeUserPhotoURL, (state, { downloadURL }) => ({
+        on(CoreActions.writeFromFirebaseInUserPhotoURL, (state, { downloadURL }) => ({
             ...state,
             user: {
                 ...state.user,

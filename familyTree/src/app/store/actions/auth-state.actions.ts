@@ -26,7 +26,7 @@ export enum AuthStateActionsEnum {
     UploadUserPhotoProgress = '[auth-state] Upload user photo progress',
     UploadUserPhotoSuccess = '[auth-state] Upload user photo success',
     UploadUserPhotoError = '[auth-state] Upload user photo error',
-    WriteUserPhotoURL = '[auth-state] Write user photo url in store user',
+    WriteFromFirebaseInUserPhotoURL = '[auth-state] Write user photo url in store user',
     ClearPhotoUserURL = '[auth-state] Clear user photo url',
 }
 
@@ -140,8 +140,8 @@ export const uploadUserPhotoError = createAction(
     props<{ error: FirebaseError }>(),
 );
 
-export const writeUserPhotoURL = createAction(
-    AuthStateActionsEnum.WriteUserPhotoURL,
+export const writeFromFirebaseInUserPhotoURL = createAction(
+    AuthStateActionsEnum.WriteFromFirebaseInUserPhotoURL,
     props<{ downloadURL: string }>(),
 );
 export const clearPhotoUserURL = createAction(
@@ -172,6 +172,6 @@ export const CoreActions = {
     uploadUserPhotoProgress,
     uploadUserPhotoSuccess,
     uploadUserPhotoError,
-    writeUserPhotoURL,
+    writeFromFirebaseInUserPhotoURL,
     clearPhotoUserURL,
 }
