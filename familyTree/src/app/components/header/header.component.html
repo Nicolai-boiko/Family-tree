@@ -20,8 +20,10 @@
     <div class="user-logo-container">
       <label class="user-logo-label" for="user-photo">
         <ng-container *ngIf="{ userPhotoURL: userPhotoURL$ | async } as data">
-          <img *ngIf="data.userPhotoURL" [src]="data.userPhotoURL" alt="User avatar" class="user-logo">
-          <p *ngIf="!data.userPhotoURL" class="user-initials">{{userInitials$ | async | uppercase}}</p>
+          <img *ngIf="data.userPhotoURL; else userInitials" [src]="data.userPhotoURL" alt="User avatar" class="user-logo">
+          <ng-template #userInitials>
+            <p class="user-initials">{{userInitials$ | async | uppercase}}</p>
+          </ng-template>
         </ng-container>
       </label>
       <button 
