@@ -1,5 +1,5 @@
-import { IAuthState, initialAuthState } from '../state/auth.state';
-import { createFeature, createReducer, on } from '@ngrx/store';
+import { IAuthState, initialAuthState, UploadStatus } from '../state/auth.state';
+import { createFeature, createReducer, createSelector, on } from '@ngrx/store';
 import { CoreActions } from '../actions/auth-state.actions';
 
 export const AUTH_FEATURE_NAME = 'authState';
@@ -95,6 +95,40 @@ export const authFeature = createFeature({
             isLoading: false,
             errorMessage: { code, name },
         })),
+        on(CoreActions.uploadUserPhoto, (state) => ({
+            ...state,
+            progressStatus: UploadStatus.Started,
+            loadProgress: 0,
+        })),
+        on(CoreActions.uploadUserPhotoProgress, (state, { loadProgress }) => ({
+            ...state,
+            progressStatus: UploadStatus.Running,
+            loadProgress,
+        })),
+        on(CoreActions.uploadUserPhotoSuccess, (state) => ({
+            ...state,
+            progressStatus: UploadStatus.Success,
+            loadProgress: 0,
+        })),
+        on(CoreActions.uploadUserPhotoError, (state, { error: { code, name } }) => ({
+            ...state,
+            progressStatus: UploadStatus.Failed,
+            errorMessage: { code, name },
+        })),
+        on(CoreActions.writeFromFirebaseInUserPhotoURL, (state, { downloadURL }) => ({
+            ...state,
+            user: {
+                ...state.user,
+                photoUrl: downloadURL,
+            },
+        })),
+        on(CoreActions.clearPhotoUserURL, (state) => ({
+            ...state,
+            user: {
+                ...state.user,
+                photoUrl: '',
+            }
+        })),
     ),
 });
 
@@ -105,8 +139,9 @@ export const {
     selectInfoMessage,
     selectIsEmailSend,
     selectIsInitializing,
+    selectLoadProgress,
     reducer,
 } = authFeature;
 
-export const selectUserUID = (state: IAuthState) => state.user?.uid;
-export const selectUserPhotoURL = (state: IAuthState) => state.user?.photoUrl;
+export const selectUserPhotoURL = createSelector(selectUser, (state) => state?.photoUrl);
+export const selectUserUID = createSelector(selectUser, (state) => state?.uid);

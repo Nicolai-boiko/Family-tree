@@ -10,12 +10,13 @@
 }
 
 .profile-container {
+  position: relative;
   background-color: $formColor;
-  border-radius: 10px;
+  border-radius: $formBorderRadius;
   display: flex;
   flex-direction: column;
-  width: 95vw;
-  max-width: 31.25rem;
+  width: $formWidth;
+  max-width: $maxFormWidth;
   padding: 1rem;
   box-shadow: $formBoxShadow;
 }
@@ -25,11 +26,45 @@
   height: 10rem;
   border-radius: 50%;
   align-self: center;
-  background: center / cover no-repeat url(../../../assets/img/man.png);
   margin-bottom: 1rem;
+  padding: 0;
+  border: none;
+}
+
+.profile-image-upload {
+  position: absolute;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  align-self: center;
+  margin-bottom: 1rem;
+  padding: 0;
+  border: none;
+  opacity: 0;
+  z-index: -1;
 }
 
 .profile-form-buttons {
   display: flex;
   justify-content: space-between;
+}
+
+.registration-date {
+  position: absolute;
+  top: 1rem;
+  width: auto;
+  font-size: 0.8rem;
+  box-sizing: border-box;
+}
+
+.upload-progress {
+  width: 10rem;
+  align-self: center;
+  margin-bottom: 1rem;
+}
+
+.delete-photo-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
 }

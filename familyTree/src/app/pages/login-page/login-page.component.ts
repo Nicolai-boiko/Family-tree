@@ -33,6 +33,9 @@ export class LoginPageComponent implements OnInit {
   get passwordControl(): FormControl {
     return this.authForm.get('password') as FormControl;
   }
+  get genderControl(): FormControl {
+    return this.authForm.get('gender') as FormControl;
+  }
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -40,7 +43,7 @@ export class LoginPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.authForm = new FormGroup(FormHelper.getFormData(this.pageURL));
+    this.authForm = new FormGroup(FormHelper.getFormData(this.pageURL as RoutesEnum));
   }
 
   onSubmit(): void {
