@@ -5,14 +5,14 @@ import { IUser } from 'src/app/constants/Interfaces/common.interfaces';
 import { RoutesEnum } from 'src/app/constants/Enums/common.enums';
 import { Store } from '@ngrx/store';
 import { IAuthState } from 'src/app/store/state/auth.state';
-import { authFeature, selectUserPhotoURL } from 'src/app/store/reducers/auth-state.reducer';
+import { authFeature } from 'src/app/store/reducers/auth-state.reducer';
 import { CoreActions } from 'src/app/store/actions/auth-state.actions';
 import { filter, map, Observable, Subscription } from 'rxjs';
 import { FormHelper } from '../form.helper';
 import { ToastrService } from 'ngx-toastr';
 
 import { AuthService } from 'src/app/services/auth.service';
-import { manPhotoURL, womenPhotoURL } from 'src/app/constants/common.constants';
+import { MAN_PHOTO_URL, WOMEN_PHOTO_URL } from 'src/app/constants/common.constants';
 
 @Component({
   selector: 'app-edit-user-page',
@@ -22,7 +22,7 @@ import { manPhotoURL, womenPhotoURL } from 'src/app/constants/common.constants';
 export class EditUserPageComponent implements OnInit, OnDestroy {
   public downloadPhotoURL$: Observable<string> = this.store.select(authFeature.selectUser).pipe(
     filter(Boolean),
-    map((user: IUser) => user.photoUrl || (user.gender === 'male' ? manPhotoURL : womenPhotoURL))
+    map((user: IUser) => user.photoUrl || (user.gender === GenderEnum.MALE ? MAN_PHOTO_URL : WOMEN_PHOTO_URL))
   );
   public uploadProgress$: Observable<number> = this.store.select(authFeature.selectLoadProgress);
   public profileForm: FormGroup;

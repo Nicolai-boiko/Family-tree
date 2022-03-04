@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from "firebase/compat";
-import { from, map, Observable, take } from 'rxjs';
+import { filter, from, map, Observable, take } from 'rxjs';
 import { IUser } from '../constants/Interfaces/common.interfaces';
 import { Store } from '@ngrx/store';
 import { IAuthState } from '../store/state/auth.state';
@@ -30,7 +30,8 @@ export class AuthService {
 
   /* Create firebase user collection */
   createCollection(user: IUser, data: firebase.auth.UserCredential): void {
-    const userUID: string | undefined = data.user?.uid; // it comes from firebase better to handle it here
+    // it comes from firebase better to handle it here
+    const userUID: string | undefined = data.user?.uid;
     if (userUID) {
       this.afs.collection<IUser>(USER_COLLECTION).doc(userUID).set({
         ...user,
@@ -45,7 +46,8 @@ export class AuthService {
   getCollection(userUID: string): Observable<IUser> {
     return this.afs.collection<IUser>(USER_COLLECTION).valueChanges().pipe(
       take(1), // Needed because of valueChanges() subscribe to changes and not unsubscribe in effects (firebase specificity)
-      map((collections: IUser[]) => collections.find(users => users.uid === userUID) || {} as IUser),
+      map((collections: IUser[]) => collections.find(users => users.uid === userUID) || null),
+      filter(Boolean),
     );
   }
   /* Update user collection in firebase */
