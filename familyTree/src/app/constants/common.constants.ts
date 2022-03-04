@@ -1,2 +1,2 @@
-export const manPhotoURL = '../../../assets/img/man.png';
-export const womenPhotoURL = '../../../assets/img/women.png';
+export const MAN_PHOTO_URL = '../../../assets/img/man.png';
+export const WOMEN_PHOTO_URL = '../../../assets/img/women.png';
