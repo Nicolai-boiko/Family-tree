@@ -5,6 +5,7 @@ import { ErrorPageModule } from './error-page/error-page.module';
 import { LoginPageModule } from './login-page/login-page.module';
 import { RestorePasswordPageModule } from './restore-password-page/restore-password-page.module';
 import { TreeModule } from './tree/tree.module';
+import { EditUserPageModule } from './edit-user-page/edit-user-page.module';
 
 @NgModule({
   declarations: [],
@@ -21,6 +22,7 @@ import { TreeModule } from './tree/tree.module';
     LoginPageModule,
     RestorePasswordPageModule,
     TreeModule,
+    EditUserPageModule,
   ]
 })
 export class PagesModule { }

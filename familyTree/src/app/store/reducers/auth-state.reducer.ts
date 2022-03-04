@@ -1,4 +1,4 @@
-import { initialAuthState } from '../state/auth.state';
+import { IAuthState, initialAuthState } from '../state/auth.state';
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { CoreActions } from '../actions/auth-state.actions';
 
@@ -8,17 +8,29 @@ export const authFeature = createFeature({
     name: AUTH_FEATURE_NAME,
     reducer: createReducer(
         initialAuthState,
-        on(CoreActions.signUpWithEmail, (state) => ({
-            ...state,
-            isLoading: true,
-            errorMessage: null,
-            infoMessage: null,
-            isEmailSend: false,
-        })),
-        on(CoreActions.signUpWithEmailSuccess, (state) => ({
-            ...state,
-            isLoading: false,
-        })),
+        on(
+            CoreActions.signUpWithEmail,
+            CoreActions.sendPasswordResetEmail,
+            CoreActions.getUserCollection,
+            CoreActions.updateUserCollection,
+            CoreActions.logoutStart,
+            (state) => ({
+                ...state,
+                isLoading: true,
+                errorMessage: null,
+                infoMessage: null,
+                isEmailSend: false,
+            })
+        ),
+        on(
+            CoreActions.signUpWithEmailSuccess,
+            CoreActions.signInWithEmailSuccess,
+            CoreActions.updateUserCollectionSuccess,
+            (state) => ({
+                ...state,
+                isLoading: false,
+            })
+        ),
         on(CoreActions.signUpWithEmailError, (state, { error: { code, name } }) => ({
             ...state,
             user: null,
@@ -37,34 +49,21 @@ export const authFeature = createFeature({
             infoMessage: null,
             isEmailSend: false,
         })),
-        on(CoreActions.signInWithEmailSuccess, (state) => ({
-            ...state,
-            isLoading: false,
-            infoMessage: null,
-        })),
         on(CoreActions.signInWithEmailError, (state, { error: { code, name } }) => ({
             ...state,
             user: null,
             isLoading: false,
             errorMessage: { code, name },
         })),
-        on(CoreActions.logoutStart, (state) => ({
-            ...state,
-            isLoading: true,
-            errorMessage: null,
-            infoMessage: null,
-        })),
         on(CoreActions.logoutEnd, (state) => ({
             ...state,
             user: null,
             isLoading: false,
+            isInitializing: false,
         })),
-        on(CoreActions.sendPasswordResetEmail, (state) => ({
+        on(CoreActions.userIsLoggedOut, (state) => ({
             ...state,
-            isLoading: true,
-            isEmailSend: false,
-            errorMessage: null,
-            infoMessage: null,
+            isInitializing: false,
         })),
         on(CoreActions.sendPasswordResetEmailSuccess, (state) => ({
             ...state,
@@ -76,17 +75,25 @@ export const authFeature = createFeature({
             isLoading: false,
             errorMessage: { code, name },
         })),
-        on(CoreActions.userIsLoggedIn, (state, { data }) => ({
+        on(CoreActions.getUserCollectionSuccess, (state, { userCollection }) => ({
             ...state,
             user: {
                 ...state.user,
-                email: data.email as string,
-                password: null,
+                ...userCollection,
             },
+            isLoading: false,
+            isInitializing: false,
         })),
-        on(CoreActions.userIsLoggedOut, (state) => ({
+        on(CoreActions.getUserCollectionError, (state, { error: { code, name } }) => ({
             ...state,
             user: null,
+            isLoading: false,
+            errorMessage: { code, name },
+        })),
+        on(CoreActions.updateUserCollectionError, (state, { error: { code, name } }) => ({
+            ...state,
+            isLoading: false,
+            errorMessage: { code, name },
         })),
     ),
 });
@@ -97,5 +104,9 @@ export const {
     selectErrorMessage,
     selectInfoMessage,
     selectIsEmailSend,
+    selectIsInitializing,
     reducer,
-  } = authFeature;
+} = authFeature;
+
+export const selectUserUID = (state: IAuthState) => state.user?.uid;
+export const selectUserPhotoURL = (state: IAuthState) => state.user?.photoUrl;

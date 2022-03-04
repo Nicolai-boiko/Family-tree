@@ -1,7 +1,7 @@
 @import "../../constants/colors.scss";
 @import "../../constants/values.scss";
 
-.login-form {
+.profile-form {
   width: 100%;
   height: $mainContentHeight;
   display: flex;
@@ -9,26 +9,27 @@
   justify-content: center;
 }
 
-.form-container {
+.profile-container {
   background-color: $formColor;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  width: 15rem;
+  width: 95vw;
+  max-width: 31.25rem;
   padding: 1rem;
   box-shadow: $formBoxShadow;
 }
 
-.password-button {
-  border: none;
-  background-color: transparent;
+.profile-image {
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  align-self: center;
+  background: center / cover no-repeat url(../../../assets/img/man.png);
+  margin-bottom: 1rem;
 }
 
-.login-form-buttons {
+.profile-form-buttons {
   display: flex;
   justify-content: space-between;
-}
-
-.restore-password-link {
-  margin-bottom: 1rem;
 }
