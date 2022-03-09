@@ -1,4 +1,5 @@
 @import "../../constants/colors.scss";
+
 a {
   text-decoration: none;
   color: white;
@@ -26,4 +27,41 @@ a {
 
 .active {
   color: aqua;
+}
+
+.user-logo-container, .user-logo, .user-logo-button, .user-initials, .user-logo-label {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.user-logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 1rem;
+  box-sizing: content-box;
+  border: 0.5px solid grey;
+  border-radius: 50%;
+  background: white;
+}
+
+.user-logo, .user-logo-button {
+  border-radius: 50%;
+  align-self: center;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+}
+
+.user-logo-button {
+  position: absolute;
+  opacity: 0;
+  z-index: -1;
+}
+
+.user-initials {
+  color: black;
+  margin: 0;
+  line-height: 2.5rem;
+  text-align: center;
 }
