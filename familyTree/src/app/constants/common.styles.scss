@@ -1,0 +1,17 @@
+.form-container {
+  position: relative;
+  background-color: $formColor;
+  border-radius: $formBorderRadius;
+  display: flex;
+  flex-direction: column;
+  width: $formWidth;
+  max-width: $maxFormWidth;
+  padding: 1rem;
+  box-shadow: $formBoxShadow;
+  margin: 2rem 0;
+}
+
+.form-wrapper {
+  width: fit-content;
+  margin: auto;
+}

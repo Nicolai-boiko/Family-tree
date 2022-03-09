@@ -1,24 +1,6 @@
 @import "../../constants/colors.scss";
 @import "../../constants/values.scss";
-
-.login-form {
-  width: 100%;
-  height: $mainContentHeight;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.form-container {
-  background-color: $formColor;
-  border-radius: $formBorderRadius;
-  display: flex;
-  flex-direction: column;
-  width: $formWidth;
-  max-width: $maxFormWidth;
-  padding: 1rem;
-  box-shadow: $formBoxShadow;
-}
+@import "../../constants/common.styles.scss";
 
 .password-button {
   border: none;

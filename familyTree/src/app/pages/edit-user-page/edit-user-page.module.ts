@@ -9,6 +9,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [EditUserPageComponent],
@@ -22,7 +25,10 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
     AppRoutingModule,
     AngularFireStorageModule,
     MatProgressBarModule,
+    MatIconModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
   exports: [EditUserPageComponent],
 })
-export class EditUserPageModule {}
+export class EditUserPageModule { }

@@ -8,8 +8,25 @@
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  font-size: 16px;
+  font-size: 24px;
   background-color: $bodyColor;
+}
+
+.mat-body, .mat-body-1, .mat-typography {
+  font: 400 18px/20px Roboto, "Helvetica Neue", sans-serif;
+  letter-spacing: normal;
+  @media (max-width: 700px) { 
+    font-size: 16px;
+  }
+}
+
+.mat-toolbar, .mat-toolbar h1, .mat-toolbar h2, .mat-toolbar h3, .mat-toolbar h4, .mat-toolbar h5, .mat-toolbar h6 {
+  font: 500 24px/32px Roboto, "Helvetica Neue", sans-serif;
+  letter-spacing: normal;
+  margin: 0;
+  @media (max-width: 700px) { 
+    font-size: 18px;
+  }
 }
 
 html, body {

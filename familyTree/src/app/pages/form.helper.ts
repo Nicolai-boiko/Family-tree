@@ -30,6 +30,7 @@ export class FormHelper {
     };
 
     const profileForm: Record<string, FormControl> = {
+      birthday: new FormControl(''),
       country: new FormControl('', [
         Validators.pattern(/[a-zA-Z]/g),
         Validators.maxLength(50),
@@ -40,6 +41,10 @@ export class FormHelper {
       ]),
       postcode: new FormControl('', [
         Validators.pattern(/\d/g),
+        Validators.maxLength(8),
+      ]),
+      telephone: new FormControl('', [
+        Validators.pattern(/^[+][0-9]*/g),
         Validators.maxLength(8),
       ]),
       registrationDate: new FormControl(''),

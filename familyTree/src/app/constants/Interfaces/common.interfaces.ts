@@ -14,6 +14,7 @@ export interface IUser {
   city?: string;
   postcode?: string;
   birthday?: string;
+  telephone?: string;
 }
 
 export interface FirebaseError {

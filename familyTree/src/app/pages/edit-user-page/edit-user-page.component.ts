@@ -7,19 +7,23 @@ import { Store } from '@ngrx/store';
 import { IAuthState } from 'src/app/store/state/auth.state';
 import { authFeature } from 'src/app/store/reducers/auth-state.reducer';
 import { CoreActions } from 'src/app/store/actions/auth-state.actions';
-import { filter, map, Observable, Subscription } from 'rxjs';
+import { filter, map, Observable, Subscription, take } from 'rxjs';
 import { FormHelper } from '../form.helper';
 import { ToastrService } from 'ngx-toastr';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ModalComponent } from 'src/app/components/modal/modal.component';
+import { ComponentCanDeactivate } from 'src/app/guards/exit-edit-page.guard';
 
 import { AuthService } from 'src/app/services/auth.service';
 import { MAN_PHOTO_URL, WOMEN_PHOTO_URL } from 'src/app/constants/common.constants';
+import { YesOrNoEnum } from 'src/app/constants/Enums/common.enums';
 
 @Component({
   selector: 'app-edit-user-page',
   templateUrl: './edit-user-page.component.html',
   styleUrls: ['./edit-user-page.component.scss']
 })
-export class EditUserPageComponent implements OnInit, OnDestroy {
+export class EditUserPageComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
   public downloadPhotoURL$: Observable<string> = this.store.select(authFeature.selectUser).pipe(
     filter(Boolean),
     map((user: IUser) => user.photoUrl || (user.gender === GenderEnum.MALE ? MAN_PHOTO_URL : WOMEN_PHOTO_URL))
@@ -31,13 +35,20 @@ export class EditUserPageComponent implements OnInit, OnDestroy {
   public user: IUser;
   public uploadPercent: Observable<number | undefined>;
   public defaultPhoto: string;
+  public manPhotoURL = MAN_PHOTO_URL;
+  public womenPhotoURL = WOMEN_PHOTO_URL;
+  public isFormChanged: boolean;
   private subscription: Subscription;
+  private subscriptionForm: Subscription;
 
   get firstNameControl(): FormControl {
     return this.profileForm.get('firstName') as FormControl;
   }
   get secondNameControl(): FormControl {
     return this.profileForm.get('secondName') as FormControl;
+  }
+  get birthdayControl(): FormControl {
+    return this.profileForm.get('birthday') as FormControl;
   }
   get countryControl(): FormControl {
     return this.profileForm.get('country') as FormControl;
@@ -54,11 +65,15 @@ export class EditUserPageComponent implements OnInit, OnDestroy {
   get postcodeControl(): FormControl {
     return this.profileForm.get('postcode') as FormControl;
   }
+  get telephoneControl(): FormControl {
+    return this.profileForm.get('telephone') as FormControl;
+  }
 
   constructor(
     public authService: AuthService,
     public toastr: ToastrService,
     private store: Store<IAuthState>,
+    public dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -73,8 +88,13 @@ export class EditUserPageComponent implements OnInit, OnDestroy {
         postcode: user?.postcode || '',
         registrationDate: user?.registrationDate || '',
         photoUrl: user?.photoUrl || '',
+        birthday: user?.birthday || '',
+        telephone: user?.telephone || '',
       });
     }));
+    this.subscriptionForm = this.profileForm.valueChanges.pipe(
+      map(value => this.isFormChanged = value),
+    ).subscribe();
   }
 
   onSubmit(): void {
@@ -96,10 +116,40 @@ export class EditUserPageComponent implements OnInit, OnDestroy {
   };
 
   deletePhoto(): void {
-    this.store.dispatch(CoreActions.clearPhotoUserURL());
+    let dialogRef: MatDialogRef<ModalComponent> = this.dialog.open(ModalComponent, {
+      width: '18.75rem',
+      disableClose: true,
+      autoFocus: true,
+      data: { text: 'Are you sure to delete this photo?' },
+    });
+    dialogRef.afterClosed().pipe(
+      take(1)
+    ).subscribe((data: YesOrNoEnum) => {
+      if (data === YesOrNoEnum.YES) {
+        this.store.dispatch(CoreActions.clearPhotoUserURL());
+      }
+    });
   };
+
+  canDeactivate(): boolean | Observable<boolean> {
+    if (this.isFormChanged) {
+      let dialogRef: MatDialogRef<ModalComponent> = this.dialog.open(ModalComponent, {
+        width: '18.75rem',
+        disableClose: true,
+        autoFocus: true,
+        data: { text: 'Are you sure to exit WITHOUT saving?' },
+      });
+      return dialogRef.afterClosed().pipe(
+        take(1),
+        map(data => data === YesOrNoEnum.YES ? true : false),
+      );
+    } else {
+      return true;
+    }
+  }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+    this.subscriptionForm.unsubscribe();
   }
 }
