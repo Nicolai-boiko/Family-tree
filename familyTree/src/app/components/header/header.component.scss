@@ -1,4 +1,5 @@
 @import "../../constants/colors.scss";
+
 a {
   text-decoration: none;
   color: white;
@@ -28,6 +29,11 @@ a {
   color: aqua;
 }
 
+.user-logo-container, .user-logo, .user-logo-button, .user-initials, .user-logo-label {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
 .user-logo-container {
   display: flex;
   align-items: center;
@@ -36,14 +42,10 @@ a {
   box-sizing: content-box;
   border: 0.5px solid grey;
   border-radius: 50%;
-  width: 2.5rem;
-  height: 2.5rem;
   background: white;
 }
 
-.user-logo {
-  width: 2.5rem;
-  height: 2.5rem;
+.user-logo, .user-logo-button {
   border-radius: 50%;
   align-self: center;
   padding: 0;
@@ -53,12 +55,6 @@ a {
 
 .user-logo-button {
   position: absolute;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  align-self: center;
-  padding: 0;
-  border: none;
   opacity: 0;
   z-index: -1;
 }
@@ -66,13 +62,6 @@ a {
 .user-initials {
   color: black;
   margin: 0;
-  width: 2.5rem;
-  height: 2.5rem;
   line-height: 2.5rem;
   text-align: center;
-}
-
-.user-logo-label {
-  width: 2.5rem;
-  height: 2.5rem;
 }
