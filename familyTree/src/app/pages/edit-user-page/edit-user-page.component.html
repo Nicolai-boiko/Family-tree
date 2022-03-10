@@ -1,14 +1,20 @@
-<form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="form-wrapper">
-  <div class="form-container">
-    <div class="photo-container">
-      <img [src]="downloadPhotoURL$ | async" class="profile-image" alt="user_photo"/>
-      
-      <label class="upload-button-label" for="upload-photo">
-        <mat-icon>add_a_photo</mat-icon>
-        <input (change)="uploadPhoto($event)" type="file" class="profile-image-upload" id="upload-photo"/>
-      </label>
+<ng-container 
+  *ngIf="{
+    uploadProgress: uploadProgress$ | async,
+    downloadPhotoURL: downloadPhotoURL$ | async
+  } as data"
+>
 
-      <ng-container *ngIf="{uploadProgress: uploadProgress$ | async } as data">
+  <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="form-wrapper">
+    <div class="form-container">
+      <div class="photo-container">
+        <img [src]="data.downloadPhotoURL" class="profile-image" alt="user_photo"/>
+        
+        <label class="upload-button-label" for="upload-photo">
+          <mat-icon>add_a_photo</mat-icon>
+          <input (change)="uploadPhoto($event)" type="file" class="profile-image-upload" id="upload-photo"/>
+        </label>
+
         <mat-progress-bar
           *ngIf="data.uploadProgress"
           [value]="data.uploadProgress"
@@ -17,90 +23,88 @@
           class="upload-progress"
         >
         </mat-progress-bar>
-      </ng-container>
 
-      <ng-container *ngIf="{downloadPhotoURL: downloadPhotoURL$ | async } as data">
         <button 
-          *ngIf="data.downloadPhotoURL !== manPhotoURL && data.downloadPhotoURL !== womenPhotoURL" 
+          *ngIf="data.downloadPhotoURL !== manPhotoURLDefault && data.downloadPhotoURL !== womenPhotoURLDefault" 
           (click)="deletePhoto()" type="button" 
           class="delete-photo-button">
           <mat-icon>no_photography</mat-icon>
         </button>
-      </ng-container>
 
-      <div class="registration-date">
-        <input
-          matInput
-          readonly
-          [formControl]="registrationDateControl"
-        />
+        <div class="registration-date">
+          <input
+            matInput
+            readonly
+            [formControl]="registrationDateControl"
+          />
+        </div>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput [formControl]="firstNameControl" />
+        <mat-error *ngIf="firstNameControl.invalid && firstNameControl.touched">
+          Please enter a valid name
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>secondName</mat-label>
+        <input matInput [formControl]="secondNameControl" />
+        <mat-error *ngIf="secondNameControl.invalid && secondNameControl.touched">
+          Please enter a valid secondName
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Choose your birthday</mat-label>
+        <input matInput [matDatepicker]="picker" [formControl]="birthdayControl" readonly>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      
+
+      <mat-form-field appearance="outline">
+        <mat-label>Gender</mat-label>
+        <input matInput [formControl]="genderControl" readonly/>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Country</mat-label>
+        <input matInput [formControl]="countryControl" />
+        <mat-error *ngIf="countryControl.invalid && countryControl.touched">
+          Please enter a valid country
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>City</mat-label>
+        <input matInput [formControl]="cityControl" />
+        <mat-error *ngIf="cityControl.invalid && cityControl.touched">
+          Please enter a valid city
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Postcode</mat-label>
+        <input matInput [formControl]="postcodeControl" />
+        <mat-error *ngIf="postcodeControl.invalid && postcodeControl.touched">
+          Please enter a valid postcode
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Telephone</mat-label>
+        <input matInput [formControl]="telephoneControl" />
+        <mat-error *ngIf="telephoneControl.invalid && telephoneControl.touched">
+          Please enter a valid telephone
+        </mat-error>
+      </mat-form-field>
+      
+      <div class="profile-form-buttons">
+        <a [routerLink]="['/', routesEnum.HOME]" mat-flat-button color="accent">Cancel</a>
+        <button mat-flat-button color="primary" [disabled]="!isFormChanged">Save changes</button>
       </div>
     </div>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Name</mat-label>
-      <input matInput [formControl]="firstNameControl" />
-      <mat-error *ngIf="firstNameControl.invalid && firstNameControl.touched">
-        Please enter a valid name
-      </mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>secondName</mat-label>
-      <input matInput [formControl]="secondNameControl" />
-      <mat-error *ngIf="secondNameControl.invalid && secondNameControl.touched">
-        Please enter a valid secondName
-      </mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Choose your birthday</mat-label>
-      <input matInput [matDatepicker]="picker" [formControl]="birthdayControl" readonly>
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
-    
-
-    <mat-form-field appearance="outline">
-      <mat-label>Gender</mat-label>
-      <input matInput [formControl]="genderControl" readonly/>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Country</mat-label>
-      <input matInput [formControl]="countryControl" />
-      <mat-error *ngIf="countryControl.invalid && countryControl.touched">
-        Please enter a valid country
-      </mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>City</mat-label>
-      <input matInput [formControl]="cityControl" />
-      <mat-error *ngIf="cityControl.invalid && cityControl.touched">
-        Please enter a valid city
-      </mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Postcode</mat-label>
-      <input matInput [formControl]="postcodeControl" />
-      <mat-error *ngIf="postcodeControl.invalid && postcodeControl.touched">
-        Please enter a valid postcode
-      </mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Telephone</mat-label>
-      <input matInput [formControl]="telephoneControl" />
-      <mat-error *ngIf="telephoneControl.invalid && telephoneControl.touched">
-        Please enter a valid telephone
-      </mat-error>
-    </mat-form-field>
-    
-    <div class="profile-form-buttons">
-      <a [routerLink]="['/', routesEnum.HOME]" mat-flat-button color="accent">Cancel</a>
-      <button mat-flat-button color="primary" [disabled]="!isFormChanged">Save changes</button>
-    </div>
-  </div>
-</form>
+  </form>
+</ng-container>

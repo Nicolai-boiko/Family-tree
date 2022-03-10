@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { IAuthState } from 'src/app/store/state/auth.state';
 import { authFeature } from 'src/app/store/reducers/auth-state.reducer';
 import { CoreActions } from 'src/app/store/actions/auth-state.actions';
-import { filter, map, Observable, Subscription, take } from 'rxjs';
+import { filter, map, Observable, Subscription, take, tap } from 'rxjs';
 import { FormHelper } from '../form.helper';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -15,7 +15,7 @@ import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { ComponentCanDeactivate } from 'src/app/guards/exit-edit-page.guard';
 
 import { AuthService } from 'src/app/services/auth.service';
-import { MAN_PHOTO_URL, WOMEN_PHOTO_URL } from 'src/app/constants/common.constants';
+import { UserPhotoURLDefaultEnum } from 'src/app/constants/Enums/common.enums';
 import { YesOrNoEnum } from 'src/app/constants/Enums/common.enums';
 
 @Component({
@@ -26,7 +26,7 @@ import { YesOrNoEnum } from 'src/app/constants/Enums/common.enums';
 export class EditUserPageComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
   public downloadPhotoURL$: Observable<string> = this.store.select(authFeature.selectUser).pipe(
     filter(Boolean),
-    map((user: IUser) => user.photoUrl || (user.gender === GenderEnum.MALE ? MAN_PHOTO_URL : WOMEN_PHOTO_URL))
+    map((user: IUser) => user.photoUrl || (user.gender === GenderEnum.MALE ? this.manPhotoURLDefault : this.womenPhotoURLDefault))
   );
   public uploadProgress$: Observable<number> = this.store.select(authFeature.selectLoadProgress);
   public profileForm: FormGroup;
@@ -35,8 +35,8 @@ export class EditUserPageComponent implements OnInit, OnDestroy, ComponentCanDea
   public user: IUser;
   public uploadPercent: Observable<number | undefined>;
   public defaultPhoto: string;
-  public manPhotoURL = MAN_PHOTO_URL;
-  public womenPhotoURL = WOMEN_PHOTO_URL;
+  public manPhotoURLDefault: UserPhotoURLDefaultEnum = UserPhotoURLDefaultEnum.MAN_PHOTO_URL_DEFAULT;
+  public womenPhotoURLDefault: UserPhotoURLDefaultEnum = UserPhotoURLDefaultEnum.WOMEN_PHOTO_URL_DEFAULT;
   public isFormChanged: boolean;
   private subscription: Subscription;
   private subscriptionForm: Subscription;
@@ -93,7 +93,7 @@ export class EditUserPageComponent implements OnInit, OnDestroy, ComponentCanDea
       });
     }));
     this.subscriptionForm = this.profileForm.valueChanges.pipe(
-      map(value => this.isFormChanged = value),
+      tap(value => this.isFormChanged = !!value),
     ).subscribe();
   }
 
@@ -132,20 +132,19 @@ export class EditUserPageComponent implements OnInit, OnDestroy, ComponentCanDea
   };
 
   canDeactivate(): boolean | Observable<boolean> {
-    if (this.isFormChanged) {
-      let dialogRef: MatDialogRef<ModalComponent> = this.dialog.open(ModalComponent, {
-        width: '18.75rem',
-        disableClose: true,
-        autoFocus: true,
-        data: { text: 'Are you sure to exit WITHOUT saving?' },
-      });
-      return dialogRef.afterClosed().pipe(
-        take(1),
-        map(data => data === YesOrNoEnum.YES ? true : false),
-      );
-    } else {
+    if (!this.isFormChanged) {
       return true;
     }
+    let dialogRef: MatDialogRef<ModalComponent> = this.dialog.open(ModalComponent, {
+      width: '18.75rem',
+      disableClose: true,
+      autoFocus: true,
+      data: { text: 'Are you sure to exit WITHOUT saving?' },
+    });
+    return dialogRef.afterClosed().pipe(
+      take(1),
+      map(data => data === YesOrNoEnum.YES),
+    );
   }
 
   ngOnDestroy(): void {

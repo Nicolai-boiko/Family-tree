@@ -17,4 +17,9 @@ export enum GenderEnum {
   FEMALE = 'female',
 }
 
+export enum UserPhotoURLDefaultEnum {
+  MAN_PHOTO_URL_DEFAULT = '../../../assets/img/man.png',
+  WOMEN_PHOTO_URL_DEFAULT = '../../../assets/img/women.png',
+}
+
 export const USER_COLLECTION = 'Users'
