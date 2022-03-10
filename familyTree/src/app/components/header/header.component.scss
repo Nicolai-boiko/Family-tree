@@ -30,8 +30,12 @@ a {
 }
 
 .user-logo-container, .user-logo, .user-logo-button, .user-initials, .user-logo-label {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  @media (max-width: 700px) { 
+    width: 2.5rem;
+    height: 2.5rem;
+  }
 }
 
 .user-logo-container {
@@ -62,6 +66,16 @@ a {
 .user-initials {
   color: black;
   margin: 0;
-  line-height: 2.5rem;
+  line-height: 3.5rem;
+  @media (max-width: 700px) { 
+    line-height: 2.5rem;
+  }
   text-align: center;
+}
+
+.mat-toolbar-row, .mat-toolbar-single-row {
+  height: 4.5rem;
+  @media (max-width: 700px) { 
+    height: 3.5rem;
+  }
 }

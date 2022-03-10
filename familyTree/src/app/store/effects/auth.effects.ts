@@ -28,7 +28,7 @@ export class AuthEffects {
     ofType(CoreActions.signUpWithEmailSuccess),
     map(({ user, data }) => this.authService.createCollection(user, data)),
     tap(() => {
-      this.route.navigate(['/', RoutesEnum.TREE]);
+      this.route.navigate(['/', RoutesEnum.HOME]);
       this.toastr.success(`You are successfully registered!`);
     }),
   ), { dispatch: false });

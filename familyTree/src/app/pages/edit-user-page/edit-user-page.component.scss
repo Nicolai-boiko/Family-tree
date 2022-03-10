@@ -1,31 +1,29 @@
 @import "../../constants/colors.scss";
 @import "../../constants/values.scss";
+@import "../../constants/common.styles.scss";
 
-.profile-form {
-  width: 100%;
-  height: $mainContentHeight;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.form-container {
+  @media (min-width: 700px) {
+    max-width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    mat-form-field {
+      width: 45vw;
+    }
+  }
 }
 
-.profile-container {
-  position: relative;
-  background-color: $formColor;
-  border-radius: $formBorderRadius;
-  display: flex;
-  flex-direction: column;
-  width: $formWidth;
-  max-width: $maxFormWidth;
-  padding: 1rem;
-  box-shadow: $formBoxShadow;
+.photo-container {
+  width: 100%;
 }
 
 .profile-image {
+  display: block;
   width: 10rem;
   height: 10rem;
   border-radius: 50%;
-  align-self: center;
+  margin: auto;
   margin-bottom: 1rem;
   padding: 0;
   border: none;
@@ -47,6 +45,7 @@
 .profile-form-buttons {
   display: flex;
   justify-content: space-between;
+  width: 100%;
 }
 
 .registration-date {
@@ -59,12 +58,36 @@
 
 .upload-progress {
   width: 10rem;
-  align-self: center;
+  margin: auto;
   margin-bottom: 1rem;
 }
 
-.delete-photo-button {
+.delete-photo-button, .upload-button-label {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 0.5rem;
+  cursor: pointer;
+
+  .mat-icon {
+    font-size: 2rem;
+    height: 100%;
+    width: 100%;
+  }
+}
+
+.delete-photo-button {
+  right: 1.5rem;
+  background: none;
+  border: none;
+
+  .mat-icon {
+    color: rgb(255, 100, 0);
+  }
+}
+
+.upload-button-label {
+  right: 4.5rem;
+
+  .mat-icon {
+    color: rgb(0, 255, 100);
+  }
 }

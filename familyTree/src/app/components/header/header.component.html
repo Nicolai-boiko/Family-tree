@@ -1,59 +1,68 @@
-<mat-toolbar color="primary">
-  <div fxHide.gt-xs>
-      <button (click)="onToggleSidenav()" mat-icon-button>
-          <mat-icon>menu</mat-icon>
-      </button>
-  </div>
-  <div>
-      <a [routerLink]="['/', routesEnum.HOME]">Family Tree</a>
-  </div>
-  <span class="menu-spacer"></span>
-  <div *ngIf="isLoggedIn$ | async" fxHide.xs>
-    <ul fxLayout fxLayoutGap="3rem" class="navigation-items">
-      <li>
-          <a [routerLink]="['/', routesEnum.TREE]" routerLinkActive="active">Tree</a>
-      </li>
-    </ul>
-  </div>
+<ng-container 
+  *ngIf="{ 
+    isLoggedIn: isLoggedIn$ | async, 
+    userPhotoURL: userPhotoURL$ | async,
+    userInitials: userInitials$ | async
+  } as data"
+>
 
-  <ng-container *ngIf="isLoggedIn$ | async; else loginBtn">
-    <div class="user-logo-container">
-      <label class="user-logo-label" for="user-photo">
-        <ng-container *ngIf="{ userPhotoURL: userPhotoURL$ | async } as data">
-          <img *ngIf="data.userPhotoURL; else userInitials" [src]="data.userPhotoURL" alt="User avatar" class="user-logo">
-          <ng-template #userInitials>
-            <p class="user-initials">{{userInitials$ | async | uppercase}}</p>
-          </ng-template>
-        </ng-container>
-      </label>
-      <button 
-        [matMenuTriggerFor]="menu" 
-        aria-label="Example icon-button with a menu"
-        class="user-logo-button"
-        id="user-photo"
-      >
-      </button>
-    </div>
-    <mat-menu #menu="matMenu">
-      <button [routerLink]="['/', routesEnum.EDIT_USER]" routerLinkActive="active" mat-menu-item>
-        <mat-icon>account_circle</mat-icon>
-        <span>Edit user</span>
-      </button>
-      <button (click)="onLogout()" mat-menu-item>
-        <mat-icon>logout</mat-icon>
-        <span>Logout</span>
-      </button>
-    </mat-menu>
-  </ng-container>
-    
+  <header class="header" >
+    <mat-toolbar color="primary">
+      <div fxHide.gt-xs>
+          <button (click)="onToggleSidenav()" mat-icon-button>
+              <mat-icon>menu</mat-icon>
+          </button>
+      </div>
+      <div>
+          <a [routerLink]="['/', routesEnum.HOME]">Family Tree</a>
+      </div>
+      <span class="menu-spacer"></span>
+      <div *ngIf="data.isLoggedIn" fxHide.xs>
+        <ul fxLayout fxLayoutGap="3rem" class="navigation-items">
+          <li>
+              <a [routerLink]="['/', routesEnum.TREE]" routerLinkActive="active">Tree</a>
+          </li>
+        </ul>
+      </div>
 
-  <ng-template #loginBtn>
-    <a  
-      [routerLink]="['/', routesEnum.LOG_IN]"
-      class="login-button"
-      mat-button
-    >
-      Login <mat-icon>login</mat-icon>
-    </a>
-  </ng-template>
-</mat-toolbar>
+      <ng-container *ngIf="data.isLoggedIn; else loginBtn">
+        <div class="user-logo-container">
+          <label class="user-logo-label" for="user-photo">
+              <img *ngIf="data.userPhotoURL; else userInitials" [src]="data.userPhotoURL" alt="User avatar" class="user-logo">
+              <ng-template #userInitials>
+                <p class="user-initials">{{data.userInitials | uppercase}}</p>
+              </ng-template>
+          </label>
+          <button 
+            [matMenuTriggerFor]="menu" 
+            aria-label="Example icon-button with a menu"
+            class="user-logo-button"
+            id="user-photo"
+          >
+          </button>
+        </div>
+        <mat-menu #menu="matMenu">
+          <button [routerLink]="['/', routesEnum.EDIT_USER]" routerLinkActive="active" mat-menu-item>
+            <mat-icon>account_circle</mat-icon>
+            <span>Edit user</span>
+          </button>
+          <button (click)="onLogout()" mat-menu-item>
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      </ng-container>
+        
+
+      <ng-template #loginBtn>
+        <a  
+          [routerLink]="['/', routesEnum.LOG_IN]"
+          class="login-button"
+          mat-button
+        >
+          Login <mat-icon>login</mat-icon>
+        </a>
+      </ng-template>
+    </mat-toolbar>
+  </header>
+</ng-container>
