@@ -83,9 +83,11 @@ describe('RestorePasswordPageComponent', () => {
   
   describe('resetPassword', () => {
     let resetFormValidationSpy: Spy;
+    let emailControlSpy: Spy;
     
     beforeEach(() => {
       resetFormValidationSpy = spyOnProperty(component.resetForm, 'valid', 'get');
+      emailControlSpy = spyOnProperty(component, 'emailControl', 'get');
     });
     
     it('should ve defined', () => {
@@ -102,10 +104,11 @@ describe('RestorePasswordPageComponent', () => {
   
     it('should call if resetForm is valid', () => {
       resetFormValidationSpy.and.returnValue(true);
+      emailControlSpy.and.returnValue({ value: 'newDummyEmail' });
     
       component.resetPassword();
     
-      expect(store.dispatch).toHaveBeenCalledWith(CoreActions.sendPasswordResetEmail({ email: 'dummyEmail' }));
+      expect(store.dispatch).toHaveBeenCalledWith(CoreActions.sendPasswordResetEmail({ email: 'newDummyEmail' }));
     });
   });
 });
