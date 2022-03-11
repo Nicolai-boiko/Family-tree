@@ -14,7 +14,6 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { ComponentCanDeactivate } from 'src/app/guards/exit-edit-page.guard';
 
-import { AuthService } from 'src/app/services/auth.service';
 import { UserPhotoURLDefaultEnum } from 'src/app/constants/Enums/common.enums';
 import { YesOrNoEnum } from 'src/app/constants/Enums/common.enums';
 
@@ -70,7 +69,6 @@ export class EditUserPageComponent implements OnInit, OnDestroy, ComponentCanDea
   }
 
   constructor(
-    public authService: AuthService,
     public toastr: ToastrService,
     private store: Store<IAuthState>,
     public dialog: MatDialog,

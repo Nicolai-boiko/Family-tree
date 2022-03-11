@@ -1,6 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AppRoutingModule } from 'src/app/app-routing.module';
 
 import { LoginPageComponent } from './login-page.component';
+
+class MockStore {
+  dispatch() {}
+}
 
 describe('LoginPageComponent', () => {
   let component: LoginPageComponent;
@@ -8,7 +16,17 @@ describe('LoginPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LoginPageComponent ]
+      imports: [
+        ReactiveFormsModule,
+        AppRoutingModule,
+      ],
+      declarations: [
+        LoginPageComponent,
+      ],
+      providers: [
+        { provide: ActivatedRoute, useValue: { snapshot: { url: { [0]: { path: '' } } } } },
+        { provide: Store, useClass: MockStore }
+      ]
     })
     .compileComponents();
   });
