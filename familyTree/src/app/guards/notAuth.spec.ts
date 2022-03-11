@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { notAuth } from './notAuth.guard';
+import { notAuthGuard } from './notAuth.guard';
 
 describe('LoggedInUsersGuard', () => {
-  let guard: notAuth;
+  let guard: notAuthGuard;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    guard = TestBed.inject(notAuth);
+    guard = TestBed.inject(notAuthGuard);
   });
 
   it('should be created', () => {
