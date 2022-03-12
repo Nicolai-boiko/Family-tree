@@ -91,6 +91,15 @@ describe('HeaderComponent', () => {
   });
   
   describe('onToggleSidenav', () => {
-  
+    it('should be defined', () => {
+      expect(component.onToggleSidenav).toBeDefined();
+    });
+
+    it('should call sidenavToggle.emit', () => {
+      const spy: Spy = spyOn(component.sidenavToggle, 'emit');
+      component.onToggleSidenav();
+
+      expect(spy).toHaveBeenCalled();
+    });
   });
 });

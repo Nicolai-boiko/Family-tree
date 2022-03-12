@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SidenavListComponent } from './sidenav-list.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AppRoutingModule } from '../../app-routing.module';
+import Spy = jasmine.Spy;
 
 describe('SidenavListComponent', () => {
   let component: SidenavListComponent;
@@ -11,10 +12,10 @@ describe('SidenavListComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppRoutingModule],
-      declarations: [ SidenavListComponent ],
+      declarations: [SidenavListComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -26,6 +27,17 @@ describe('SidenavListComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-  
-  describe('onSidenavClose', () => {});
+
+  describe('onSidenavClose', () => {
+    it('should be defined', () => {
+      expect(component.onSidenavClose).toBeDefined();
+    });
+
+    it('should call sidenavClose.emit', () => {
+      const spy: Spy = spyOn(component.sidenavClose, 'emit');
+      component.onSidenavClose();
+
+      expect(spy).toHaveBeenCalled();
+    });
+  });
 });
