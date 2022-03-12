@@ -5,9 +5,10 @@ import { Store } from '@ngrx/store';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { IUser } from 'src/app/constants/Interfaces/common.interfaces';
-import { AuthService } from 'src/app/services/auth.service';
 import { authFeature } from 'src/app/store/reducers/auth-state.reducer';
 import { EditUserPageComponent } from './edit-user-page.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { AppRoutingModule } from '../../app-routing.module';
 import createSpy = jasmine.createSpy;
 
 class MockToastrService {
@@ -41,6 +42,7 @@ describe('EditUserPageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
+        AppRoutingModule,
         ReactiveFormsModule,
       ],
       declarations: [ EditUserPageComponent ],
@@ -48,7 +50,8 @@ describe('EditUserPageComponent', () => {
         { provide: ToastrService, useClass: MockToastrService },
         { provide: Store, useClass: MockStore },
         { provide: MatDialog, useClass: MockMatDialog },
-      ]
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
     })
     .compileComponents();
   });
@@ -62,5 +65,7 @@ describe('EditUserPageComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  
+  
 });
 
