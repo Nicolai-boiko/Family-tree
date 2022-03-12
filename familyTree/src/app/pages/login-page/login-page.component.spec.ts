@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 
 import { LoginPageComponent } from './login-page.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 class MockStore {
   dispatch() {}
@@ -26,7 +27,8 @@ describe('LoginPageComponent', () => {
       providers: [
         { provide: ActivatedRoute, useValue: { snapshot: { url: { [0]: { path: '' } } } } },
         { provide: Store, useClass: MockStore }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
   });
