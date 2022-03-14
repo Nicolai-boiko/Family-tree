@@ -55,7 +55,7 @@ describe('LoginPageComponent', () => {
 
     beforeEach(() => {
       MockFormControl = new FormControl();
-      authFormGetControlSpy = spyOnProperty(component, 'firstNameControl');
+      authFormGetControlSpy = spyOn(component.authForm, 'get');
     });
 
     it('should return needed form control', () => {
