@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppRoutingModule } from 'src/app/app-routing.module';
@@ -49,13 +49,32 @@ describe('LoginPageComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  describe('getter formControl', () => {
+    let MockFormControl: FormControl;
+    let authFormGetControlSpy: Spy;
+
+    beforeEach(() => {
+      MockFormControl = new FormControl();
+      authFormGetControlSpy = spyOnProperty(component, 'firstNameControl');
+    });
+
+    it('should return needed form control', () => {
+      authFormGetControlSpy.and.returnValue(MockFormControl);
+
+      expect(component.firstNameControl).toBe(MockFormControl);
+      expect(authFormGetControlSpy).toHaveBeenCalled();
+    });
+  });
+
   describe('ngOnInit', () => {
     it('should be defined', () => {
       expect(component.ngOnInit).toBeDefined();
     });
 
     it('should create FormGroup with needed controls', () => {
+
       component.ngOnInit();
+
       expect(Object.keys(component.authForm.controls)).toEqual(
         [
           'email',
@@ -81,6 +100,7 @@ describe('LoginPageComponent', () => {
 
     it('should not be called if form is invalid', () => {
       authFormValidationSpy.and.returnValue(false);
+
       component.onSubmit();
 
       expect(store.dispatch).not.toHaveBeenCalled();
