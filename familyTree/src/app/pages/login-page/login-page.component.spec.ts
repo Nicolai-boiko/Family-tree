@@ -66,9 +66,13 @@ describe('LoginPageComponent', () => {
 
   describe('onSubmit', () => {
     let authFormValidationSpy: Spy;
+    let authFormValueSpy: Spy;
+    let MockIUser: IUser;
 
     beforeEach(() => {
       authFormValidationSpy = spyOnProperty(component.authForm, 'valid', 'get');
+      MockIUser = { email: 'dummyEmail', password: 'dummyPassword' } as IUser;
+      authFormValueSpy = spyOn(component.authForm, 'getRawValue').and.returnValue(MockIUser);
     });
 
     it('should be defined', () => {
@@ -84,8 +88,18 @@ describe('LoginPageComponent', () => {
 
     it('should be called if form is valid', () => {
       authFormValidationSpy.and.returnValue(true);
+      component.pageURL = RoutesEnum.REGISTRATION;
+
       component.onSubmit();
-      const MockIUser: IUser = { email: 'dummyEmail', password: 'dummyPassword' } as IUser;
+
+      expect(store.dispatch).toHaveBeenCalledWith(CoreActions.signUpWithEmail({ user: MockIUser }));
+    });
+
+    it('should be called if form is valid', () => {
+      authFormValidationSpy.and.returnValue(true);
+      component.pageURL = RoutesEnum.LOG_IN;
+
+      component.onSubmit();
 
       expect(store.dispatch).toHaveBeenCalledWith(CoreActions.signInWithEmail({ user: MockIUser }));
     });

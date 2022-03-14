@@ -109,6 +109,7 @@ describe('EditUserPageComponent', () => {
 
     beforeEach(() => {
       toastrSpy = spyOn(component.toastr, 'error');
+      MockFile = new File(['dummyData'], 'dummyFile');
       fileSizeSpy= spyOnProperty(MockFile, 'size', 'get');
     });
     it('should be defined', () => {
