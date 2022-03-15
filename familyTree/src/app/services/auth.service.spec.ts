@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { AuthService } from './auth.service';
 import Spy = jasmine.Spy;
 import createSpy = jasmine.createSpy;
+import { HttpTestingController } from '@angular/common/http/testing';
 
 class MockAngularFireAuth {
   onIdTokenChanged() {}
@@ -31,6 +32,7 @@ class MockStore {
 
 describe('AuthService', () => {
   let service: AuthService;
+  let httpMock: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -43,8 +45,27 @@ describe('AuthService', () => {
     });
     service = TestBed.inject(AuthService);
   });
+  
+  afterEach(() => {
+    httpMock.verify();
+  });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+  
+  
+  
+  // describe('http example', () => {
+  //   it('http example', () => {
+  //     service.signOut().subscribe(result => {
+  //       expect(result).toEqual({ someExpectedData: 'dummy'});
+  //     });
+  //
+  //     const request = httpMock.expectOne('shapephase/dummyShapePhaseId');
+  //     expect(request.request.method).toBe('GET');
+  //
+  //     request.flush({ someExpectedData: 'dummy'});
+  //   });
+  // });
 });
