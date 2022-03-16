@@ -1,4 +1,4 @@
-import { IAuthState, initialAuthState, UploadStatus } from '../state/auth.state';
+import { initialAuthState, UploadStatus } from '../state/auth.state';
 import { createFeature, createReducer, createSelector, on } from '@ngrx/store';
 import { CoreActions } from '../actions/auth-state.actions';
 
