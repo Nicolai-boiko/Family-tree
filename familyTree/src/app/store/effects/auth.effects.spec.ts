@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { AuthEffects } from './auth.effects';
 import { AuthService } from '../../services/auth.service';
-import { BehaviorSubject, Observable, of, ReplaySubject, throwError } from 'rxjs';
+import { BehaviorSubject, of, ReplaySubject, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { Store } from '@ngrx/store';
 import { selectUserUID } from '../../store/reducers/auth-state.reducer';
@@ -51,6 +51,8 @@ class MockStore {
 const mockIUser: IUser = { id: 'mockId', firstName: 'dummyName' } as IUser;
 const mockData: firebase.auth.UserCredential = { user: { uid: 'mockUID' } } as firebase.auth.UserCredential;
 const mockUserCollection: IUser = { uid: 'mockId', firstName: 'dummyName' };
+const mockFile = new File(['dummyData'], 'dummyFile');
+let mockTaskSnapshot: firebase.storage.UploadTaskSnapshot = { state: 'dummyState', ref: { fullPath: 'dummyRef' } } as firebase.storage.UploadTaskSnapshot;
 
 describe('AuthEffects', () => {
   let effects: AuthEffects;
@@ -334,7 +336,7 @@ describe('AuthEffects', () => {
     beforeEach(() => {
       authService.updateCollection = createSpy().and.returnValue(of({}));
     });
-    
+
     // ToDo should test case if selectUserUId returns null
 
     it('should call updateCollection with proper user', (done: DoneFn) => {
@@ -385,8 +387,6 @@ describe('AuthEffects', () => {
   });
 
   describe('uploadUserPhoto$', () => {
-    const mockFile = new File(['dummyData'], 'dummyFile');
-    const mockTaskSnapshot: firebase.storage.UploadTaskSnapshot = { state: 'dummyState', ref: { fullPath: 'dummyRef' } } as firebase.storage.UploadTaskSnapshot;
     let getActionFromUploadTaskSnapshotSpy: Spy;
 
     beforeEach(() => {
@@ -419,14 +419,14 @@ describe('AuthEffects', () => {
       });
     });
   });
-  
+
   describe('uploadUserPhotoSuccess$', () => {
     const mockDownloadURL = 'mockDownloadURL';
-    
+
     beforeEach(() => {
       authService.getPhotoURL = createSpy().and.returnValue(of(mockDownloadURL));
     });
-    
+
     it('should call getPhotoURL', (done: DoneFn) => {
       actions$.next(CoreActions.uploadUserPhotoSuccess({ taskRef: 'dummyRef' }));
       effects.uploadUserPhotoSuccess$.subscribe(() => {
@@ -434,7 +434,7 @@ describe('AuthEffects', () => {
         done();
       });
     });
-    
+
     it('should return CoreActions.writeFromFirebaseInUserPhotoURL with proper URL and toast success', (done: DoneFn) => {
       actions$.next(CoreActions.uploadUserPhotoSuccess({ taskRef: 'dummyRef' }));
       effects.uploadUserPhotoSuccess$.subscribe(result => {
@@ -444,7 +444,7 @@ describe('AuthEffects', () => {
       });
     });
   });
-  
+
   describe('updateUserCollectionError$', () => {
     it('should toast error', (done: DoneFn) => {
       actions$.next(CoreActions.updateUserCollectionError({ error: { error: 'dummyError' } } as any));
@@ -454,6 +454,18 @@ describe('AuthEffects', () => {
       });
     });
   });
-  //ToDo getActionFromUploadTaskSnapshot()
-  
+
+  describe('getActionFromUploadTaskSnapshot$', () => {
+    it('should return needed action in set case', () => {
+      mockTaskSnapshot = { state: 'running', bytesTransferred: 50, totalBytes: 100 } as firebase.storage.UploadTaskSnapshot;
+      const { bytesTransferred: loaded, totalBytes: total } = mockTaskSnapshot;
+      expect(effects['getActionFromUploadTaskSnapshot'](mockTaskSnapshot)).toEqual(CoreActions.uploadUserPhotoProgress({ loadProgress: Math.round(loaded / total * 100) }));
+
+      mockTaskSnapshot = { state: 'success', ref: { fullPath: 'dummyRef' } } as firebase.storage.UploadTaskSnapshot;
+      expect(effects['getActionFromUploadTaskSnapshot'](mockTaskSnapshot)).toEqual(CoreActions.uploadUserPhotoSuccess({ taskRef: mockTaskSnapshot.ref.fullPath }));
+
+      mockTaskSnapshot = { state: 'dummyState' } as firebase.storage.UploadTaskSnapshot;
+      expect(effects['getActionFromUploadTaskSnapshot'](mockTaskSnapshot)).toEqual(CoreActions.uploadUserPhotoError({ error: { message: "Photo doesn't updated", code: '' } }));
+    });
+  });
 });
