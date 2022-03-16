@@ -109,11 +109,10 @@ export class AuthEffects {
     ofType(CoreActions.updateUserCollection),
     map((action) => action.user),
     withLatestFrom(this.store.select(selectUserUID).pipe(filter(Boolean))),
-    map(([userFormData, userUID]: [IUser, string]) => {
-      this.authService.updateCollection(userFormData, userUID);
-      return CoreActions.updateUserCollectionSuccess({ userUID });
-    }),
-    catchError((error: FirebaseError) => of(CoreActions.updateUserCollectionError({ error }))),
+    switchMap(([userFormData, userUID]: [IUser, string]) => this.authService.updateCollection(userFormData, userUID).pipe(
+      map(() => CoreActions.updateUserCollectionSuccess({ userUID })),
+      catchError((error: FirebaseError) => of(CoreActions.updateUserCollectionError({ error }))),
+    )),
   ));
 
   updateUserCollectionSuccess$: Observable<any> = createEffect(() => this.actions.pipe(

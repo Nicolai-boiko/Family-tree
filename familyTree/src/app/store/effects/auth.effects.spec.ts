@@ -27,12 +27,12 @@ class MockAuthService {
 }
 
 class MockToastrService {
-  success() { }
-  error() { }
+  success = createSpy();
+  error = createSpy();
 }
 
 class MockRouter {
-  navigate() { }
+  navigate = createSpy();
 }
 
 class MockStore {
@@ -78,11 +78,6 @@ describe('AuthEffects', () => {
     store = TestBed.inject(Store);
     router = TestBed.inject(Router);
     actions$ = new ReplaySubject<any>(1);
-
-
-    toastrService.success = createSpy();
-    toastrService.error = createSpy();
-    router.navigate = createSpy();
   });
 
   it('should be created', () => {
@@ -123,7 +118,7 @@ describe('AuthEffects', () => {
 
   describe('signUpWithEmailSuccess$', () => {
     beforeEach(() => {
-      authService.createCollection = createSpy();
+      authService.createCollection = createSpy().and.returnValue(of({}));
     });
 
     it('should call createCollection with proper user and data', (done: DoneFn) => {
@@ -209,7 +204,7 @@ describe('AuthEffects', () => {
 
   describe('logoutStart$', () => {
     beforeEach(() => {
-      authService.signOut = createSpy();
+      authService.signOut = createSpy().and.returnValue(of({}));
     });
 
     it('should call signOut', (done: DoneFn) => {
@@ -243,7 +238,7 @@ describe('AuthEffects', () => {
   describe('sendPasswordResetEmail$', () => {
     const mockEmail = 'dummyEmail';
     beforeEach(() => {
-      authService.resetPassword = createSpy();
+      authService.resetPassword = createSpy().and.returnValue(of({}));
     });
 
     it('should call resetPassword with proper user', (done: DoneFn) => {
@@ -296,7 +291,7 @@ describe('AuthEffects', () => {
     const mockUserUID = 'dummyUID';
 
     beforeEach(() => {
-      authService.getCollection = createSpy().and.returnValue(mockUserCollection);
+      authService.getCollection = createSpy().and.returnValue(of(mockUserCollection));
     });
 
     it('should call getCollection with proper userUID', (done: DoneFn) => {
@@ -316,7 +311,7 @@ describe('AuthEffects', () => {
     });
 
     it('should return CoreActions.getUserCollectionError if failed', (done: DoneFn) => {
-      authService.resetPassword = createSpy().and.returnValue(throwError({ error: 'dummyError' }));
+      authService.getCollection = createSpy().and.returnValue(throwError({ error: 'dummyError' }));
       actions$.next(CoreActions.getUserCollection({ userUID: mockUserUID }));
       effects.getUserCollection$.subscribe(result => {
         expect(result).toEqual(CoreActions.getUserCollectionError({ error: { error: 'dummyError' } as any }));
@@ -337,8 +332,10 @@ describe('AuthEffects', () => {
 
   describe('updateUserCollection$', () => {
     beforeEach(() => {
-      authService.updateCollection = createSpy();
+      authService.updateCollection = createSpy().and.returnValue(of({}));
     });
+    
+    // ToDo should test case if selectUserUId returns null
 
     it('should call updateCollection with proper user', (done: DoneFn) => {
       actions$.next(CoreActions.updateUserCollection({ user: mockIUser }));
@@ -357,7 +354,7 @@ describe('AuthEffects', () => {
     });
 
     it('should return CoreActions.updateUserCollectionError if failed', (done: DoneFn) => {
-      authService.resetPassword = createSpy().and.returnValue(throwError({ error: 'dummyError' }));
+      authService.updateCollection = createSpy().and.returnValue(throwError({ error: 'dummyError' }));
       actions$.next(CoreActions.updateUserCollection({ user: mockIUser }));
       effects.updateUserCollection$.subscribe(result => {
         expect(result).toEqual(CoreActions.updateUserCollectionError({ error: { error: 'dummyError' } as any }));
@@ -395,7 +392,6 @@ describe('AuthEffects', () => {
     beforeEach(() => {
       authService.uploadUserPhoto = createSpy().and.returnValue(of(mockTaskSnapshot));
       getActionFromUploadTaskSnapshotSpy = spyOn<any>(effects, 'getActionFromUploadTaskSnapshot');
-      // effects['getActionFromUploadTaskSnapshot'] = createSpy();
     });
 
     it('should call uploadUserPhoto with proper data', (done: DoneFn) => {
@@ -414,14 +410,6 @@ describe('AuthEffects', () => {
       });
     });
 
-    it('should return uploadUserPhotoSuccess with proper data if succeeded', (done: DoneFn) => {
-      actions$.next(CoreActions.uploadUserPhoto({ file: mockFile }));
-      effects.uploadUserPhoto$.subscribe(result => {
-        expect(result).toEqual(CoreActions.uploadUserPhotoSuccess({ taskRef: 'dummyRef' }));
-        done();
-      });
-    });
-
     it('should return uploadUserPhotoError with proper data if failed', (done: DoneFn) => {
       authService.uploadUserPhoto = createSpy().and.returnValue(throwError({ error: 'dummyError' }));
       actions$.next(CoreActions.uploadUserPhoto({ file: mockFile }));
@@ -430,40 +418,42 @@ describe('AuthEffects', () => {
         done();
       });
     });
-
-    describe('uploadUserPhotoSuccess$', () => {
-      const mockDownloadURL = 'dummyDownloadURL';
-      authService.getPhotoURL = createSpy();
-      it('should call getPhotoURL', (done: DoneFn) => {
-        actions$.next(CoreActions.uploadUserPhotoSuccess({ taskRef: 'dummyRef' }));
-        effects.uploadUserPhotoSuccess$.subscribe(() => {
-          expect(authService.getPhotoURL).toHaveBeenCalledWith('dummyRef');
-          done();
-        });
-      });
-
-      it('should return CoreActions.writeFromFirebaseInUserPhotoURL with proper URL and toast success', (done: DoneFn) => {
-        authService.getPhotoURL = createSpy().and.returnValue(of(mockDownloadURL));
-        actions$.next(CoreActions.uploadUserPhotoSuccess({ taskRef: 'dummyRef' }));
-        effects.uploadUserPhotoSuccess$.subscribe(result => {
-          expect(toastrService.success).toHaveBeenCalled();
-          expect(result).toEqual(CoreActions.writeFromFirebaseInUserPhotoURL({ downloadURL: mockDownloadURL }));
-          done();
-        });
-      });
-    });
-
-    describe('updateUserCollectionError$', () => {
-      it('should toast error', (done: DoneFn) => {
-        actions$.next(CoreActions.updateUserCollectionError({ error: { error: 'dummyError' } } as any));
-        effects.updateUserCollectionError$.subscribe(() => {
-          expect(toastrService.error).toHaveBeenCalled();
-          done();
-        });
-      });
-    });
-    //ToDo getActionFromUploadTaskSnapshot()
-
-
   });
+  
+  describe('uploadUserPhotoSuccess$', () => {
+    const mockDownloadURL = 'mockDownloadURL';
+    
+    beforeEach(() => {
+      authService.getPhotoURL = createSpy().and.returnValue(of(mockDownloadURL));
+    });
+    
+    it('should call getPhotoURL', (done: DoneFn) => {
+      actions$.next(CoreActions.uploadUserPhotoSuccess({ taskRef: 'dummyRef' }));
+      effects.uploadUserPhotoSuccess$.subscribe(() => {
+        expect(authService.getPhotoURL).toHaveBeenCalledWith('dummyRef');
+        done();
+      });
+    });
+    
+    it('should return CoreActions.writeFromFirebaseInUserPhotoURL with proper URL and toast success', (done: DoneFn) => {
+      actions$.next(CoreActions.uploadUserPhotoSuccess({ taskRef: 'dummyRef' }));
+      effects.uploadUserPhotoSuccess$.subscribe(result => {
+        expect(toastrService.success).toHaveBeenCalledWith('New photo has uploaded');
+        expect(result).toEqual(CoreActions.writeFromFirebaseInUserPhotoURL({ downloadURL: mockDownloadURL }));
+        done();
+      });
+    });
+  });
+  
+  describe('updateUserCollectionError$', () => {
+    it('should toast error', (done: DoneFn) => {
+      actions$.next(CoreActions.updateUserCollectionError({ error: { error: 'dummyError' } } as any));
+      effects.updateUserCollectionError$.subscribe(() => {
+        expect(toastrService.error).toHaveBeenCalled();
+        done();
+      });
+    });
+  });
+  //ToDo getActionFromUploadTaskSnapshot()
+  
 });

@@ -51,8 +51,8 @@ export class AuthService {
     );
   }
   /* Update user collection in firebase */
-  updateCollection(userFormData: IUser, uid: string): void {
-    this.afs.doc<IUser>(`${USER_COLLECTION}/${uid}`).update(userFormData);
+  updateCollection(userFormData: IUser, uid: string): Observable<void> {
+    return from<Promise<void>>(this.afs.doc<IUser>(`${USER_COLLECTION}/${uid}`).update(userFormData));
   }
 
   /* Sign up Observable<firebase.auth.UserCredential> */
