@@ -456,16 +456,21 @@ describe('AuthEffects', () => {
   });
 
   describe('getActionFromUploadTaskSnapshot$', () => {
-    it('should return needed action in set case', () => {
+    it('should return uploadUserPhotoProgress action with proper values for running case', () => {
       mockTaskSnapshot = { state: 'running', bytesTransferred: 50, totalBytes: 100 } as firebase.storage.UploadTaskSnapshot;
-      const { bytesTransferred: loaded, totalBytes: total } = mockTaskSnapshot;
-      expect(effects['getActionFromUploadTaskSnapshot'](mockTaskSnapshot)).toEqual(CoreActions.uploadUserPhotoProgress({ loadProgress: Math.round(loaded / total * 100) }));
+      expect(effects['getActionFromUploadTaskSnapshot'](mockTaskSnapshot))
+      .toEqual(CoreActions.uploadUserPhotoProgress({ loadProgress: 50 }));
 
+      // TOdO move it to separate it
       mockTaskSnapshot = { state: 'success', ref: { fullPath: 'dummyRef' } } as firebase.storage.UploadTaskSnapshot;
-      expect(effects['getActionFromUploadTaskSnapshot'](mockTaskSnapshot)).toEqual(CoreActions.uploadUserPhotoSuccess({ taskRef: mockTaskSnapshot.ref.fullPath }));
-
-      mockTaskSnapshot = { state: 'dummyState' } as firebase.storage.UploadTaskSnapshot;
-      expect(effects['getActionFromUploadTaskSnapshot'](mockTaskSnapshot)).toEqual(CoreActions.uploadUserPhotoError({ error: { message: "Photo doesn't updated", code: '' } }));
+      expect(effects['getActionFromUploadTaskSnapshot'](mockTaskSnapshot))
+      .toEqual(CoreActions.uploadUserPhotoSuccess({ taskRef: 'dummyRef' }));
+  
+      // TOdO move it to separate it
+      mockTaskSnapshot = { state: 'any, for default' } as firebase.storage.UploadTaskSnapshot;
+      // expect(effects['getActionFromUploadTaskSnapshot'](mockTaskSnapshot)).toEqual(CoreActions.uploadUserPhotoError({ error: { message: "Photo doesn't updated", code: '' } }));
+      expect(effects['getActionFromUploadTaskSnapshot'](mockTaskSnapshot))
+      .toEqual(CoreActions.uploadUserPhotoError({ error: { message: "Photo doesn't updated", code: '' } }));
     });
   });
 });
