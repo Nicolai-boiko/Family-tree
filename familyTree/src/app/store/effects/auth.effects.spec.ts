@@ -89,7 +89,6 @@ describe('AuthEffects', () => {
   describe('signUpWithEmail$', () => {
     beforeEach(() => {
       authService.signUp = createSpy().and.returnValue(of(mockData));
-      // spyOn(authService, 'signUp').and.returnValue(of(mockData));
     });
 
     it('should call signUp with proper user', (done: DoneFn) => {
@@ -154,7 +153,6 @@ describe('AuthEffects', () => {
   describe('signInWithEmail$', () => {
     beforeEach(() => {
       authService.signIn = createSpy().and.returnValue(of(mockData));
-      // spyOn(authService, 'signUp').and.returnValue(of(mockData));
     });
 
     it('should call signIn with proper user', (done: DoneFn) => {
@@ -337,8 +335,6 @@ describe('AuthEffects', () => {
       authService.updateCollection = createSpy().and.returnValue(of({}));
     });
 
-    // ToDo should test case if selectUserUId returns null
-
     it('should call updateCollection with proper user', (done: DoneFn) => {
       actions$.next(CoreActions.updateUserCollection({ user: mockIUser }));
       effects.updateUserCollection$.subscribe(() => {
@@ -459,18 +455,19 @@ describe('AuthEffects', () => {
     it('should return uploadUserPhotoProgress action with proper values for running case', () => {
       mockTaskSnapshot = { state: 'running', bytesTransferred: 50, totalBytes: 100 } as firebase.storage.UploadTaskSnapshot;
       expect(effects['getActionFromUploadTaskSnapshot'](mockTaskSnapshot))
-      .toEqual(CoreActions.uploadUserPhotoProgress({ loadProgress: 50 }));
+        .toEqual(CoreActions.uploadUserPhotoProgress({ loadProgress: 50 }));
+    });
 
-      // TOdO move it to separate it
+    it('should return uploadUserPhotoSuccess action with proper values for running case', () => {
       mockTaskSnapshot = { state: 'success', ref: { fullPath: 'dummyRef' } } as firebase.storage.UploadTaskSnapshot;
       expect(effects['getActionFromUploadTaskSnapshot'](mockTaskSnapshot))
-      .toEqual(CoreActions.uploadUserPhotoSuccess({ taskRef: 'dummyRef' }));
-  
-      // TOdO move it to separate it
+        .toEqual(CoreActions.uploadUserPhotoSuccess({ taskRef: 'dummyRef' }));
+    });
+
+    it('should return uploadUserPhotoError action with proper values for running case', () => {
       mockTaskSnapshot = { state: 'any, for default' } as firebase.storage.UploadTaskSnapshot;
-      // expect(effects['getActionFromUploadTaskSnapshot'](mockTaskSnapshot)).toEqual(CoreActions.uploadUserPhotoError({ error: { message: "Photo doesn't updated", code: '' } }));
       expect(effects['getActionFromUploadTaskSnapshot'](mockTaskSnapshot))
-      .toEqual(CoreActions.uploadUserPhotoError({ error: { message: "Photo doesn't updated", code: '' } }));
+        .toEqual(CoreActions.uploadUserPhotoError({ error: { message: "Photo doesn't updated", code: '' } }));
     });
   });
 });

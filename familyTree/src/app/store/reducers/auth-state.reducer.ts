@@ -31,12 +31,16 @@ export const authFeature = createFeature({
                 isLoading: false,
             })
         ),
-        on(CoreActions.signUpWithEmailError, (state, { error: { code, name } }) => ({
-            ...state,
-            user: null,
-            isLoading: false,
-            errorMessage: { code, name },
-        })),
+        on(
+            CoreActions.signUpWithEmailError,
+            CoreActions.signInWithEmailError,
+            (state, { error: { code, name } }) => ({
+                ...state,
+                user: null,
+                isLoading: false,
+                errorMessage: { code, name },
+            })
+        ),
         on(CoreActions.signInWithEmail, (state, { user }) => ({
             ...state,
             user: {
@@ -48,12 +52,6 @@ export const authFeature = createFeature({
             errorMessage: null,
             infoMessage: null,
             isEmailSend: false,
-        })),
-        on(CoreActions.signInWithEmailError, (state, { error: { code, name } }) => ({
-            ...state,
-            user: null,
-            isLoading: false,
-            errorMessage: { code, name },
         })),
         on(CoreActions.logoutEnd, (state) => ({
             ...state,
@@ -70,11 +68,15 @@ export const authFeature = createFeature({
             isLoading: false,
             isEmailSend: true,
         })),
-        on(CoreActions.sendPasswordResetEmailError, (state, { error: { code, name } }) => ({
-            ...state,
-            isLoading: false,
-            errorMessage: { code, name },
-        })),
+        on(
+            CoreActions.sendPasswordResetEmailError,
+            CoreActions.updateUserCollectionError,
+            (state, { error: { code, name } }) => ({
+                ...state,
+                isLoading: false,
+                errorMessage: { code, name },
+            })
+        ),
         on(CoreActions.getUserCollectionSuccess, (state, { userCollection }) => ({
             ...state,
             user: {
@@ -87,11 +89,6 @@ export const authFeature = createFeature({
         on(CoreActions.getUserCollectionError, (state, { error: { code, name } }) => ({
             ...state,
             user: null,
-            isLoading: false,
-            errorMessage: { code, name },
-        })),
-        on(CoreActions.updateUserCollectionError, (state, { error: { code, name } }) => ({
-            ...state,
             isLoading: false,
             errorMessage: { code, name },
         })),
