@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { IUser } from 'src/app/constants/Interfaces/common.interfaces';
 import { authFeature } from 'src/app/store/reducers/auth-state.reducer';
 import { EditUserPageComponent } from './edit-user-page.component';
@@ -12,6 +12,8 @@ import { AppRoutingModule } from '../../app-routing.module';
 import { CoreActions } from 'src/app/store/actions/auth-state.actions';
 import Spy = jasmine.Spy;
 import createSpy = jasmine.createSpy;
+import anything = jasmine.anything;
+import { YesOrNoEnum } from 'src/app/constants/Enums/common.enums';
 
 class MockToastrService {
   error() { }
@@ -34,7 +36,8 @@ class MockStore {
 }
 
 class MockMatDialog {
-  open() { }
+  open() { };
+  afterClosed() { };
 }
 
 describe('EditUserPageComponent', () => {
@@ -110,7 +113,7 @@ describe('EditUserPageComponent', () => {
     beforeEach(() => {
       toastrSpy = spyOn(component.toastr, 'error');
       MockFile = new File(['dummyData'], 'dummyFile');
-      fileSizeSpy= spyOnProperty(MockFile, 'size', 'get');
+      fileSizeSpy = spyOnProperty(MockFile, 'size', 'get');
     });
     it('should be defined', () => {
       expect(component.uploadPhoto).toBeDefined();
@@ -140,6 +143,64 @@ describe('EditUserPageComponent', () => {
 
       expect(toastrSpy).not.toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(CoreActions.uploadUserPhoto({ file: MockFile }));
+    });
+  });
+
+  describe('deletePhoto', () => {
+    let dialogOpenSpy: Spy;
+
+    beforeEach(() => {
+      dialogOpenSpy = spyOn(component.dialog, 'open').and.returnValue({ afterClosed: () => of(YesOrNoEnum.YES) } as MatDialogRef<YesOrNoEnum>);
+    });
+
+    it('should call dialog.open with needed params', () => {
+      component.deletePhoto();
+
+      expect(component.dialog.open).toHaveBeenCalledWith(anything(), {
+        width: '18.75rem',
+        disableClose: true,
+        autoFocus: true,
+        data: { text: 'Are you sure to delete this photo?' },
+      });
+    });
+
+    it('should dispatch CoreActions.clearPhotoUserURL if afterClosed send YES', () => {
+      component.deletePhoto();
+
+      expect(store.dispatch).toHaveBeenCalledWith(CoreActions.clearPhotoUserURL());
+    });
+
+    it('should not dispatch CoreActions.clearPhotoUserURL if afterClosed send NO', () => {
+      dialogOpenSpy.and.returnValue({ afterClosed: () => of(YesOrNoEnum.NO) } as MatDialogRef<YesOrNoEnum>);
+
+      component.deletePhoto();
+
+      expect(store.dispatch).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('canDeactivate', () => {
+    let dialogOpenSpy: Spy;
+
+    beforeEach(() => {
+      dialogOpenSpy = spyOn(component.dialog, 'open').and.returnValue({ afterClosed: () => of(YesOrNoEnum.YES) } as MatDialogRef<YesOrNoEnum>);
+      component.isFormChanged = true;
+    });
+
+    it('should call dialog.open with needed params', () => {
+      component.canDeactivate();
+
+      expect(component.dialog.open).toHaveBeenCalledWith(anything(), {
+        width: '18.75rem',
+        disableClose: true,
+        autoFocus: true,
+        data: { text: 'Are you sure to exit WITHOUT saving?' },
+      });
+    });
+
+    xit('should return YES if afterClosed send YES', () => {
+      spyOn(component, 'canDeactivate');
+      expect(component.canDeactivate()).toBeObservable(true);
     });
   });
 

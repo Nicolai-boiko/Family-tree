@@ -6,14 +6,13 @@ import { Store } from '@ngrx/store';
 import { AuthService } from './auth.service';
 import Spy = jasmine.Spy;
 import createSpy = jasmine.createSpy;
-import { HttpTestingController } from '@angular/common/http/testing';
 
 class MockAngularFireAuth {
-  onIdTokenChanged() {}
-  createUserWithEmailAndPassword() {}
-  signInWithEmailAndPassword() {}
-  signOut() {}
-  sendPasswordResetEmail() {}
+  onIdTokenChanged = createSpy();
+  createUserWithEmailAndPassword = createSpy();
+  signInWithEmailAndPassword = createSpy();
+  signOut = createSpy();
+  sendPasswordResetEmail = createSpy();
 }
 
 class MockAngularFirestore {
@@ -32,7 +31,10 @@ class MockStore {
 
 describe('AuthService', () => {
   let service: AuthService;
-  let httpMock: HttpTestingController;
+  let angularFireAuth: AngularFireAuth;
+  let afs: AngularFirestore;
+  let storage: AngularFireStorage;
+  let store: Store;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -44,28 +46,14 @@ describe('AuthService', () => {
       ]
     });
     service = TestBed.inject(AuthService);
+    angularFireAuth = TestBed.inject(AngularFireAuth);
+    afs = TestBed.inject(AngularFirestore);
+    storage = TestBed.inject(AngularFireStorage);
+    store = TestBed.inject(Store);
   });
   
-  /* afterEach(() => {
-    httpMock.verify();
-  }); */
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
-  
-  
-  
-  // describe('http example', () => {
-  //   it('http example', () => {
-  //     service.signOut().subscribe(result => {
-  //       expect(result).toEqual({ someExpectedData: 'dummy'});
-  //     });
-  //
-  //     const request = httpMock.expectOne('shapephase/dummyShapePhaseId');
-  //     expect(request.request.method).toBe('GET');
-  //
-  //     request.flush({ someExpectedData: 'dummy'});
-  //   });
-  // });
 });

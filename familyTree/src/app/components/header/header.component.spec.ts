@@ -14,8 +14,8 @@ import Spy = jasmine.Spy;
 import anything = jasmine.anything;
 
 class MockMatDialog {
-  open() {}
-  afterClosed() {};
+  open() { };
+  afterClosed() { };
 }
 
 describe('HeaderComponent', () => {
@@ -42,7 +42,7 @@ describe('HeaderComponent', () => {
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -50,10 +50,10 @@ describe('HeaderComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
     store = TestBed.inject(MockStore);
-  
+
     spyOn(store, 'dispatch');
   });
-  
+
   afterEach(() => {
     store?.resetSelectors();
   });
@@ -61,7 +61,7 @@ describe('HeaderComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-  
+
   describe('userInitials$', () => {
     it('should not execute observable for user if it is null', () => {
       // const nexFn = jasmine.createSpy('name');
@@ -72,52 +72,96 @@ describe('HeaderComponent', () => {
       //
       // expect(nexFn).not.toHaveBeenCalled();
       let invoked = 0;
-      
+
       component.userInitials$.subscribe(() => {
         invoked++;
       });
-      
+
       expect(invoked).toEqual(0);
     });
-  
+
     it('should execute observable for user if it exists', () => {
       const mockUser: IUser = { firstName: 'aaaa', secondName: 'bbbbb' } as IUser;
       store.overrideSelector(authFeature.selectUser, mockUser);
       let invoked = 0;
-    
+
       component.userInitials$.subscribe(() => {
         invoked++;
       });
-    
+
       expect(invoked).toEqual(1);
     });
-    
+
     it('should create initials for user if first and second name exist', (done: DoneFn) => {
       const mockUser: IUser = { firstName: 'aaaa', secondName: 'bbbbb' } as IUser;
       store.overrideSelector(authFeature.selectUser, mockUser);
-      
+
       component.userInitials$.subscribe(result => {
         expect(result).toEqual('ab');
         done();
-      })
+      });
+    });
+
+    it('should return "" for user if first name does not exist', (done: DoneFn) => {
+      const mockUser: IUser = { firstName: '', secondName: 'bbbbb' } as IUser;
+      store.overrideSelector(authFeature.selectUser, mockUser);
+
+      component.userInitials$.subscribe(result => {
+        expect(result).toEqual('');
+        done();
+      });
+    });
+
+    it('should return "" for user if second name does not exist', (done: DoneFn) => {
+      const mockUser: IUser = { firstName: 'aaaaa', secondName: '' } as IUser;
+      store.overrideSelector(authFeature.selectUser, mockUser);
+
+      component.userInitials$.subscribe(result => {
+        expect(result).toEqual('');
+        done();
+      });
     });
   });
-  
+
+  describe('userPhotoURL$', () => {
+    it('should not execute observable for user photo if it is null', () => {
+      let invoked = 0;
+
+      component.userPhotoURL$.subscribe(() => {
+        invoked++;
+      });
+
+      expect(invoked).toEqual(0);
+    });
+
+    it('should execute observable for user photo if it exists', () => {
+      const mockUser: IUser = { photoUrl: 'dummyURL' } as IUser;
+      store.overrideSelector(authFeature.selectUser, mockUser);
+      let invoked = 0;
+
+      component.userInitials$.subscribe(() => {
+        invoked++;
+      });
+
+      expect(invoked).toEqual(1);
+    });
+  });
+
   describe('onLogout', () => {
     let dialogOpenSpy: Spy;
-    
+
     beforeEach(() => {
       dialogOpenSpy = spyOn(component.dialog, 'open').and.returnValue({ afterClosed: () => of(YesOrNoEnum.YES) } as MatDialogRef<YesOrNoEnum>);
     });
-    
+
     it('should be defined', () => {
       expect(component.onLogout).toBeDefined();
     });
-    
-    
+
+
     it('should call dialog.open with needed params', () => {
       component.onLogout();
-      
+
       expect(component.dialog.open).toHaveBeenCalledWith(anything(), {
         width: '18.75rem',
         disableClose: true,
@@ -125,22 +169,22 @@ describe('HeaderComponent', () => {
         data: { text: 'Are you sure to logout?' },
       });
     });
-    
+
     it('should dispatch CoreActions.logoutStart if afterClosed send YES', () => {
       component.onLogout();
-      
+
       expect(store.dispatch).toHaveBeenCalledWith(CoreActions.logoutStart());
     });
-    
+
     it('should not dispatch CoreActions.logoutStart if afterClosed send NO', () => {
       dialogOpenSpy.and.returnValue({ afterClosed: () => of(YesOrNoEnum.NO) } as MatDialogRef<YesOrNoEnum>);
-      
+
       component.onLogout();
-      
+
       expect(store.dispatch).not.toHaveBeenCalled();
     });
   });
-  
+
   describe('onToggleSidenav', () => {
     it('should be defined', () => {
       expect(component.onToggleSidenav).toBeDefined();
