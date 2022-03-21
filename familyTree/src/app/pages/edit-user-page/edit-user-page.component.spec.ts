@@ -13,6 +13,7 @@ import { CoreActions } from 'src/app/store/actions/auth-state.actions';
 import Spy = jasmine.Spy;
 import createSpy = jasmine.createSpy;
 import anything = jasmine.anything;
+import createSpyObj = jasmine.createSpyObj;
 import { YesOrNoEnum } from 'src/app/constants/Enums/common.enums';
 
 class MockToastrService {
@@ -39,6 +40,8 @@ class MockMatDialog {
   open() { };
   afterClosed() { };
 }
+
+class MockModal { }
 
 describe('EditUserPageComponent', () => {
   let component: EditUserPageComponent;
@@ -181,9 +184,12 @@ describe('EditUserPageComponent', () => {
 
   describe('canDeactivate', () => {
     let dialogOpenSpy: Spy;
+    let afterClosedSpy: Spy;
 
     beforeEach(() => {
-      dialogOpenSpy = spyOn(component.dialog, 'open').and.returnValue({ afterClosed: () => of(YesOrNoEnum.YES) } as MatDialogRef<YesOrNoEnum>);
+      /* afterClosedSpy = createSpyObj({}) */
+      dialogOpenSpy = spyOn(component.dialog, 'open').and
+        .returnValue({ afterClosed: () => of(YesOrNoEnum.YES) } as MatDialogRef<YesOrNoEnum>);
       component.isFormChanged = true;
     });
 
@@ -198,9 +204,28 @@ describe('EditUserPageComponent', () => {
       });
     });
 
-    xit('should return YES if afterClosed send YES', () => {
-      spyOn(component, 'canDeactivate');
-      expect(component.canDeactivate()).toBeObservable(true);
+    it('should not call dialog open if isFormChanged = false', () => {
+      component.isFormChanged = false;
+
+      component.canDeactivate();
+
+      expect(component.dialog.open).not.toHaveBeenCalled();
+    });
+
+    it('should return true if modal return YES', (done: DoneFn) => {
+      (component.canDeactivate() as Observable<boolean>).subscribe(result => {
+        expect(result).toBeTrue();
+        done();
+      });
+    });
+
+    it('should return false if modal return NO', (done: DoneFn) => {
+      dialogOpenSpy.and.returnValue({ afterClosed: () => of(YesOrNoEnum.NO) } as MatDialogRef<YesOrNoEnum>);
+
+      (<Observable<boolean>>component.canDeactivate()).subscribe(result => {
+        expect(result).toBeFalse();
+        done();
+      });
     });
   });
 
@@ -225,7 +250,6 @@ describe('EditUserPageComponent', () => {
           'photoUrl',
         ]);
     });
-    //store ToDo
   });
 
 });

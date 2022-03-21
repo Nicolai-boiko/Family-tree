@@ -140,7 +140,6 @@ export class EditUserPageComponent implements OnInit, OnDestroy, ComponentCanDea
       data: { text: 'Are you sure to exit WITHOUT saving?' },
     });
     return dialogRef.afterClosed().pipe(
-      take(1),
       map(data => data === YesOrNoEnum.YES),
     );
   }
