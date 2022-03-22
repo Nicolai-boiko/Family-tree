@@ -10,11 +10,10 @@ import { EditUserPageComponent } from './edit-user-page.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { AppRoutingModule } from '../../app-routing.module';
 import { CoreActions } from 'src/app/store/actions/auth-state.actions';
+import { YesOrNoEnum } from 'src/app/constants/Enums/common.enums';
 import Spy = jasmine.Spy;
 import createSpy = jasmine.createSpy;
 import anything = jasmine.anything;
-import createSpyObj = jasmine.createSpyObj;
-import { YesOrNoEnum } from 'src/app/constants/Enums/common.enums';
 
 class MockToastrService {
   error() { }
@@ -40,8 +39,6 @@ class MockMatDialog {
   open() { };
   afterClosed() { };
 }
-
-class MockModal { }
 
 describe('EditUserPageComponent', () => {
   let component: EditUserPageComponent;
@@ -184,10 +181,8 @@ describe('EditUserPageComponent', () => {
 
   describe('canDeactivate', () => {
     let dialogOpenSpy: Spy;
-    let afterClosedSpy: Spy;
 
     beforeEach(() => {
-      /* afterClosedSpy = createSpyObj({}) */
       dialogOpenSpy = spyOn(component.dialog, 'open').and
         .returnValue({ afterClosed: () => of(YesOrNoEnum.YES) } as MatDialogRef<YesOrNoEnum>);
       component.isFormChanged = true;

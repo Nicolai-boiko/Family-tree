@@ -17,11 +17,11 @@ import { IUser } from 'src/app/constants/Interfaces/common.interfaces';
 export class HeaderComponent {
   public userInitials$: Observable<string> = this.store.select(authFeature.selectUser).pipe(
     filter(Boolean),
-    map((user: IUser) => user.firstName && user.secondName ? `${user.firstName[0]}${user.secondName[0]}` : '')
+    map((user: IUser) => user.firstName && user.secondName ? `${user.firstName[0]}${user.secondName[0]}` : ''),
   );
   public userPhotoURL$: Observable<string> = this.store.select(selectUserPhotoURL).pipe(filter(Boolean));
-  public routesEnum: typeof RoutesEnum = RoutesEnum;
   public isLoggedIn$: Observable<IUser | null> = this.store.select(authFeature.selectUser);
+  public routesEnum: typeof RoutesEnum = RoutesEnum;
 
   @Output() public sidenavToggle: EventEmitter<void> = new EventEmitter();
 

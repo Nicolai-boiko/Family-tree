@@ -37,9 +37,7 @@ const initialMockAuthState: IAuthState = {
 const mockFile = new File(['dummyData'], 'dummyFile');
 
 describe('auth-state.reducer', () => {
-
     describe('reducer', () => {
-
         describe('unknown action', () => {
             it('should return the default state', () => {
                 const action = {
@@ -83,6 +81,7 @@ describe('auth-state.reducer', () => {
                 expect(state).not.toBe(newState);
             });
         });
+        
         describe('getUserCollection', () => {
             it('should reset state of messages, start loading and set email send to false', () => {
                 const action = CoreActions.getUserCollection({ userUID: 'dummyUID' });
@@ -99,6 +98,7 @@ describe('auth-state.reducer', () => {
                 expect(state).not.toBe(newState);
             });
         });
+        
         describe('updateUserCollection', () => {
             it('should reset state of messages, start loading and set email send to false', () => {
                 const action = CoreActions.updateUserCollection({ user: mockIUser });
@@ -115,6 +115,7 @@ describe('auth-state.reducer', () => {
                 expect(state).not.toBe(newState);
             });
         });
+        
         describe('logoutStart', () => {
             it('should reset state of messages, start loading and set email send to false', () => {
                 const action = CoreActions.logoutStart();
@@ -431,35 +432,36 @@ describe('auth-state.reducer', () => {
                 expect(state).not.toBe(newState);
             });
         });
-
-
-
-
-
-
-
-
     });
-
 
     describe("selectors", () => {
         it('selectIsLoading', () => {
             expect(authFeature.selectIsLoading.projector(initialMockAuthState)).toBeFalse();
         });
-
+        
+        it('selectUser', () => {});
+    
+        it('selectErrorMessage', () => {});
+    
+        it('selectInfoMessage', () => {});
+    
+        it('selectIsEmailSend', () => {});
+    
+        it('selectIsInitializing', () => {});
+    
+        it('selectLoadProgress', () => {});
 
         it('selectUserPhotoURL', () => {
-            const initialMockAuthState = { user: { photoUrl: 'dummyPhotoUrl' } };
-            const selectMockUser = authFeature.selectUser.projector(initialMockAuthState);
-            const result = selectUserPhotoURL.projector(selectMockUser);
+            const selectedMockUser: IUser = { photoUrl: 'dummyPhotoUrl' };
+            
+            const result = selectUserPhotoURL.projector(selectedMockUser);
             expect(result).toEqual('dummyPhotoUrl');
         });
 
-
         it('selectUserUID', () => {
-            const initialMockAuthState = { user: { uid: 'dummyUID' } };
-            const selectMockUser = authFeature.selectUser.projector(initialMockAuthState);
-            const result = selectUserUID.projector(selectMockUser);
+            const selectedMockUser: IUser = { uid: 'dummyUID' };
+    
+            const result = selectUserUID.projector(selectedMockUser);
             expect(result).toEqual('dummyUID');
         });
     });

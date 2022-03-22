@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppRoutingModule } from 'src/app/app-routing.module';
@@ -14,6 +14,8 @@ import createSpy = jasmine.createSpy;
 class MockStore {
   dispatch = createSpy();
 }
+
+const mockFormControl: FormControl = new FormControl('mock');
 
 describe('LoginPageComponent', () => {
   let component: LoginPageComponent;
@@ -30,7 +32,7 @@ describe('LoginPageComponent', () => {
         LoginPageComponent,
       ],
       providers: [
-        { provide: ActivatedRoute, useValue: { snapshot: { url: { [0]: { path: RoutesEnum.LOG_IN } } } } },
+        { provide: ActivatedRoute, useValue: { snapshot: { url: { [0]: { path: 'dummyPath' } } } } },
         { provide: Store, useClass: MockStore }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -48,21 +50,12 @@ describe('LoginPageComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  describe('getter formControl', () => {
-    let MockFormControl: FormControl;
-    let authFormGetControlSpy: Spy;
-
-    beforeEach(() => {
-      MockFormControl = new FormControl();
-      authFormGetControlSpy = spyOn(component.authForm, 'get');
-    });
-
-    it('should return needed form control', () => {
-      authFormGetControlSpy.and.returnValue(MockFormControl);
-
-      expect(component.firstNameControl).toBe(MockFormControl);
-      expect(authFormGetControlSpy).toHaveBeenCalled();
+  
+  describe('get firstNameControl', () => {
+    it('should return proper value', () => {
+      component.authForm = new FormGroup({ firstName: mockFormControl });
+      
+      expect(component.firstNameControl).toEqual(mockFormControl);
     });
   });
 
@@ -71,10 +64,23 @@ describe('LoginPageComponent', () => {
       expect(component.ngOnInit).toBeDefined();
     });
 
-    it('should create FormGroup with needed controls', () => {
+    it('should create proper FormGroup for login page', () => {
+      component.pageURL = RoutesEnum.LOG_IN;
 
       component.ngOnInit();
 
+      expect(Object.keys(component.authForm.controls)).toEqual(
+        [
+          'email',
+          'password',
+        ]);
+    });
+  
+    it('should create proper FormGroup for registration page', () => {
+      component.pageURL = RoutesEnum.REGISTRATION;
+    
+      component.ngOnInit();
+    
       expect(Object.keys(component.authForm.controls)).toEqual(
         [
           'email',
