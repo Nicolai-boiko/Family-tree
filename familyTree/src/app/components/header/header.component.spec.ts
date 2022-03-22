@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { of } from 'rxjs';
-import { authFeature } from 'src/app/store/reducers/auth-state.reducer';
+import { authFeature, selectUserPhotoURL } from 'src/app/store/reducers/auth-state.reducer';
 import { HeaderComponent } from './header.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AppRoutingModule } from '../../app-routing.module';
@@ -64,13 +64,6 @@ describe('HeaderComponent', () => {
 
   describe('userInitials$', () => {
     it('should not execute observable for user if it is null', () => {
-      // const nexFn = jasmine.createSpy('name');
-      //
-      // component.userInitials$.subscribe({
-      //   next: value => nexFn(value),
-      // });
-      //
-      // expect(nexFn).not.toHaveBeenCalled();
       let invoked = 0;
 
       component.userInitials$.subscribe(() => {
@@ -81,7 +74,7 @@ describe('HeaderComponent', () => {
     });
 
     it('should execute observable for user if it exists', () => {
-      const mockUser: IUser = { firstName: 'aaaa', secondName: 'bbbbb' } as IUser;
+      const mockUser: IUser = { firstName: 'aaaa', secondName: 'bbbbb' };
       store.overrideSelector(authFeature.selectUser, mockUser);
       let invoked = 0;
 
@@ -93,7 +86,7 @@ describe('HeaderComponent', () => {
     });
 
     it('should create initials for user if first and second name exist', (done: DoneFn) => {
-      const mockUser: IUser = { firstName: 'aaaa', secondName: 'bbbbb' } as IUser;
+      const mockUser: IUser = { firstName: 'aaaa', secondName: 'bbbbb' };
       store.overrideSelector(authFeature.selectUser, mockUser);
 
       component.userInitials$.subscribe(result => {
@@ -103,7 +96,7 @@ describe('HeaderComponent', () => {
     });
 
     it('should return "" for user if first name does not exist', (done: DoneFn) => {
-      const mockUser: IUser = { firstName: '', secondName: 'bbbbb' } as IUser;
+      const mockUser: IUser = { firstName: '', secondName: 'bbbbb' };
       store.overrideSelector(authFeature.selectUser, mockUser);
 
       component.userInitials$.subscribe(result => {
@@ -113,7 +106,7 @@ describe('HeaderComponent', () => {
     });
 
     it('should return "" for user if second name does not exist', (done: DoneFn) => {
-      const mockUser: IUser = { firstName: 'aaaaa', secondName: '' } as IUser;
+      const mockUser: IUser = { firstName: 'aaaaa', secondName: '' };
       store.overrideSelector(authFeature.selectUser, mockUser);
 
       component.userInitials$.subscribe(result => {
@@ -124,6 +117,8 @@ describe('HeaderComponent', () => {
   });
 
   describe('userPhotoURL$', () => {
+    const mockURL = 'dummyURL';
+    
     it('should not execute observable for user photo if it is null', () => {
       let invoked = 0;
 
@@ -135,15 +130,43 @@ describe('HeaderComponent', () => {
     });
 
     it('should execute observable for user photo if it exists', () => {
-      const mockUser: IUser = { photoUrl: 'dummyURL' } as IUser;
-      store.overrideSelector(authFeature.selectUser, mockUser);
+      store.overrideSelector(selectUserPhotoURL, mockURL);
       let invoked = 0;
 
-      component.userInitials$.subscribe(() => {
+      component.userPhotoURL$.subscribe(() => {
         invoked++;
       });
 
       expect(invoked).toEqual(1);
+    });
+
+    it('should return photoUrl if it exists', (done: DoneFn) => {
+      store.overrideSelector(selectUserPhotoURL, mockURL);
+
+      component.userPhotoURL$.subscribe(result => {
+        expect(result).toEqual('dummyURL');
+        done();
+      });
+    });
+  });
+
+  describe('isLoggedIn$', () => {
+    it('should return user if he exists', (done: DoneFn) => {
+      const mockUser: IUser = { photoUrl: 'dummyURL' };
+      store.overrideSelector(authFeature.selectUser, mockUser);
+      component.isLoggedIn$.subscribe(result => {
+        expect(result).toEqual(mockUser);
+        done();
+      });
+    });
+
+    it('should return null if user does not exist', (done: DoneFn) => {
+      const mockUser = null;
+      store.overrideSelector(authFeature.selectUser, mockUser);
+      component.isLoggedIn$.subscribe(result => {
+        expect(result).toBeNull();
+        done();
+      });
     });
   });
 

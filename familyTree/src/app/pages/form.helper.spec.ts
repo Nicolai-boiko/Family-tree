@@ -33,6 +33,14 @@ describe('FormHelper', () => {
       ]);
     });
 
+    it('should return correct data for RoutesEnum.RESTORE_PASSWORD', () => {
+      const result: Record<string, FormControl> = FormHelper.getFormData(RoutesEnum.RESTORE_PASSWORD);
+
+      expect(Object.keys(result)).toEqual([
+        'email',
+      ]);
+    });
+
     it('should return correct data for RoutesEnum.LOG_IN', () => {
       const result: Record<string, FormControl> = FormHelper.getFormData(RoutesEnum.LOG_IN);
 

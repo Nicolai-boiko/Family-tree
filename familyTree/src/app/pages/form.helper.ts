@@ -65,6 +65,10 @@ export class FormHelper {
           registrationDate,
           photoUrl,
         };
+      case RoutesEnum.RESTORE_PASSWORD:
+        return {
+          email,
+        };
       default:
         return {
           email,

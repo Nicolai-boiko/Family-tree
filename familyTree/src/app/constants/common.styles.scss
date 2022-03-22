@@ -1,3 +1,6 @@
+@import "./colors.scss";
+@import "./values.scss";
+
 .form-container {
   position: relative;
   background-color: $formColor;
@@ -8,10 +11,13 @@
   max-width: $maxFormWidth;
   padding: 1rem;
   box-shadow: $formBoxShadow;
-  margin: 2rem 0;
 }
 
 .form-wrapper {
   width: fit-content;
   margin: auto;
+  
+  padding: 2rem 0;
+  
+  height: $mainContentHeight;
 }

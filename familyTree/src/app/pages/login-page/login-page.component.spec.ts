@@ -59,6 +59,38 @@ describe('LoginPageComponent', () => {
     });
   });
 
+  describe('get secondNameControl', () => {
+    it('should return proper value', () => {
+      component.authForm = new FormGroup({ secondName: mockFormControl });
+      
+      expect(component.secondNameControl).toEqual(mockFormControl);
+    });
+  });
+
+  describe('get emailControl', () => {
+    it('should return proper value', () => {
+      component.authForm = new FormGroup({ email: mockFormControl });
+      
+      expect(component.emailControl).toEqual(mockFormControl);
+    });
+  });
+
+  describe('get passwordControl', () => {
+    it('should return proper value', () => {
+      component.authForm = new FormGroup({ password: mockFormControl });
+      
+      expect(component.passwordControl).toEqual(mockFormControl);
+    });
+  });
+
+  describe('get genderControl', () => {
+    it('should return proper value', () => {
+      component.authForm = new FormGroup({ gender: mockFormControl });
+      
+      expect(component.genderControl).toEqual(mockFormControl);
+    });
+  });
+
   describe('ngOnInit', () => {
     it('should be defined', () => {
       expect(component.ngOnInit).toBeDefined();
@@ -85,6 +117,9 @@ describe('LoginPageComponent', () => {
         [
           'email',
           'password',
+          'firstName',
+          'secondName',
+          'gender',
         ]);
     });
   });
