@@ -136,6 +136,7 @@ export const {
     selectInfoMessage,
     selectIsEmailSend,
     selectIsInitializing,
+    selectProgressStatus,
     selectLoadProgress,
     reducer,
 } = authFeature;

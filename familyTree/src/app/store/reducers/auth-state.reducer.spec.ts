@@ -439,17 +439,33 @@ describe('auth-state.reducer', () => {
             expect(authFeature.selectIsLoading.projector(initialMockAuthState)).toBeFalse();
         });
         
-        it('selectUser', () => {});
+        it('selectUser', () => {
+            expect(authFeature.selectUser.projector(initialMockAuthState)).toBeNull();
+        });
     
-        it('selectErrorMessage', () => {});
+        it('selectErrorMessage', () => {
+            expect(authFeature.selectErrorMessage.projector(initialMockAuthState)).toBeNull();
+        });
     
-        it('selectInfoMessage', () => {});
+        it('selectInfoMessage', () => {
+            expect(authFeature.selectInfoMessage.projector(initialMockAuthState)).toBeNull();
+        });
     
-        it('selectIsEmailSend', () => {});
+        it('selectIsEmailSend', () => {
+            expect(authFeature.selectIsEmailSend.projector(initialMockAuthState)).toBeFalse();
+        });
     
-        it('selectIsInitializing', () => {});
+        it('selectIsInitializing', () => {
+            expect(authFeature.selectIsInitializing.projector(initialMockAuthState)).toBeTrue();
+        });
+        
+        it('selectProgressStatus', () => {
+            expect(authFeature.selectProgressStatus.projector(initialMockAuthState)).toEqual(UploadStatus.Ready);
+        });
     
-        it('selectLoadProgress', () => {});
+        it('selectLoadProgress', () => {
+            expect(authFeature.selectLoadProgress.projector(initialMockAuthState)).toEqual(0);
+        });
 
         it('selectUserPhotoURL', () => {
             const selectedMockUser: IUser = { photoUrl: 'dummyPhotoUrl' };
