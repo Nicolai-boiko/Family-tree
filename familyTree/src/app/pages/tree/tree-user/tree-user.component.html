@@ -1,0 +1,6 @@
+<ul>
+  <li *ngFor="let comment of comments">
+    <a>{{ comment.text }}</a>
+    <app-tree-user [comments]="comment.comments" *ngIf="comment.comments"></app-tree-user>
+  </li>
+</ul>
