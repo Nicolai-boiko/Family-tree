@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RoutesEnum } from 'src/app/constants/Enums/common.enums';
 import { IAuthState } from '../../store/state/auth.state';
@@ -7,6 +7,7 @@ import { Store } from '@ngrx/store';
 import { authFeature } from 'src/app/store/reducers/auth-state.reducer';
 import { CoreActions } from 'src/app/store/actions/auth-state.actions';
 import { Observable } from 'rxjs';
+import { FormHelper } from '../form.helper';
 
 @Component({
   selector: 'app-restore-password-page',
@@ -25,16 +26,10 @@ export class RestorePasswordPageComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private store: Store<IAuthState>,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.resetForm = new FormGroup({
-      email: new FormControl(this.userEmail, [
-        Validators.required,
-        Validators.email,
-        Validators.maxLength(50),
-      ]),
-    });
+    this.resetForm = new FormGroup(FormHelper.getFormData(RoutesEnum.RESTORE_PASSWORD));
   }
 
   resetPassword(): void {

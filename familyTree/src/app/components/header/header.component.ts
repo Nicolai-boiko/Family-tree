@@ -1,9 +1,8 @@
-import { Component, Output, EventEmitter } from '@angular/core';
-import { RoutesEnum } from 'src/app/constants/Enums/common.enums';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { RoutesEnum, YesOrNoEnum } from 'src/app/constants/Enums/common.enums';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ModalComponent } from '../modal/modal.component';
 import { filter, map, Observable, take } from 'rxjs';
-import { YesOrNoEnum } from 'src/app/constants/Enums/common.enums';
 import { IAuthState } from '../../store/state/auth.state';
 import { Store } from '@ngrx/store';
 import { CoreActions } from 'src/app/store/actions/auth-state.actions';
@@ -18,12 +17,11 @@ import { IUser } from 'src/app/constants/Interfaces/common.interfaces';
 export class HeaderComponent {
   public userInitials$: Observable<string> = this.store.select(authFeature.selectUser).pipe(
     filter(Boolean),
-    map((user: IUser) => user.firstName && user.secondName ? `${user.firstName[0]}${user.secondName[0]}` : '')
+    map((user: IUser) => user.firstName && user.secondName ? `${user.firstName[0]}${user.secondName[0]}` : ''),
   );
   public userPhotoURL$: Observable<string> = this.store.select(selectUserPhotoURL).pipe(filter(Boolean));
-  public routesEnum: typeof RoutesEnum = RoutesEnum;
-  public eYesOrNo: typeof YesOrNoEnum = YesOrNoEnum;
   public isLoggedIn$: Observable<IUser | null> = this.store.select(authFeature.selectUser);
+  public routesEnum: typeof RoutesEnum = RoutesEnum;
 
   @Output() public sidenavToggle: EventEmitter<void> = new EventEmitter();
 

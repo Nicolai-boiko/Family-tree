@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RestorePasswordPageComponent } from './restore-password-page.component';
 import { ActivatedRoute } from '@angular/router';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from '../../app-routing.module';
 import { BehaviorSubject } from 'rxjs';
 import { authFeature } from '../../store/reducers/auth-state.reducer';
@@ -67,9 +67,18 @@ describe('RestorePasswordPageComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  describe('get emailControl', () => {
+    it('should return proper value', () => {
+      const mockFormControl: FormControl = new FormControl('mock');
+      component.resetForm = new FormGroup({ email: mockFormControl });
+      
+      expect(component.emailControl).toEqual(mockFormControl);
+    });
+  });
   
   describe('ngOnInit', () => {
-    it('should ve defined', () => {
+    it('should be defined', () => {
       expect(component.ngOnInit).toBeDefined();
     });
     
@@ -90,7 +99,7 @@ describe('RestorePasswordPageComponent', () => {
       emailControlSpy = spyOnProperty(component, 'emailControl', 'get');
     });
     
-    it('should ve defined', () => {
+    it('should be defined', () => {
       expect(component.resetPassword).toBeDefined();
     });
     
