@@ -2,9 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RoutesEnum } from 'src/app/constants/Enums/common.enums';
-import { AuthService } from 'src/app/services/auth.service';
-import { LoginPageHelper } from './login-page.helper';
+import { FormHelper } from '../form.helper';
 import { GenderEnum } from 'src/app/constants/Enums/common.enums';
+import { IUser } from 'src/app/constants/Interfaces/common.interfaces';
+import { IAuthState } from '../../store/state/auth.state';
+import { Store } from '@ngrx/store';
+import { CoreActions } from 'src/app/store/actions/auth-state.actions';
 
 @Component({
   selector: 'app-login-page',
@@ -14,8 +17,8 @@ import { GenderEnum } from 'src/app/constants/Enums/common.enums';
 export class LoginPageComponent implements OnInit {
   public routesEnum: typeof RoutesEnum = RoutesEnum;
   public gender: typeof GenderEnum = GenderEnum;
-  public isRegistrationPage: boolean = this.activatedRoute.snapshot.url[0].path === RoutesEnum.REGISTRATION;
-  public authForm!: FormGroup;
+  public pageURL: RoutesEnum = this.activatedRoute.snapshot.url[0].path as RoutesEnum;
+  public authForm: FormGroup;
   public hidePassword = true;
   
   get firstNameControl(): FormControl {
@@ -30,22 +33,26 @@ export class LoginPageComponent implements OnInit {
   get passwordControl(): FormControl {
     return this.authForm.get('password') as FormControl;
   }
+  get genderControl(): FormControl {
+    return this.authForm.get('gender') as FormControl;
+  }
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private authenticationService: AuthService,
+    private store: Store<IAuthState>,
   ) {}
 
   ngOnInit(): void {
-    this.authForm = new FormGroup(LoginPageHelper.getFormData(this.isRegistrationPage));
+    this.authForm = new FormGroup(FormHelper.getFormData(this.pageURL as RoutesEnum));
   }
 
   onSubmit(): void {
-    const formValue = this.authForm.getRawValue();
     if (this.authForm.valid) {
-      this.isRegistrationPage
-          ? this.authenticationService.signUp(formValue)
-          : this.authenticationService.signIn(formValue);
+      const user: IUser = this.authForm.getRawValue() as IUser;
+      
+      this.pageURL === RoutesEnum.REGISTRATION
+          ? this.store.dispatch(CoreActions.signUpWithEmail({ user }))
+          : this.store.dispatch(CoreActions.signInWithEmail({ user }));
     }
   }
 }

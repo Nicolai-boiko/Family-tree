@@ -22,4 +22,10 @@ describe('TreeComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  
+  describe('ngOnInit', () => {
+    it('should be defined', () => {
+      expect(component.ngOnInit).toBeDefined();
+    });
+  });
 });

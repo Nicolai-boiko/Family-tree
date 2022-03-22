@@ -1,0 +1,23 @@
+@import "./colors.scss";
+@import "./values.scss";
+
+.form-container {
+  position: relative;
+  background-color: $formColor;
+  border-radius: $formBorderRadius;
+  display: flex;
+  flex-direction: column;
+  width: $formWidth;
+  max-width: $maxFormWidth;
+  padding: 1rem;
+  box-shadow: $formBoxShadow;
+}
+
+.form-wrapper {
+  width: fit-content;
+  margin: auto;
+  
+  padding: 2rem 0;
+  
+  height: $mainContentHeight;
+}
